@@ -1,9 +1,8 @@
 # INDEX
 
 1. BasicMaths/
-2. BitManipulation/
-3. Recursion/
-   ....(will be updated)
+2. Recursion/
+3. ....(will be updated)
 
 ## Structure
 
