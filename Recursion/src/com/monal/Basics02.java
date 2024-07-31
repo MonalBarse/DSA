@@ -1,4 +1,7 @@
+// BINARY SEARCH WITH RECURSION
 package com.monal;
+
+import java.util.ArrayList;
 
 /*
 public class Basics02 {
@@ -34,7 +37,6 @@ public class Basics02 {
   }
 } */
 
-// Memoization is an optimization technique used primarily to speed up computer programs by storing
 public class Basics02 {
   public static void main(String[] args) {
     // BinarySearch with recursion and memoization
@@ -50,6 +52,22 @@ public class Basics02 {
       System.out.println("Element not found");
     } else {
       System.out.println("Element found at positon " + (result + 1) + " in the array");
+    }
+    System.out.println("------------------------");
+    // Linear search
+    int target2 = 88;
+
+    // linearSearch(array, target2, 0);
+    // if (list.isEmpty()) {
+    //   System.out.println("Element not found");
+    // } else {
+    //   System.out.println("Element found at index " + list + " in the array");
+    // }
+    int ans = rotatedBinarySearch(array, target2, 0, array.length - 1);
+    if (ans == -1) {
+      System.out.println("Element not found");
+    } else {
+      System.out.println("Element found at index " + ans + " in the array");
     }
   }
 
@@ -73,6 +91,53 @@ public class Basics02 {
       return binarySearch(arr, target, mid + 1, end, memo); // Search right half
     } else {
       return binarySearch(arr, target, start, mid - 1, memo); // Search left half
+    }
+  }
+
+  // not optimized as its creating objects at each recursive call but this is just for learn..
+  public static ArrayList<Integer> linearSearch(int[] arr, int target, int index) {
+    // solve using recursion
+    ArrayList<Integer> list = new ArrayList<Integer>(); // Create an ArrayList object
+
+    if (index == arr.length) {
+      return list;
+    }
+    if (arr[index] == target) {
+      list.add(index);
+    }
+    ArrayList<Integer> temp = linearSearch(arr, target, index + 1);
+    list.addAll(temp);
+
+    return list;
+  }
+
+  // Solve for a rotated array using binary search with recursion
+
+  public static int rotatedBinarySearch(int[] arr, int target, int start, int end) {
+    if (start > end) {
+      return -1;
+    }
+
+    int mid = start + (end - start) / 2;
+
+    if (arr[mid] == target) {
+      return mid;
+    }
+
+    if (arr[start] <= arr[mid]) {
+      // The left half is sorted
+      if (target >= arr[start] && target < arr[mid]) {
+        return rotatedBinarySearch(arr, target, start, mid - 1);
+      } else {
+        return rotatedBinarySearch(arr, target, mid + 1, end);
+      }
+    } else {
+      // The right half is sorted
+      if (target > arr[mid] && target <= arr[end]) {
+        return rotatedBinarySearch(arr, target, mid + 1, end);
+      } else {
+        return rotatedBinarySearch(arr, target, start, mid - 1);
+      }
     }
   }
 }

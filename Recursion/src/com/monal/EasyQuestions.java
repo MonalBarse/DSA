@@ -67,6 +67,7 @@ public class EasyQuestions {
   }
 
   // ----------------------------------------------------------------- //
+  // we tend to use helper functions in recursion to avoid passing extra parameters
   public static boolean isPalindrome(String word) {
 
     word =
