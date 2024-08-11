@@ -31,7 +31,6 @@ public class Subsequence {
     /*
     ArrayList<String> result = question_4("", "abcd");
     System.out.println(result); */
-
     System.out.println("-----------------------------");
     int[] arr = {1, 2, 2};
     List<List<Integer>> subset = subsetwitdDuplicate(arr);
@@ -41,6 +40,7 @@ public class Subsequence {
     System.out.println();
   }
 
+  // ------------------------------------------------------------------------ //
   public static String question_1(String str) {
     // Base case: if the string is empty, return an empty string
     if (str.length() == 0) {
@@ -65,6 +65,7 @@ public class Subsequence {
     return sb;
   } */
 
+  // ------------------------------------------------------------------------ //
   public static StringBuilder question_2(String str) {
     // Given a sentence, return a sentence without any occurrence of the word "apple"
     // Word can even be adfapple or appleadgf the output should be adf or adgf
@@ -81,6 +82,7 @@ public class Subsequence {
     }
   }
 
+  // ------------------------------------------------------------------------ //
   // Q3: Given an ArrayList of integers, return all the possible sub-set of the list.
   public static ArrayList<ArrayList<Integer>> question_3(ArrayList<Integer> list) {
     if (list.isEmpty()) {
@@ -88,7 +90,6 @@ public class Subsequence {
       result.add(new ArrayList<>()); // Add empty subset
       return result;
     }
-
     int firstElement = list.get(0);
     ArrayList<Integer> restOfList = new ArrayList<>(list.subList(1, list.size()));
 
@@ -125,7 +126,7 @@ public class Subsequence {
     result1.addAll(result2);
     return result1;
   }
-   */
+  */
 
   // Using for loops
   public static List<List<Integer>> subset(int[] arr) {
@@ -180,5 +181,134 @@ public class Subsequence {
     }
 
     return outer;
+  }
+
+  // ------------------------------------------------------------------------ //
+
+  // AMAZON QUESTION
+
+  // Given a list of Strings, return the number of subsequences that have a vowel count less than or
+  // equal to a given threshold.
+
+  // Method to count vowels in a string
+  public static int countVowels(String s) {
+    String vowels = "aeiouAEIOU";
+    int count = 0;
+    for (char c : s.toCharArray()) {
+      if (vowels.indexOf(c) != -1) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  public static ArrayList<ArrayList<String>> generateSubsequences(ArrayList<String> list) {
+    if (list.isEmpty()) {
+      ArrayList<ArrayList<String>> result = new ArrayList<>();
+      result.add(new ArrayList<>()); // Add empty subset
+      return result;
+    }
+
+    String firstElement = list.get(0);
+    ArrayList<String> restOfList = new ArrayList<>(list.subList(1, list.size()));
+
+    ArrayList<ArrayList<String>> subsetsWithoutFirst = generateSubsequences(restOfList);
+    ArrayList<ArrayList<String>> subsetsWithFirst = new ArrayList<>();
+
+    for (ArrayList<String> subset : subsetsWithoutFirst) {
+      ArrayList<String> newSubset = new ArrayList<>(subset);
+      newSubset.add(0, firstElement); // Add the first element at the beginning
+      subsetsWithFirst.add(newSubset);
+    }
+
+    subsetsWithoutFirst.addAll(subsetsWithFirst);
+    return subsetsWithoutFirst;
+  }
+
+  public static int countValidSubsequences(ArrayList<String> list, int threshold) {
+    ArrayList<ArrayList<String>> allSubsequences = generateSubsequences(list);
+    int count = 0;
+
+    for (ArrayList<String> subsequence : allSubsequences) {
+      int vowelCount = 0;
+      for (String s : subsequence) {
+        vowelCount += countVowels(s);
+      }
+      if (vowelCount <= threshold) {
+        count++;
+      }
+    }
+    // Subtract 1 to exclude the empty subsequence
+    return count - 1;
+  }
+
+  // ------------------------------------------------------------------------ //
+  // GOOGLE QUESTION
+
+  /* using Backtraking
+
+  * Given a string containing digits from 2-9 inclusive, return all possible letter combinations that
+  * the number could represent. Return the answer in any order. A mapping of digits to letters
+  * (just like on the telephone buttons). Note that 1 does not map to any letters.
+  *
+  * Input: digits = "23"
+  * Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+  * Input: digits = ""
+  * Output: []
+  */
+  private static final String[] mapping = {
+    "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"
+  };
+
+  public List<String> letterCombinations(String digits) {
+    List<String> res = new ArrayList<>();
+    if (digits.length() == 0) return res;
+
+    combinations(digits, 0, new StringBuilder(), res);
+    return res;
+  }
+
+  private void combinations(String digits, int pos, StringBuilder sb, List<String> res) {
+    if (pos == digits.length()) {
+      res.add(new String(sb));
+      return;
+    }
+
+    String letters = mapping[digits.charAt(pos) - '2'];
+    for (int i = 0; i < letters.length(); i++) {
+      sb.append(letters.charAt(i));
+      combinations(digits, pos + 1, sb, res);
+      sb.deleteCharAt(sb.length() - 1);
+    }
+  }
+
+  // ------------------------------------------------------------------------ //
+  // Dice Question
+  // Given a dice with 6 faces, each face having a number from 1 to 6. and a target number N,
+  // find the number of ways to get the target number N by rolling the dice. (you can roll the dice
+  // any number of times)
+  // For eg, if N = 3, the output should be [111, 12, 21] because we can get 3 by rolling the dice
+  // in the following ways: 1+1+1, 1+2, 2+1
+
+  public static List<String> diceRoll(int target) {
+    return diceRollHelper('', target);
+  }
+
+  public static List<String> diceRollHelper(String p, int target) {
+    if (target == 0) {
+      List<String> result = new ArrayList<>();
+      result.add(p);
+      return result;
+    }
+    if (target < 0) {
+      return new ArrayList<>();
+    }
+    List<String> result = new ArrayList<>();
+
+    for (int i = 1; i <= 6 && i <= target; i++) {
+
+      result.addAll(diceRollHelper(p + i, target - i));
+      // p + i will add the number to the string 
+    }
   }
 }

@@ -8,7 +8,6 @@ public class Recursivesort {
   public static void main(String[] args) {
 
     // ==================================================//
-
     System.out.println("----------Merge Sort-------------");
     // mergeSort
     int[] arr2 = {64, 34, 25, 12, 22, 11, 90};
@@ -28,7 +27,6 @@ public class Recursivesort {
     System.out.println("Array after Quick Sort:");
     printArray(arr);
   }
-
   // ------------------------------------------------------------------------------------//
   // Merge sort
   public static void mergeSort(int[] arr, int start, int end) {
