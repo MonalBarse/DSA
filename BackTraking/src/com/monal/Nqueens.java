@@ -171,3 +171,64 @@ public class Nqueens {
   }
 }
 */
+/*
+
+  static void nQueens(int boardOSize) {
+    int[][] board = new int[boardOSize][boardOSize];
+    boolean[] cols = new boolean[boardOSize];
+    boolean[] majDiags = new boolean[2 * boardOSize - 1];
+    boolean[] minDiags = new boolean[2 * boardOSize - 1];
+
+    if (nQueensUtil(board, 0, boardOSize, cols, majDiags, minDiags)) {
+      System.out.println("Solution Exists");
+      printBoard(board);
+    } else {
+      System.out.println("Solution does not exist");
+    }
+  }
+
+  static boolean nQueensUtil(
+      int[][] board,
+      int col,
+      int boardOSize,
+      boolean[] cols,
+      boolean[] majDiags,
+      boolean[] minDiags) {
+    if (col >= boardOSize) {
+      return true;
+    }
+    for (int row = 0; row < boardOSize; row++) {
+      if (isSafe(row, col, boardOSize, cols, majDiags, minDiags)) {
+        board[row][col] = 1;
+        cols[col] = true;
+        majDiags[row - col + boardOSize - 1] = true;
+        minDiags[row + col] = true;
+
+        if (nQueensUtil(board, col + 1, boardOSize, cols, majDiags, minDiags)) {
+          return true;
+        }
+
+        // Backtrack
+        board[row][col] = 0;
+        cols[col] = false;
+        majDiags[row - col + boardOSize - 1] = false;
+        minDiags[row + col] = false;
+      }
+    }
+    return false;
+  }
+
+  static boolean isSafe(
+      int row, int col, int boardOSize, boolean[] cols, boolean[] majDiags, boolean[] minDiags) {
+    return !cols[col] && !majDiags[row - col + boardOSize - 1] && !minDiags[row + col];
+  }
+
+  static void printBoard(int[][] board) {
+    for (int[] row : board) {
+      for (int cell : row) {
+        System.out.print(cell + " ");
+      }
+      System.out.println();
+    }
+  }
+*/

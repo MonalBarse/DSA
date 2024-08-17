@@ -10,6 +10,25 @@ public class BacktrackQue {
     // 1. N-Queens Problem -
     System.out.println("1. N-Queens Problem -");
     nQueens(4);
+    System.out.println("================================");
+    System.out.println("2. Sudoko Solver -");
+
+    // 2. Sudoko Solver -
+    int[][] board = {
+      {5, 3, 0, 0, 7, 0, 0, 0, 0},
+      {6, 0, 0, 1, 9, 5, 0, 0, 0},
+      {0, 9, 8, 0, 0, 0, 0, 6, 0},
+      {8, 0, 0, 0, 6, 0, 0, 0, 3},
+      {4, 0, 0, 8, 0, 3, 0, 0, 1},
+      {7, 0, 0, 0, 2, 0, 0, 0, 6},
+      {0, 6, 0, 0, 0, 0, 2, 8, 0},
+      {0, 0, 0, 4, 1, 9, 0, 0, 5},
+      {0, 0, 0, 0, 8, 0, 0, 7, 9}
+    };
+    printBoard(board);
+
+    int[][] solvedBoard = solveSudoku(board);
+    printBoard(solvedBoard);
   }
 
   // 1. N-Queens Problem -
@@ -122,59 +141,73 @@ public class BacktrackQue {
     }
   }
 
-  /*
-
-  static void nQueens(int boardOSize) {
-    int[][] board = new int[boardOSize][boardOSize];
-    boolean[] cols = new boolean[boardOSize];
-    boolean[] majDiags = new boolean[2 * boardOSize - 1];
-    boolean[] minDiags = new boolean[2 * boardOSize - 1];
-
-    if (nQueensUtil(board, 0, boardOSize, cols, majDiags, minDiags)) {
-      System.out.println("Solution Exists");
-      printBoard(board);
+  // 2. Sudoko Solver ------------------------------------------------------------------
+  public static int[][] solveSudoku(int[][] board) {
+    if (sudokuUtil(board, 0, 0)) {
+      return board;
     } else {
-      System.out.println("Solution does not exist");
+      return null; // No solution exists
     }
   }
 
-  static boolean nQueensUtil(
-      int[][] board,
-      int col,
-      int boardOSize,
-      boolean[] cols,
-      boolean[] majDiags,
-      boolean[] minDiags) {
-    if (col >= boardOSize) {
+  private static boolean sudokuUtil(int[][] board, int row, int col) {
+    // If we have reached the end of the board
+    if (row == board.length) {
       return true;
     }
-    for (int row = 0; row < boardOSize; row++) {
-      if (isSafe(row, col, boardOSize, cols, majDiags, minDiags)) {
-        board[row][col] = 1;
-        cols[col] = true;
-        majDiags[row - col + boardOSize - 1] = true;
-        minDiags[row + col] = true;
 
-        if (nQueensUtil(board, col + 1, boardOSize, cols, majDiags, minDiags)) {
-          return true;
+    // Move to the next row if we are past the last column
+    if (col == board.length) {
+      return sudokuUtil(board, row + 1, 0);
+    }
+
+    // Assuming the empty cell is denoted by 0
+    if (board[row][col] == 0) {
+      for (int number = 1; number <= 9; number++) {
+        if (isSafe(board, row, col, number)) {
+          board[row][col] = number;
+          if (sudokuUtil(board, row, col + 1)) {
+            return true;
+          }
+          board[row][col] = 0; // Backtrack
         }
+      }
+      return false; // No valid number found, trigger backtracking
+    } else {
+      return sudokuUtil(board, row, col + 1);
+    }
+  }
 
-        // Backtrack
-        board[row][col] = 0;
-        cols[col] = false;
-        majDiags[row - col + boardOSize - 1] = false;
-        minDiags[row + col] = false;
+  private static boolean isSafe(int[][] board, int row, int col, int number) {
+    // Check the row and column for the number
+    for (int i = 0; i < board.length; i++) {
+      if (board[row][i] == number || board[i][col] == number) {
+        return false;
       }
     }
-    return false;
+
+    // Check the 3x3 box for the number
+    int boxSize = (int) Math.sqrt(board.length);
+    int boxRowStart = row - row % boxSize;
+    int boxColStart = col - col % boxSize;
+
+    for (int i = boxRowStart; i < boxRowStart + boxSize; i++) {
+      for (int j = boxColStart; j < boxColStart + boxSize; j++) {
+        if (board[i][j] == number) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
-  static boolean isSafe(
-      int row, int col, int boardOSize, boolean[] cols, boolean[] majDiags, boolean[] minDiags) {
-    return !cols[col] && !majDiags[row - col + boardOSize - 1] && !minDiags[row + col];
-  }
+  public static void printBoard(int[][] board) {
+    if (board == null) {
+      System.out.println("No solution exists");
+      return;
+    }
 
-  static void printBoard(int[][] board) {
+    System.out.println("Sudoku Board:");
     for (int[] row : board) {
       for (int cell : row) {
         System.out.print(cell + " ");
@@ -182,5 +215,4 @@ public class BacktrackQue {
       System.out.println();
     }
   }
-  */
 }
