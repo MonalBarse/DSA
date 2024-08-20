@@ -7,7 +7,7 @@ if [ -z "$1" ]; then
 fi
 
 # Directory paths
-BIN_DIR="bin"
+BIN_DIR="out"
 
 # Run the specified Java class from the bin directory
 java -cp $BIN_DIR com.monal.$1

@@ -2,12 +2,12 @@
 
 # Directory paths
 SRC_DIR="src"
-BIN_DIR="bin"
+BIN_DIR="out"
 
 # Create the bin directory if it doesn't exist
 mkdir -p $BIN_DIR
 
-# Compile all .java files in src/ and place .class files into bin/
+# Compile all .java files in src/ and place .class files into out/
 javac -d $BIN_DIR $SRC_DIR/com/monal/*.java
 
 # Check if compilation was successful
