@@ -1,16 +1,28 @@
 #!/bin/bash
 
-# Check if a class name was provided
+# Check if a filename was provided
 if [ -z "$1" ]; then
-  echo "Usage: $0 <MainClassName>"
+  echo "Usage: $0 <JavaFileName>"
   exit 1
 fi
 
 # Directory paths
 BIN_DIR="out"
 
-# Run the specified Java class from the bin directory
-java -cp $BIN_DIR com.monal.$1
+# Find the class file
+CLASS_FILE=$(find $BIN_DIR/com/monal -name "$1.class")
+
+# Check if the class file was found
+if [ -z "$CLASS_FILE" ]; then
+  echo "Error: Class file for $1 not found. Make sure you've compiled it first."
+  exit 1
+fi
+
+# Get the package name
+PACKAGE_NAME=$(dirname ${CLASS_FILE#$BIN_DIR/} | tr '/' '.')
+
+# Run the Java program
+java -cp $BIN_DIR $PACKAGE_NAME.$1
 
 # Capture the exit status of the Java program
 JAVA_EXIT_STATUS=$?
@@ -21,8 +33,3 @@ if [ $JAVA_EXIT_STATUS -eq 0 ]; then
 else
     echo "Program encountered an error."
 fi
-
-# To run a problem1.java file, execute the following command:
-# ./run.sh problem1
-# This will first compile using the compile.sh script and then run this class using the java command.
-

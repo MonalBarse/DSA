@@ -115,7 +115,7 @@ public class Inheritance {
     }
   }
 
-  static class Dog extends Animal {
+  static class Dog extends Animal implements Swimmer {
     public Dog(String name, int energy) {
       super(name, energy);
     }
@@ -131,6 +131,16 @@ public class Inheritance {
         System.out.println(name + " fetches the ball happily! Energy decreased to " + energy + ".");
       } else {
         System.out.println(name + " is too tired to fetch. Need more food!");
+      }
+    }
+
+    @Override
+    public void swim() {
+      if (energy >= 6) {
+        energy -= 6;
+        System.out.println(name + " splashes in the water! Energy decreased to " + energy + ".");
+      } else {
+        System.out.println(name + " is too tired to swim. Need more food!");
       }
     }
   }
@@ -155,7 +165,6 @@ public class Inheritance {
     }
   }
 
-  // New class to demonstrate hierarchical inheritance
   static class Bird extends Animal {
     public Bird(String name, int energy) {
       super(name, energy);
@@ -176,28 +185,8 @@ public class Inheritance {
     }
   }
 
-  // New interface to demonstrate hybrid inheritance
   interface Swimmer {
     void swim();
-  }
-
-  // Modified Dog class to demonstrate hybrid inheritance
-  static class Dog extends Animal implements Swimmer {
-    public Dog(String name, int energy) {
-      super(name, energy);
-    }
-
-    // ... (other methods remain the same)
-
-    @Override
-    public void swim() {
-      if (energy >= 6) {
-        energy -= 6;
-        System.out.println(name + " splashes in the water! Energy decreased to " + energy + ".");
-      } else {
-        System.out.println(name + " is too tired to swim. Need more food!");
-      }
-    }
   }
 }
   // Important points about inheritance:
