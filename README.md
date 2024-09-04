@@ -171,15 +171,15 @@ fi
   - [x] Quick Sort
 
 ## Backtracking
-- [ ] Sudoku Solver
-- [ ] N-Queens
-- [ ] N-Knights
-- [ ] Maze problems
-- [ ] Recursion String Problems
-- [ ] Recursion Array Problems
-- [ ] Recursion Pattern Problems
-- [ ] Subset Questions
-- [ ] Recursion - Permutations, Dice Throws etc Questions
+- [x] Sudoku Solver
+- [x] N-Queens
+- [x] N-Knights
+- [x] Maze problems
+- [x] Recursion String Problems
+- [x] Recursion Array Problems
+- [x] Recursion Pattern Problems
+- [x] Subset Questions
+- [x] Recursion - Permutations, Dice Throws etc Questions
 
 ## Object Oriented Programming
 - [ ] Introduction
