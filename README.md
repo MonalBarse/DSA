@@ -193,7 +193,7 @@ fi
 - [x] Recursion Array Problems
 - [x] Recursion Pattern Problems
 - [x] Subset Questions
-- [ ] Recursion - Permutations, Dice Throws etc Questions
+- [x] Recursion - Permutations, Dice Throws etc Questions
 
 ## Object Oriented Programming
 
