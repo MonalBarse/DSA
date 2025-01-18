@@ -179,34 +179,34 @@ fi
 - [x] Convert recursion to iteration
 - [x] Tree building of function calls
 - [ ] Tail recursion
-- [x] Sorting
-  - [x] Merge Sort
-  - [x] Quick Sort
+- [ ] Sorting
+  - [ ] Merge Sort
+  - [ ] Quick Sort
 
 ## Backtracking
 
-- [x] Sudoku Solver
-- [x] N-Queens
-- [x] N-Knights
-- [x] Maze problems
-- [x] Recursion String Problems
-- [x] Recursion Array Problems
-- [x] Recursion Pattern Problems
-- [x] Subset Questions
-- [x] Recursion - Permutations, Dice Throws etc Questions
+- [ ] Sudoku Solver
+- [ ] N-Queens
+- [ ] N-Knights
+- [ ] Maze problems
+- [ ] Recursion String Problems
+- [ ] Recursion Array Problems
+- [ ] Recursion Pattern Problems
+- [ ] Subset Questions
+- [ ] Recursion - Permutations, Dice Throws etc Questions
 
 ## Object Oriented Programming
 
 - [x] Introduction
 - [x] Classes & its instances
 - [x] this keyword in Java
-- [x] Properties
+- [ ] Properties
 - [ ] Inheritance
 - [ ] Abstraction
 - [ ] Polymorphism
 - [ ] Encapsulation
 - [ ] Overloading & Overriding
-- [x] Static & Non-Static
+- [ ] Static & Non-Static
 - [ ] Access Control
 - [ ] Interfaces
 - [ ] Abstract Classes
