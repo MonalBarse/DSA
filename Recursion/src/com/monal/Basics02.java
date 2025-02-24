@@ -71,6 +71,17 @@ public class Basics02 {
     }
   }
 
+  /*
+   * Apply memoization only when the function has overlapping subproblems and the time complexity of the function is high
+   * and not to apply it when the function has a low time complexity as the overhead of memoization will be more than the
+   * time saved by memoization
+   *
+   * General steps in Memoised Functions:
+   *
+   * Pass a memoization Object to the function (here its an array)
+   * Check if the result is already memoized and if it is return the result
+   * If the result is not memoized, calculate the result and store it in the memoization object
+   */
   public static int binarySearch(int[] arr, int target, int start, int end, int[] memo) {
     if (start > end) {
       return -1; // Base case: element not found
@@ -92,23 +103,6 @@ public class Basics02 {
     } else {
       return binarySearch(arr, target, start, mid - 1, memo); // Search left half
     }
-  }
-
-  // not optimized as its creating objects at each recursive call but this is just for learn..
-  public static ArrayList<Integer> linearSearch(int[] arr, int target, int index) {
-    // solve using recursion
-    ArrayList<Integer> list = new ArrayList<Integer>(); // Create an ArrayList object
-
-    if (index == arr.length) {
-      return list;
-    }
-    if (arr[index] == target) {
-      list.add(index);
-    }
-    ArrayList<Integer> temp = linearSearch(arr, target, index + 1);
-    list.addAll(temp);
-
-    return list;
   }
 
   // Solve for a rotated array using binary search with recursion
@@ -139,5 +133,29 @@ public class Basics02 {
         return rotatedBinarySearch(arr, target, start, mid - 1);
       }
     }
+  }
+
+  // Not optimized as its creating objects at each recursive call but this is just for learning
+  public static ArrayList<Integer> linearSearch(int[] arr, int target, int index) {
+    // solve using recursion
+    ArrayList<Integer> list = new ArrayList<Integer>(); // Create an ArrayList object
+
+    if (index == arr.length) {
+      return list;
+    }
+    if (arr[index] == target) {
+      list.add(index);
+    }
+    ArrayList<Integer> temp = linearSearch(arr, target, index + 1);
+    list.addAll(temp);
+
+    return list;
+  }
+
+  // Simple LinerSearch
+  public static int linearSearch1(int[] arr, int target, int index) {
+    return (index == arr.length)
+        ? -1
+        : (arr[index] == target ? index : linearSearch1(arr, target, index + 1));
   }
 }

@@ -14,8 +14,8 @@ public class Basics03 {
     printArray(arr1);
     System.out.println("------------------------");
     // ---------------------------------------- //
-    // Insertion sort
 
+    // Insertion sort
     int[] arr2 = {64, 34, 25, 12, 22, 11, 90};
 
     System.out.println("Array before sorting:");
@@ -57,6 +57,10 @@ public class Basics03 {
   }
 
   // Bubble sort algorithm
+  // Iterate from start and swap the adjacent elem if current elem is > than next.
+  // Move to next elem and continue, At the end of the first iteration the largest
+  // elem will be at the end of the array thus next iteration will be
+  // till n-1 and next to n-2 and so on
   public static void bubbleSort(int[] arr) {
     int n = arr.length;
     for (int i = 0; i < n - 1; i++) {
@@ -73,6 +77,9 @@ public class Basics03 {
 
   // ---------------------------------------- //
   // Insertion sort algorithm
+  // In insertion sort we take an element and compare it with the elements before it
+  // and place it in the correct position, we start from the second element and
+  // compare it with the first elem and place it in correct position
   public static void insertionSort(int[] arr) {
     int n = arr.length;
 
