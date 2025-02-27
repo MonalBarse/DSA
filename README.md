@@ -178,7 +178,7 @@ fi
 - [x] Flow of recursive programs - stacks
 - [x] Convert recursion to iteration
 - [x] Tree building of function calls
-- [ ] Tail recursion
+- [x] Tail recursion
 - [x] Sorting
   - [x] Merge Sort
   - [x] Quick Sort
@@ -206,7 +206,7 @@ fi
 - [ ] Polymorphism
 - [ ] Encapsulation
 - [ ] Overloading & Overriding
-- [x] Static & Non-Static
+- [ ] Static & Non-Static
 - [ ] Access Control
 - [ ] Interfaces
 - [ ] Abstract Classes
@@ -244,6 +244,18 @@ fi
 - [ ] Subseq questions
 - [ ] String DP
 
+## Hashmaps
+
+- [ ] Introduction
+- [ ] Theory - how it works
+- [ ] Comparisons of various forms
+- [ ] Limitations and how to solve
+- [ ] Map using LinkedList
+- [ ] Map using Hash
+- [ ] Chaining
+- [ ] Probing
+- [ ] Huffman-Encoder
+
 ## Trees
 
 - [ ] Introduction
@@ -265,17 +277,6 @@ fi
 - [ ] top k elements
 - [ ] interval problems
 
-## Hashmaps
-
-- [ ] Introduction
-- [ ] Theory - how it works
-- [ ] Comparisons of various forms
-- [ ] Limitations and how to solve
-- [ ] Map using LinkedList
-- [ ] Map using Hash
-- [ ] Chaining
-- [ ] Probing
-- [ ] Huffman-Encoder
 
 ## Tries
 
