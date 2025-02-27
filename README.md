@@ -178,29 +178,29 @@ fi
 - [x] Flow of recursive programs - stacks
 - [x] Convert recursion to iteration
 - [x] Tree building of function calls
-- [ ] Tail recursion
-- [ ] Sorting
-  - [ ] Merge Sort
-  - [ ] Quick Sort
+- [x] Tail recursion
+- [x] Sorting
+  - [x] Merge Sort
+  - [x] Quick Sort
 
 ## Backtracking
 
-- [ ] Sudoku Solver
-- [ ] N-Queens
-- [ ] N-Knights
-- [ ] Maze problems
-- [ ] Recursion String Problems
-- [ ] Recursion Array Problems
-- [ ] Recursion Pattern Problems
-- [ ] Subset Questions
-- [ ] Recursion - Permutations, Dice Throws etc Questions
+- [x] Sudoku Solver
+- [x] N-Queens
+- [x] N-Knights
+- [x] Maze problems
+- [x] Recursion String Problems
+- [x] Recursion Array Problems
+- [x] Recursion Pattern Problems
+- [x] Subset Questions
+- [x] Recursion - Permutations, Dice Throws etc Questions
 
 ## Object Oriented Programming
 
 - [x] Introduction
 - [x] Classes & its instances
 - [x] this keyword in Java
-- [ ] Properties
+- [x] Properties
 - [ ] Inheritance
 - [ ] Abstraction
 - [ ] Polymorphism
@@ -244,6 +244,18 @@ fi
 - [ ] Subseq questions
 - [ ] String DP
 
+## Hashmaps
+
+- [ ] Introduction
+- [ ] Theory - how it works
+- [ ] Comparisons of various forms
+- [ ] Limitations and how to solve
+- [ ] Map using LinkedList
+- [ ] Map using Hash
+- [ ] Chaining
+- [ ] Probing
+- [ ] Huffman-Encoder
+
 ## Trees
 
 - [ ] Introduction
@@ -265,17 +277,6 @@ fi
 - [ ] top k elements
 - [ ] interval problems
 
-## Hashmaps
-
-- [ ] Introduction
-- [ ] Theory - how it works
-- [ ] Comparisons of various forms
-- [ ] Limitations and how to solve
-- [ ] Map using LinkedList
-- [ ] Map using Hash
-- [ ] Chaining
-- [ ] Probing
-- [ ] Huffman-Encoder
 
 ## Tries
 
