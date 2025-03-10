@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
  * This class provides detailed examples of the various collection interfaces,
  * implementations, algorithms, and utility methods.
  */
+
+@SuppressWarnings("unused")
 public class CollectionFramework {
     public static void main(String[] args) {
         System.out.println("\n========== COMPREHENSIVE JAVA COLLECTIONS FRAMEWORK TUTORIAL ==========\n");
