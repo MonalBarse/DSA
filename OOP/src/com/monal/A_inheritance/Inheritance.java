@@ -1,4 +1,11 @@
+/*
+ * Inheritance -
+ *  - Inheritance is a mechanism in which one class acquires the properties and behavior of another class.
+ *  - It represents an "is-a" relationship between classes, i.e a subclass is a type of superclass.
+ */
+
 // Important points about inheritance:
+
 // 1. Java supports single inheritance for classes (a class can only extend one class)
 // 2. Java supports multiple inheritance of types through interfaces
 // 3. The 'extends' keyword is used for class inheritance
@@ -9,7 +16,7 @@
 // 6. The 'super' keyword is used to call the superclass constructor or methods
 // 7. Inheritance is a fundamental concept in object-oriented programming, enabling polymorphism
 
-package com.monal.inheritance;
+package com.monal.A_inheritance;
 
 import java.util.Scanner;
 

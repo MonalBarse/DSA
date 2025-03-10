@@ -1,4 +1,25 @@
-package com.monal.polymorphism;
+package com.monal.B_polymorphism;
+
+/*
+ *  Polymorphism in Java
+ *  Polymorphism is the ability of an object to take on multiple forms.
+ *  In simple words, polymorphism is the ability to present the same form in different ways.
+ *  In Java, polymorphism allows us to perform a single action in different ways.
+ *  e.g., Method Overloading, Method Overriding, Interface-based Polymorphism, etc.
+ *  There are two types of polymorphism in Java: Compile-time (Static) Polymorphism and Runtime (Dynamic) Polymorphism.
+ *
+ * 1. Compile-time (Static) Polymorphism:
+ * - Method Overloading is an example of compile-time polymorphism.
+ * - It allows a class to have multiple methods with the same name but different parameters.
+ * - The method to be called is determined at compile-time based on the method signature.
+ * - The return type of the method is not considered while overloading.
+ *
+ * 2. Runtime (Dynamic) Polymorphism:
+ * - Method Overriding is an example of runtime polymorphism.
+ * - It allows a subclass to provide a specific implementation of a method that is already provided by its superclass.
+ * - The method to be called is determined at runtime based on the object type.
+ * - The return type of the method must be the same or a subtype of the return type of the overridden method.
+ */
 
 import java.util.Scanner;
 
@@ -30,8 +51,12 @@ interface Drawable {
   void draw();
 }
 
-// Circle class extending Shape and implementing Drawable
+// Circle class extending Shape and implementing Drawable -
+// i.e it can inherit from Shape (draw method) and implement Drawable (draw
+// method)
 class Circle extends Shape implements Drawable {
+  // Overriding the draw method from Shape class or implementing the draw method?
+  // Both are correct, as the Circle class is extending Shape and implementing
   @Override
   public void draw() {
     System.out.println("Drawing a Circle: ⭕");

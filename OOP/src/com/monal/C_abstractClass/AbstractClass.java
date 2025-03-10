@@ -1,11 +1,21 @@
-package com.monal.abstractClass;
+package com.monal.C_abstractClass;
 
 // Introduction: Demonstrating Abstract Classes and Interfaces in Java
 
-// Abstract Class Example
+// Abstract Class Example -
+// Abstract classes are used to provide a common definition of a base class that multiple derived classes can share.
+// They are different from interfaces as they can have concrete methods along with abstract methods.
+// Abstract classes cannot be instantiated, but they can be subclassed.
+// Interfaces are different from abstract classes as they provide a way to achieve multiple inheritance in Java.
+// Interface in detail in next section.
+
 abstract class Animal {
 
-    // Abstract method (to be implemented by subclasses)
+    public Animal(String species) {
+        System.out.println("This is a " + species + "\n[INFO] This is from abstract class constructor.");
+    }
+
+    // Abstract method (to be implemented by subclasses
     abstract void makeSound();
 
     // Concrete method
@@ -23,7 +33,12 @@ abstract class Animal {
 
 // Concrete subclass implementing abstract method
 class Dog extends Animal {
+
+    // Constructor
+
     public Dog() {
+        // Calling constructor of superclass
+        super("Dog");
         System.out.println("\n[INFO] Dog class extending Animal abstract class.");
     }
 
@@ -36,6 +51,7 @@ class Dog extends Animal {
 
 class Cat extends Animal {
     public Cat() {
+        super("Cat");
         System.out.println("\n[INFO] Cat class extending Animal abstract class.");
     }
 

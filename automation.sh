@@ -9,6 +9,223 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+# Function to handle git operations
+git_operations() {
+    echo -e "${BLUE}Git Operations${NC}"
+
+    # Check if git is installed
+    if ! command -v git &> /dev/null; then
+        echo -e "${RED}Error:${NC} Git is not installed or not in your PATH."
+        return 1
+    fi
+
+    # Options for git operations
+    echo "1. Commit and push all changes in DSA directory"
+    echo "2. Commit and push changes in a specific topic"
+    echo "3. Commit and push changes in a specific subtopic"
+    echo "4. Return to main menu"
+
+    read -p "Enter your choice (1-4): " git_choice
+
+    case $git_choice in
+        1)
+            # Commit all changes in DSA root
+            cd "$DSA_ROOT" || return
+
+            # Check if this is a git repository
+            if [ ! -d ".git" ]; then
+                echo -e "${YELLOW}Warning:${NC} This is not a git repository."
+                read -p "Do you want to initialize a git repository? (y/n): " init_choice
+                if [[ $init_choice == "y" || $init_choice == "Y" ]]; then
+                    git init
+                    echo -e "${GREEN}Git repository initialized${NC}"
+                else
+                    return
+                fi
+            fi
+
+            # Add all changes
+            git add .
+
+            # Get commit message
+            read -p "Enter your commit message: " commit_message
+
+            # Commit changes
+            git commit -m "$commit_message"
+
+            # Push changes
+            echo -e "${BLUE}Pushing changes...${NC}"
+            git push
+
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}Successfully pushed changes!${NC}"
+            else
+                echo -e "${YELLOW}Note:${NC} If this is your first push, you might need to set the upstream branch."
+                read -p "Do you want to set upstream and push? (y/n): " upstream_choice
+                if [[ $upstream_choice == "y" || $upstream_choice == "Y" ]]; then
+                    read -p "Enter remote name (usually 'origin'): " remote_name
+                    read -p "Enter branch name (usually 'main' or 'master'): " branch_name
+                    git push --set-upstream "$remote_name" "$branch_name"
+                fi
+            fi
+            ;;
+
+        2)
+            # Commit changes in a specific topic
+            echo -e "${GREEN}Available topics:${NC}"
+            topics=$(get_valid_topics)
+
+            if [ -z "$topics" ]; then
+                echo -e "${RED}No existing topics found!${NC}"
+                return
+            fi
+
+            echo "$topics"
+
+            # Get topic choice
+            read -p "Enter topic name: " topic_name
+            topic_dir="$DSA_ROOT/$topic_name"
+
+            if [ ! -d "$topic_dir" ]; then
+                echo -e "${RED}Error:${NC} Topic '$topic_name' does not exist!"
+                return
+            fi
+
+            # Change to topic directory
+            cd "$topic_dir" || return
+
+            # Check if parent directory is a git repository
+            if [ ! -d "$DSA_ROOT/.git" ]; then
+                echo -e "${YELLOW}Warning:${NC} DSA root is not a git repository."
+                read -p "Do you want to initialize a git repository in DSA root? (y/n): " init_choice
+                if [[ $init_choice == "y" || $init_choice == "Y" ]]; then
+                    cd "$DSA_ROOT" || return
+                    git init
+                    echo -e "${GREEN}Git repository initialized in DSA root${NC}"
+                    cd "$topic_dir" || return
+                else
+                    return
+                fi
+            fi
+
+            # Add changes in this topic
+            cd "$DSA_ROOT" || return
+            git add "$topic_name"
+
+            # Get commit message
+            read -p "Enter your commit message: " commit_message
+
+            # Commit changes
+            git commit -m "$commit_message"
+
+            # Push changes
+            echo -e "${BLUE}Pushing changes...${NC}"
+            git push
+
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}Successfully pushed changes for topic '$topic_name'!${NC}"
+            else
+                echo -e "${YELLOW}Note:${NC} If this is your first push, you might need to set the upstream branch."
+                read -p "Do you want to set upstream and push? (y/n): " upstream_choice
+                if [[ $upstream_choice == "y" || $upstream_choice == "Y" ]]; then
+                    read -p "Enter remote name (usually 'origin'): " remote_name
+                    read -p "Enter branch name (usually 'main' or 'master'): " branch_name
+                    git push --set-upstream "$remote_name" "$branch_name"
+                fi
+            fi
+            ;;
+
+        3)
+            # Commit changes in a specific subtopic
+            echo -e "${GREEN}Available topics:${NC}"
+            topics=$(get_valid_topics)
+
+            if [ -z "$topics" ]; then
+                echo -e "${RED}No existing topics found!${NC}"
+                return
+            fi
+
+            echo "$topics"
+
+            # Get topic choice
+            read -p "Enter topic name: " topic_name
+            topic_dir="$DSA_ROOT/$topic_name"
+
+            if [ ! -d "$topic_dir" ]; then
+                echo -e "${RED}Error:${NC} Topic '$topic_name' does not exist!"
+                return
+            fi
+
+            # List subtopics
+            echo -e "${GREEN}Available subtopics in $topic_name:${NC}"
+            subtopics=$(find "$topic_dir/src/com/monal" -type d -mindepth 1 -maxdepth 1 2>/dev/null | xargs -n1 basename 2>/dev/null)
+
+            if [ -z "$subtopics" ]; then
+                echo -e "${RED}No subtopics found in '$topic_name'!${NC}"
+                return
+            fi
+
+            echo "$subtopics"
+
+            # Get subtopic choice
+            read -p "Enter subtopic name: " subtopic_name
+            subtopic_dir="$topic_dir/src/com/monal/$subtopic_name"
+
+            if [ ! -d "$subtopic_dir" ]; then
+                echo -e "${RED}Error:${NC} Subtopic '$subtopic_name' does not exist!${NC}"
+                return
+            fi
+
+            # Check if parent directory is a git repository
+            if [ ! -d "$DSA_ROOT/.git" ]; then
+                echo -e "${YELLOW}Warning:${NC} DSA root is not a git repository."
+                read -p "Do you want to initialize a git repository in DSA root? (y/n): " init_choice
+                if [[ $init_choice == "y" || $init_choice == "Y" ]]; then
+                    cd "$DSA_ROOT" || return
+                    git init
+                    echo -e "${GREEN}Git repository initialized in DSA root${NC}"
+                else
+                    return
+                fi
+            fi
+
+            # Add changes in this subtopic
+            cd "$DSA_ROOT" || return
+            git add "$topic_name/src/com/monal/$subtopic_name"
+
+            # Get commit message
+            read -p "Enter your commit message: " commit_message
+
+            # Commit changes
+            git commit -m "$commit_message"
+
+            # Push changes
+            echo -e "${BLUE}Pushing changes...${NC}"
+            git push
+
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}Successfully pushed changes for subtopic '$subtopic_name' in topic '$topic_name'!${NC}"
+            else
+                echo -e "${YELLOW}Note:${NC} If this is your first push, you might need to set the upstream branch."
+                read -p "Do you want to set upstream and push? (y/n): " upstream_choice
+                if [[ $upstream_choice == "y" || $upstream_choice == "Y" ]]; then
+                    read -p "Enter remote name (usually 'origin'): " remote_name
+                    read -p "Enter branch name (usually 'main' or 'master'): " branch_name
+                    git push --set-upstream "$remote_name" "$branch_name"
+                fi
+            fi
+            ;;
+
+        4)
+            # Return to main menu
+            return
+            ;;
+
+        *)
+            echo -e "${YELLOW}Invalid choice.${NC}"
+            ;;
+    esac
+}
 # Function to compile Java file (replaces compile.sh)
 compile_java_file() {
     local topic_dir="$1"
@@ -554,10 +771,11 @@ main_menu() {
     echo "4. Run a compiled class"
     echo "5. Quick compile and run"
     echo "6. List all topics and files"
-    echo "7. Exit"
+    echo "7. Git operations"         # New option added here
+    echo "8. Exit"                   # Changed from 7 to 8
     echo
 
-    read -p "Enter your choice (1-7): " choice
+    read -p "Enter your choice (1-8): " choice  # Changed from 1-7 to 1-8
 
     case $choice in
         1) create_project ;;
@@ -566,7 +784,8 @@ main_menu() {
         4) run_class ;;
         5) quick_compile_run ;;
         6) list_topics ;;
-        7) echo "Exiting..."; exit 0 ;;
+        7) git_operations ;;         # New case added here
+        8) echo "Exiting..."; exit 0 ;;  # Changed from 7 to 8
         *) echo -e "${YELLOW}Invalid choice.${NC}" ;;
     esac
 
