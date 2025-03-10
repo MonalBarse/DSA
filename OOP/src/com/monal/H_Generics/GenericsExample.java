@@ -53,10 +53,10 @@ class Pair<K, V> {
 
   @Override
   public String toString() {
-    return "Pair{" +
-        "key=" + key +
-        ", value=" + value +
-        '}';
+    return "Pair { \n" +
+        "key=" + key + ", \n" +
+        "value=" + value + "\n" +
+        "}";
   }
 }
 

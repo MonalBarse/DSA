@@ -23,7 +23,9 @@ public class CustomArrayList<E> implements Iterable<E> {
     // The size of the ArrayList (number of elements it contains)
     private int size;
 
-    // Modification count for fail-fast iterator
+    // modCount is used to keep track of the number of times the list has been
+    // structurally modified.
+    // This is used to detect concurrent modification during iteration.
     private int modCount = 0;
 
     /**
@@ -50,20 +52,12 @@ public class CustomArrayList<E> implements Iterable<E> {
         }
     }
 
-    /**
-     * Returns the number of elements in this list.
-     *
-     * @return the number of elements in this list
-     */
+    // Returns the number of elements in this list.
     public int size() {
         return size;
     }
 
-    /**
-     * Returns true if this list contains no elements.
-     *
-     * @return true if this list contains no elements
-     */
+    // Returns true if this list contains no elements.
     public boolean isEmpty() {
         return size == 0;
     }
@@ -349,22 +343,15 @@ public class CustomArrayList<E> implements Iterable<E> {
         }
     }
 
-    /**
+    /*
      * Returns an array containing all of the elements in this list in proper
      * sequence.
-     *
-     * @return an array containing all of the elements in this list in proper
-     *         sequence
      */
     public Object[] toArray() {
         return Arrays.copyOf(elementData, size);
     }
 
-    /**
-     * Returns an iterator over the elements in this list in proper sequence.
-     *
-     * @return an iterator over the elements in this list in proper sequence
-     */
+    // Returns an iterator over the elements in this list in proper sequence
     @Override
     public Iterator<E> iterator() {
         return new ArrayListIterator();

@@ -19,6 +19,140 @@ import java.util.TreeSet;
  * - Multiple field comparison
  * - equals() and hashCode() methods
  */
+
+/**
+ * Person class implements Comparable for natural ordering by age
+ */
+class Person implements Comparable<Person> {
+  private String firstName;
+  private String lastName;
+  private int age;
+
+  public Person(String firstName, String lastName, int age) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  @Override
+  public String toString() {
+    return firstName + " " + lastName + " (" + age + ")";
+  }
+
+  // Natural ordering based on age
+  @Override
+  public int compareTo(Person other) {
+    return Integer.compare(this.age, other.age);
+  }
+
+  // Proper equals method
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null || getClass() != obj.getClass())
+      return false;
+
+    Person other = (Person) obj;
+
+    return age == other.age &&
+        Objects.equals(firstName, other.firstName) &&
+        Objects.equals(lastName, other.lastName);
+  }
+
+  // Proper hashCode method (always override with equals)
+  @Override
+  public int hashCode() {
+    return Objects.hash(firstName, lastName, age);
+  }
+}
+
+/**
+ * A custom comparator for sorting Person objects by first name
+ */
+class FirstNameComparator implements Comparator<Person> {
+  @Override
+  public int compare(Person p1, Person p2) {
+    return p1.getFirstName().compareTo(p2.getFirstName());
+  }
+}
+
+/**
+ * A class that demonstrates how equals and compareTo can have different
+ * behavior
+ * This class considers two persons equal if they have the same name,
+ * but sorts them by age (natural ordering)
+ */
+
+class PersonNameOnly implements Comparable<PersonNameOnly> {
+  private String firstName;
+  private String lastName;
+  private int age;
+
+  public PersonNameOnly(String firstName, String lastName, int age) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+  }
+
+  public String getFirstName() {
+    return firstName;
+  }
+
+  public String getLastName() {
+    return lastName;
+  }
+
+  public int getAge() {
+    return age;
+  }
+
+  @Override
+  public String toString() {
+    return firstName + " " + lastName + " (" + age + ")";
+  }
+
+  // Natural ordering based on age
+  @Override
+  public int compareTo(PersonNameOnly other) {
+    return Integer.compare(this.age, other.age);
+  }
+
+  // Equality based only on first and last name
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null || getClass() != obj.getClass())
+      return false;
+
+    PersonNameOnly other = (PersonNameOnly) obj;
+
+    return Objects.equals(firstName, other.firstName) &&
+        Objects.equals(lastName, other.lastName);
+    // Note: age is intentionally excluded for demonstration purposes
+  }
+
+  // HashCode consistent with equals
+  @Override
+  public int hashCode() {
+    return Objects.hash(firstName, lastName);
+    // Note: age is intentionally excluded to match equals method
+  }
+}
+
 public class ComparingObjectsExample {
 
   public static void main(String[] args) {
@@ -211,137 +345,5 @@ public class ComparingObjectsExample {
     for (Person p : list) {
       System.out.println(p);
     }
-  }
-}
-
-/**
- * Person class implements Comparable for natural ordering by age
- */
-class Person implements Comparable<Person> {
-  private String firstName;
-  private String lastName;
-  private int age;
-
-  public Person(String firstName, String lastName, int age) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.age = age;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public int getAge() {
-    return age;
-  }
-
-  @Override
-  public String toString() {
-    return firstName + " " + lastName + " (" + age + ")";
-  }
-
-  // Natural ordering based on age
-  @Override
-  public int compareTo(Person other) {
-    return Integer.compare(this.age, other.age);
-  }
-
-  // Proper equals method
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null || getClass() != obj.getClass())
-      return false;
-
-    Person other = (Person) obj;
-
-    return age == other.age &&
-        Objects.equals(firstName, other.firstName) &&
-        Objects.equals(lastName, other.lastName);
-  }
-
-  // Proper hashCode method (always override with equals)
-  @Override
-  public int hashCode() {
-    return Objects.hash(firstName, lastName, age);
-  }
-}
-
-/**
- * A custom comparator for sorting Person objects by first name
- */
-class FirstNameComparator implements Comparator<Person> {
-  @Override
-  public int compare(Person p1, Person p2) {
-    return p1.getFirstName().compareTo(p2.getFirstName());
-  }
-}
-
-/**
- * A class that demonstrates how equals and compareTo can have different
- * behavior
- * This class considers two persons equal if they have the same name,
- * but sorts them by age (natural ordering)
- */
-class PersonNameOnly implements Comparable<PersonNameOnly> {
-  private String firstName;
-  private String lastName;
-  private int age;
-
-  public PersonNameOnly(String firstName, String lastName, int age) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.age = age;
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public int getAge() {
-    return age;
-  }
-
-  @Override
-  public String toString() {
-    return firstName + " " + lastName + " (" + age + ")";
-  }
-
-  // Natural ordering based on age
-  @Override
-  public int compareTo(PersonNameOnly other) {
-    return Integer.compare(this.age, other.age);
-  }
-
-  // Equality based only on first and last name
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null || getClass() != obj.getClass())
-      return false;
-
-    PersonNameOnly other = (PersonNameOnly) obj;
-
-    return Objects.equals(firstName, other.firstName) &&
-        Objects.equals(lastName, other.lastName);
-    // Note: age is intentionally excluded for demonstration purposes
-  }
-
-  // HashCode consistent with equals
-  @Override
-  public int hashCode() {
-    return Objects.hash(firstName, lastName);
-    // Note: age is intentionally excluded to match equals method
   }
 }
