@@ -1,5 +1,8 @@
 
-   import java.util.*;
+package com.monal.contestOne;
+
+import java.util.*;
+
 public class B_Robot_Program {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -44,11 +47,11 @@ public class B_Robot_Program {
         return zeroCount;
     }
 
-
     public static long solve(int n, int x, long k, String commands) {
 
-    // Handeling edge case when robot starts at zero
-        if (x == 0) return handleStartingAtZero(n, k, commands);
+        // Handeling edge case when robot starts at zero
+        if (x == 0)
+            return handleStartingAtZero(n, k, commands);
 
         int position = x, cmdIndex = 0;
         long zeroCount = 0, time = 0;
@@ -75,7 +78,8 @@ public class B_Robot_Program {
 
             seen.put(state, time);
 
-            if (time >= k) return zeroCount;
+            if (time >= k)
+                return zeroCount;
 
             if (cmdIndex < n) {
                 position += (commands.charAt(cmdIndex) == 'L') ? -1 : 1;
@@ -87,7 +91,8 @@ public class B_Robot_Program {
                     cmdIndex = 0;
                 }
 
-                if (cmdIndex == n && position != 0) return zeroCount;
+                if (cmdIndex == n && position != 0)
+                    return zeroCount;
             } else {
                 return zeroCount;
             }
@@ -96,7 +101,8 @@ public class B_Robot_Program {
     }
 
     public static long countZeros(int n, int position, int cmdIndex, String commands, long steps) {
-        if (steps == 0) return 0;
+        if (steps == 0)
+            return 0;
         long zeroCount = 0;
 
         for (long i = 0; i < steps; i++) {
@@ -109,7 +115,8 @@ public class B_Robot_Program {
                     cmdIndex = 0;
                 }
 
-                if (cmdIndex == n && position != 0) return zeroCount;
+                if (cmdIndex == n && position != 0)
+                    return zeroCount;
             } else {
                 return zeroCount;
             }

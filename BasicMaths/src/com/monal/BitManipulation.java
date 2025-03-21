@@ -1,16 +1,17 @@
+
 package com.monal;
 
 public class BitManipulation {
 
-  public static void main(String[] args) {}
+  public static void main(String[] args) {
+  }
 
   // -------------------------------------------------------------------- //
 
   public static double sqrtNR(int number, int precision) {
     double x = number; // Initial guess for the square root
     double root; // Variable to store the calculated square root
-    double threshold =
-        Math.pow(10, -precision); // Precision threshold based on the desired precision
+    double threshold = Math.pow(10, -precision); // Precision threshold based on the desired precision
 
     while (true) {
       root = 0.5 * (x + (number / x)); // Update the guess
@@ -53,7 +54,8 @@ public class BitManipulation {
       }
 
       // we also need to round off the number to the given precision
-      // we can do this by multiplying the number by 10^precision, rounding it off and then dividing
+      // we can do this by multiplying the number by 10^precision, rounding it off and
+      // then dividing
       // it by 10^precision
 
       root = root - increment;
@@ -65,7 +67,8 @@ public class BitManipulation {
      * int number = 50;
      * int precision = 3;
      * double sqrt = sqrtBS(number, precision);
-     * System.out.println("Square root of " + number + " with precision " + precision + " is: " + sqrt);
+     * System.out.println("Square root of " + number + " with precision " +
+     * precision + " is: " + sqrt);
      */
   }
 
@@ -74,20 +77,23 @@ public class BitManipulation {
   public static void seive(int number) {
     // Given a number find all the prime numbers less than or equal to it
     // We can solve this problem using Seive of Eratosthenes
-    // The algorithm works by marking the multiples of each prime number starting from 2 as
+    // The algorithm works by marking the multiples of each prime number starting
+    // from 2 as
     // composites
     // and then finding the next prime number and repeating the process
-    // The time complexity of this algorithm is O(nlog(logn)) and space complexity is O(n)
-    // The algorithm is efficient for finding all prime numbers up to 10 million and not efficient
+    // The time complexity of this algorithm is O(nlog(logn)) and space complexity
+    // is O(n)
+    // The algorithm is efficient for finding all prime numbers up to 10 million and
+    // not efficient
     // for finding in a range.
 
     // We will mark the prime numbers as true and the non prime numbers as false
-    boolean[] isPrime =
-        new boolean[number + 1]; // Initialzing an empty array puts all the values to false
+    boolean[] isPrime = new boolean[number + 1]; // Initialzing an empty array puts all the values to false
     for (int i = 2; i <= number; i++) {
       isPrime[i] = true;
     }
-    // We are marking all the numbers as true as we are assuming all the numbers to be prime
+    // We are marking all the numbers as true as we are assuming all the numbers to
+    // be prime
     // and the prime numbers as true
     for (int i = 2; i * i <= number; i++) {
       if (isPrime[i]) {
@@ -106,10 +112,12 @@ public class BitManipulation {
 
   // -------------------------------------------------------------------- //
   public static int findMagicNumber(int n) {
-    // A nth magic number is a number which can be represented as the sum of powers of 5;
+    // A nth magic number is a number which can be represented as the sum of powers
+    // of 5;
     // 1st magic number = 1 in binary is 1 so , Math.pow(5, 1) = 5
     // 2nd magic number = 2 in binary is 10 so, Math.pow(5, 2) + Math.pow(0,1)= 25
-    // 3rd magic number = 3 in binary is 11 so, Math.pow(5, 2) + Math.pow(5,1) = 30 .... and so on
+    // 3rd magic number = 3 in binary is 11 so, Math.pow(5, 2) + Math.pow(5,1) = 30
+    // .... and so on
     // we can solve this problem using bitwise operators
 
     int pow = 1, answer = 0;
@@ -128,7 +136,10 @@ public class BitManipulation {
 
   // -------------------------------------------------------------------- //
   public static int oneOutOfThreeRepeating(int[] arr) {
-    /* An array has all elements repeated thrice except for one element which is repeated once find that element */
+    /*
+     * An array has all elements repeated thrice except for one element which is
+     * repeated once find that element
+     */
     // We can solve this problem using XOR operator
 
     int ones = 0, twos = 0;
@@ -141,8 +152,10 @@ public class BitManipulation {
       twos &= common_bit_mask;
     }
     return ones;
-    /* int[] arr = {2, 2, 1, 3, 4, 5, 6, 4, 3, 5, 1, 2, 1, 3, 4, 5};
-    system.out.println(finduniqueelement(arr)); // 6 */
+    /*
+     * int[] arr = {2, 2, 1, 3, 4, 5, 6, 4, 3, 5, 1, 2, 1, 3, 4, 5};
+     * system.out.println(finduniqueelement(arr)); // 6
+     */
 
   }
 
@@ -156,7 +169,8 @@ public class BitManipulation {
       for (int j = 0; j < 32; j++) {
         // increment bit count for the j-th bit
         bitcounts[j] = bitcounts[j] + ((num >> j) & 1);
-        // num >> j will shift the bit to the right by j positions and & 1 will give the last bit
+        // num >> j will shift the bit to the right by j positions and & 1 will give the
+        // last bit
       }
     }
 
@@ -166,17 +180,19 @@ public class BitManipulation {
       // if bit count is not a multiple of 3, set the bit in the result
       if (bitcounts[i] % 3 != 0) {
         result = result | (1 << i);
-        // 1 << i will shift the bit to the left by i positions and | will set the the bit (if it is
+        // 1 << i will shift the bit to the left by i positions and | will set the the
+        // bit (if it is
         // 1) in the result
       }
     }
 
     return result;
     /*
-     arr --> [3,3,1,2,3,2,2]   3 --> 011 , 1 --> 001 , 2 --> 010 and the bitcounts will look like
-
-    int[] arr = {2, 2, 1, 3, 4, 5, 6, 4, 3, 5, 1, 2, 1, 3, 4, 5};
-    System.out.println(findUniqueElement(arr)); // 6
+     * arr --> [3,3,1,2,3,2,2] 3 --> 011 , 1 --> 001 , 2 --> 010 and the bitcounts
+     * will look like
+     * 
+     * int[] arr = {2, 2, 1, 3, 4, 5, 6, 4, 3, 5, 1, 2, 1, 3, 4, 5};
+     * System.out.println(findUniqueElement(arr)); // 6
      */
   }
 
@@ -198,10 +214,11 @@ public class BitManipulation {
 
   // -------------------------------------------------------------------- //
   public static int ithbit(int num, int position) {
-    // given an  number find it's i'th bit
+    // given an number find it's i'th bit
     // we can create a mask and do & operation with it
-    // so let's say if we have been given a number 54 and we want to find its 3rd bit (from right)
-    // 54 = 110110  --> 3rd bit from right is 1
+    // so let's say if we have been given a number 54 and we want to find its 3rd
+    // bit (from right)
+    // 54 = 110110 --> 3rd bit from right is 1
     // 1 << 3 = 1000 (mask) --> 54 & 1000 = 1000 (8) --> 8 is the 3rd bit from right
     // if we want to display its both bit and value, we can use the following code
 
@@ -210,18 +227,21 @@ public class BitManipulation {
     int binary = n >> position; // to get the actual bit value
     return binary;
 
-    /*  system.out.println(ithbit(43, 2)); // 0
-     *  system.out.println(ithbit(42, 3)); // 1
-     *  system.out.println(ithbit(54, 3)); // 1
-     *  system.out.println(ithbit(54, 2)); // 0 (54--> 110110)
+    /*
+     * system.out.println(ithbit(43, 2)); // 0
+     * system.out.println(ithbit(42, 3)); // 1
+     * system.out.println(ithbit(54, 3)); // 1
+     * system.out.println(ithbit(54, 2)); // 0 (54--> 110110)
      */
   }
 
   // -------------------------------------------------------------------- //
   public static int uniqueelement(int[] arr) {
-    // given an array of integers, every element appears twice except for one. find that single one
+    // given an array of integers, every element appears twice except for one. find
+    // that single one
     // eg [2,2,1] --> 1 , [4,1,2,1,2] --> 4
-    // we can solve this problem using xor operator since a xor a = 0 and a xor 0 = a
+    // we can solve this problem using xor operator since a xor a = 0 and a xor 0 =
+    // a
     int result = 0;
 
     for (int elem : arr) {
@@ -238,9 +258,11 @@ public class BitManipulation {
   // -------------------------------------------------------------------- //
   public static void bitwiseoperator() {
     // bitwise operators
-    // note: negative numbers are stored in 2's complement form in memory --> 2's complement of a
+    // note: negative numbers are stored in 2's complement form in memory --> 2's
+    // complement of a
     // number is the bitwise not of the number + 1
-    // eg -5 = 1111 1011 (1's complement of 5) + 1 = 1111 1100 , eg2 -10 = 1111 0110 (1's complement
+    // eg -5 = 1111 1011 (1's complement of 5) + 1 = 1111 1100 , eg2 -10 = 1111 0110
+    // (1's complement
     // of 10) + 1 = 1111 0111
     // and operator
     System.out.println(5 & 6); // 4 (101 & 110 = 100)
@@ -250,13 +272,15 @@ public class BitManipulation {
     // xor operator
     // xor operator returns 1 if both bits are different, otherwise it returns 0
     System.out.println(5 ^ 6); // 3 (101 ^ 110 = 011) --> n ^ 1 = ~n , n ^ 0 = n , n ^ n = 0
-    // not operator (~) --> returns the complement of a number by changing 1 to 0 and 0 to 1
+    // not operator (~) --> returns the complement of a number by changing 1 to 0
+    // and 0 to 1
 
   }
 
   public static int numberOfBinary(int n, int base) {
 
-    // given a decimal number n, find the number of digits it take to represent it in base b (2, 8,
+    // given a decimal number n, find the number of digits it take to represent it
+    // in base b (2, 8,
     // 16)
     // we can solve this problem using log base b of n + 1
     // eg 10 in binary = 1010 --> 4 digits , 10 in octal = 12 --> 2 digits
@@ -268,19 +292,22 @@ public class BitManipulation {
   // -------------------------------------------------------------------- //
   public static boolean iseven(int num) {
 
-    /*  we can use bitwise and to check if a number is even or odd
-      if a number is even, its last bit will be 0 and if it is odd, its last bit will be 1
-      so, if we do a & 1, we will get 0 for even numbers and 1 for odd numbers
-      this is better than using modulo operator because it is faster (bitwise operations are faster than arithmetic operations)
-      and it works for negative numbers as well
-
-      /*
-        system.out.println(iseven(10)); // true
-        system.out.println(iseven(5)); // false
-        system.out.println(iseven(-10)); // true
-        system.out.println(iseven(-5)); // false
-      /
-    */
+    /*
+     * we can use bitwise and to check if a number is even or odd
+     * if a number is even, its last bit will be 0 and if it is odd, its last bit
+     * will be 1
+     * so, if we do a & 1, we will get 0 for even numbers and 1 for odd numbers
+     * this is better than using modulo operator because it is faster (bitwise
+     * operations are faster than arithmetic operations)
+     * and it works for negative numbers as well
+     * 
+     * /*
+     * system.out.println(iseven(10)); // true
+     * system.out.println(iseven(5)); // false
+     * system.out.println(iseven(-10)); // true
+     * system.out.println(iseven(-5)); // false
+     * /
+     */
     int lastbit = num & 1;
     if (lastbit == 0) {
       return true;

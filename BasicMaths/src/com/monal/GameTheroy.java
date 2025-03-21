@@ -43,6 +43,9 @@ Note
   A player can make a move and write number 6 after number 30; 6, as we know, is a losing number.
   Thus, this move will bring us the victory.
  */
+
+package com.monal;
+
 public class GameTheroy {
   public static void main() {
 

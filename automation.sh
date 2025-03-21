@@ -227,6 +227,7 @@ git_operations() {
     esac
 }
 # Function to compile Java file (replaces compile.sh)
+# Function to compile Java file (replaces compile.sh)
 compile_java_file() {
     local topic_dir="$1"
     local java_file_name="$2"
@@ -284,6 +285,8 @@ compile_java_file() {
     fi
 }
 
+
+# Function to run compiled Java class (replaces run.sh)
 # Function to run compiled Java class (replaces run.sh)
 run_java_class() {
     local topic_dir="$1"
@@ -571,8 +574,7 @@ compile_file() {
     # Create out directory if it doesn't exist
     mkdir -p "$topic_dir/out"
 
-    # List Java files in the topic directory with their full paths relative to src/com/monal
-    echo -e "${GREEN}Java files in this topic:${NC}"
+    # Find all Java files in the topic directory
     java_files=$(find "$topic_dir/src" -name "*.java")
 
     # Check if any Java files were found
@@ -581,88 +583,140 @@ compile_file() {
         return
     fi
 
-    # Display Java files with their packages
-    echo "$java_files" | while read file; do
+    # Create a numbered list of Java files with their full package paths
+    echo -e "${GREEN}Java files in this topic:${NC}"
+    file_counter=1
+    declare -a file_paths
+
+    while IFS= read -r file; do
         rel_path=${file#$topic_dir/src/}
         package_path=$(dirname "$rel_path")
         file_name=$(basename "$file" .java)
-        echo -e "${BLUE}${package_path}${NC} - ${file_name}"
-    done
+        echo -e "$file_counter. ${BLUE}${package_path}${NC} - ${file_name}"
+        file_paths[$file_counter]="$file"
+        ((file_counter++))
+    done <<< "$java_files"
 
-    read -p "Enter Java file name (without .java extension): " java_file_name
+    # Ask user to select file by number
+    read -p "Enter the number of the Java file to compile: " file_number
 
-    # Check if the file is a directory
-    if [ -d "$topic_dir/src/com/monal/$java_file_name" ]; then
-        echo -e "${RED}Error:${NC} '$java_file_name' is a directory, not a Java file!"
-
-        # List Java files in that directory
-        echo -e "${YELLOW}Java files in $java_file_name directory:${NC}"
-        find "$topic_dir/src/com/monal/$java_file_name" -name "*.java" | while read file; do
-            echo "- $(basename "$file" .java)"
-        done
-
-        read -p "Enter Java file name from the list above: " java_file_name
+    # Validate input
+    if ! [[ "$file_number" =~ ^[0-9]+$ ]] || [ "$file_number" -lt 1 ] || [ "$file_number" -ge "$file_counter" ]; then
+        echo -e "${RED}Error:${NC} Invalid selection!"
+        return
     fi
 
-    # Run the compilation function
-    compile_java_file "$topic_dir" "$java_file_name"
+    # Get the selected file path
+    selected_file="${file_paths[$file_number]}"
+    java_file_name=$(basename "$selected_file" .java)
+
+    # Extract the subtopic path for more accurate file finding
+    subtopic_path=${selected_file#$topic_dir/src/}
+    subtopic_path=$(dirname "$subtopic_path")
+
+    # Run the compilation function with the proper path context
+    echo -e "${GREEN}Compiling${NC} $java_file_name from package $subtopic_path"
+
+    # Change to the topic directory
+    cd "$topic_dir" || return
+
+    # Directory paths
+    SRC_DIR="src"
+    BIN_DIR="out"
+
+    # Create the bin directory if it doesn't exist
+    mkdir -p "$BIN_DIR"
+
+    # Use the exact file path we found earlier
+    JAVA_FILE=${selected_file#$topic_dir/}
+
+    # Get the package path
+    PACKAGE_PATH=$(dirname ${JAVA_FILE#$SRC_DIR/})
+
+    # Create the package directory in the output folder
+    mkdir -p "$BIN_DIR/$PACKAGE_PATH"
+
+    # Compile the Java file
+    javac -d "$BIN_DIR" "$JAVA_FILE"
+
+    # Check if compilation was successful
+    if [ $? -eq 0 ]; then
+        echo "Compilation successful. Class file saved in $BIN_DIR/$PACKAGE_PATH"
+
+        # Extract the main class name from package path and filename
+        MAIN_CLASS="${PACKAGE_PATH}.${java_file_name}"
+        MAIN_CLASS=$(echo "$MAIN_CLASS" | tr '/' '.')
+
+        # Store these values for potential recompilation
+        LAST_COMPILED_FILE="$JAVA_FILE"
+        LAST_COMPILED_CLASS="$MAIN_CLASS"
+        LAST_TOPIC_DIR="$topic_dir"
+
+        # Ask if user wants to run the compiled program
+        echo "Run the program? (y/n)"
+        read -r RUN_OPTION
+        if [ "$RUN_OPTION" = "y" ]; then
+            java -cp "$BIN_DIR" "$MAIN_CLASS"
+            echo ""  # Add a blank line for better separation
+
+            # Ask if user wants to recompile and run again
+            recompile_loop "$topic_dir" "$JAVA_FILE" "$MAIN_CLASS"
+        fi
+
+        return 0
+    else
+        echo "Compilation failed."
+        return 1
+    fi
 }
 
-# Function to run a compiled class
-run_class() {
-    echo -e "${BLUE}Run a compiled Java class${NC}"
+# New function to handle recompile loop
+recompile_loop() {
+    local topic_dir="$1"
+    local java_file="$2"
+    local main_class="$3"
 
-    # List all valid topic folders
-    echo -e "${GREEN}Available topics:${NC}"
-    topics=$(get_valid_topics)
+    while true; do
+        echo -e "${GREEN}Options:${NC}"
+        echo "1. Recompile and run"
+        echo "2. Return to main menu"
+        read -p "Enter your choice (1-2): " recompile_choice
 
-    # Check if any topics were found
-    if [ -z "$topics" ]; then
-        echo -e "${RED}No topics with Java files found!${NC}"
-        return
-    fi
+        case $recompile_choice in
+            1)
+                # Recompile the same file
+                echo -e "${GREEN}Recompiling${NC} $(basename "$java_file")..."
+                cd "$topic_dir" || return
 
-    # Display topics
-    echo "$topics"
+                # Directory paths
+                BIN_DIR="out"
 
-    # Get topic choice
-    read -p "Enter topic name: " topic_name
-    topic_dir="$DSA_ROOT/$topic_name"
+                # Compile the Java file
+                javac -d "$BIN_DIR" "$java_file"
 
-    if [ ! -d "$topic_dir" ]; then
-        echo -e "${RED}Error:${NC} Topic '$topic_name' does not exist!"
-        return
-    fi
+                # Check if compilation was successful
+                if [ $? -eq 0 ]; then
+                    echo "Compilation successful."
 
-    # Create out directory if it doesn't exist
-    mkdir -p "$topic_dir/out"
-
-    # List class files in the topic directory with their packages
-    echo -e "${GREEN}Compiled classes in this topic:${NC}"
-    class_files=$(find "$topic_dir/out" -name "*.class" 2>/dev/null)
-
-    # Check if any class files were found
-    if [ -z "$class_files" ]; then
-        echo -e "${YELLOW}No compiled classes found. Let's compile a file first.${NC}"
-        compile_file
-        return
-    fi
-
-    # Display class files with their packages
-    echo "$class_files" | while read file; do
-        rel_path=${file#$topic_dir/out/}
-        package_path=$(dirname "$rel_path")
-        class_name=$(basename "$file" .class)
-        echo -e "${BLUE}${package_path}${NC} - ${class_name}"
+                    # Run the program automatically
+                    echo -e "${BLUE}Running program...${NC}"
+                    java -cp "$BIN_DIR" "$main_class"
+                    echo ""  # Add a blank line for better separation
+                else
+                    echo "Compilation failed."
+                fi
+                ;;
+            2)
+                return 0
+                ;;
+            *)
+                echo -e "${YELLOW}Invalid choice. Please enter 1 or 2.${NC}"
+                ;;
+        esac
     done
-
-    read -p "Enter class name (without .class extension): " class_name
-
-    # Run the class using our function
-    run_java_class "$topic_dir" "$class_name"
 }
 
-# Quick compilation and run in one step
+# Modified quick compile and run
 quick_compile_run() {
     echo -e "${BLUE}Quick compile and run${NC}"
 
@@ -691,8 +745,7 @@ quick_compile_run() {
     # Create out directory if it doesn't exist
     mkdir -p "$topic_dir/out"
 
-    # List Java files in the topic directory with their paths
-    echo -e "${GREEN}Java files in this topic:${NC}"
+    # Find all Java files in the topic directory
     java_files=$(find "$topic_dir/src" -name "*.java")
 
     # Check if any Java files were found
@@ -701,32 +754,193 @@ quick_compile_run() {
         return
     fi
 
-    # Display Java files with their packages
-    echo "$java_files" | while read file; do
+    # Create a numbered list of Java files with their full package paths
+    echo -e "${GREEN}Java files in this topic:${NC}"
+    file_counter=1
+    declare -a file_paths
+
+    while IFS= read -r file; do
         rel_path=${file#$topic_dir/src/}
         package_path=$(dirname "$rel_path")
         file_name=$(basename "$file" .java)
-        echo -e "${BLUE}${package_path}${NC} - ${file_name}"
-    done
+        echo -e "$file_counter. ${BLUE}${package_path}${NC} - ${file_name}"
+        file_paths[$file_counter]="$file"
+        ((file_counter++))
+    done <<< "$java_files"
 
-    read -p "Enter Java file name (without .java extension): " java_file_name
+    # Ask user to select file by number
+    read -p "Enter the number of the Java file to compile and run: " file_number
 
-    # Check if the file is a directory
-    if [ -d "$topic_dir/src/com/monal/$java_file_name" ]; then
-        echo -e "${RED}Error:${NC} '$java_file_name' is a directory, not a Java file!"
-
-        # List Java files in that directory
-        echo -e "${YELLOW}Java files in $java_file_name directory:${NC}"
-        find "$topic_dir/src/com/monal/$java_file_name" -name "*.java" | while read file; do
-            echo "- $(basename "$file" .java)"
-        done
-
-        read -p "Enter Java file name from the list above: " java_file_name
+    # Validate input
+    if ! [[ "$file_number" =~ ^[0-9]+$ ]] || [ "$file_number" -lt 1 ] || [ "$file_number" -ge "$file_counter" ]; then
+        echo -e "${RED}Error:${NC} Invalid selection!"
+        return
     fi
 
-    # Compile the file using our function, which includes option to run
-    compile_java_file "$topic_dir" "$java_file_name"
+    # Get the selected file path
+    selected_file="${file_paths[$file_number]}"
+    java_file_name=$(basename "$selected_file" .java)
+
+    # Extract the subtopic path for more accurate file finding
+    subtopic_path=${selected_file#$topic_dir/src/}
+    subtopic_path=$(dirname "$subtopic_path")
+
+    # Run the compilation and execution directly
+    echo -e "${GREEN}Compiling and running${NC} $java_file_name from package $subtopic_path"
+
+    # Change to the topic directory
+    cd "$topic_dir" || return
+
+    # Directory paths
+    SRC_DIR="src"
+    BIN_DIR="out"
+
+    # Create the bin directory if it doesn't exist
+    mkdir -p "$BIN_DIR"
+
+    # Use the exact file path we found earlier
+    JAVA_FILE=${selected_file#$topic_dir/}
+
+    # Get the package path
+    PACKAGE_PATH=$(dirname ${JAVA_FILE#$SRC_DIR/})
+
+    # Create the package directory in the output folder
+    mkdir -p "$BIN_DIR/$PACKAGE_PATH"
+
+    # Compile the Java file
+    javac -d "$BIN_DIR" "$JAVA_FILE"
+
+    # Check if compilation was successful
+    if [ $? -eq 0 ]; then
+        echo "Compilation successful. Class file saved in $BIN_DIR/$PACKAGE_PATH"
+
+        # Extract the main class name from package path and filename
+        MAIN_CLASS="${PACKAGE_PATH}.${java_file_name}"
+        MAIN_CLASS=$(echo "$MAIN_CLASS" | tr '/' '.')
+
+        # Store these values for potential recompilation
+        LAST_COMPILED_FILE="$JAVA_FILE"
+        LAST_COMPILED_CLASS="$MAIN_CLASS"
+        LAST_TOPIC_DIR="$topic_dir"
+
+        # Run the program automatically
+        echo -e "${BLUE}Running program...${NC}"
+        java -cp "$BIN_DIR" "$MAIN_CLASS"
+        echo ""  # Add a blank line for better separation
+
+        # Ask if user wants to recompile and run again
+        recompile_loop "$topic_dir" "$JAVA_FILE" "$MAIN_CLASS"
+
+        return 0
+    else
+        echo "Compilation failed."
+        return 1
+    fi
 }
+
+# Modified run_class function
+run_class() {
+    echo -e "${BLUE}Run a compiled Java class${NC}"
+
+    # List all valid topic folders
+    echo -e "${GREEN}Available topics:${NC}"
+    topics=$(get_valid_topics)
+
+    # Check if any topics were found
+    if [ -z "$topics" ]; then
+        echo -e "${RED}No topics with Java files found!${NC}"
+        return
+    fi
+
+    # Display topics
+    echo "$topics"
+
+    # Get topic choice
+    read -p "Enter topic name: " topic_name
+    topic_dir="$DSA_ROOT/$topic_name"
+
+    if [ ! -d "$topic_dir" ]; then
+        echo -e "${RED}Error:${NC} Topic '$topic_name' does not exist!"
+        return
+    fi
+
+    # Check for compiled classes
+    class_files=$(find "$topic_dir/out" -name "*.class" 2>/dev/null)
+
+    # Check if any class files were found
+    if [ -z "$class_files" ]; then
+        echo -e "${YELLOW}No compiled classes found. Let's compile a file first.${NC}"
+        compile_file
+        return
+    fi
+
+    # Create a numbered list of compiled classes with their full package paths
+    echo -e "${GREEN}Compiled classes in this topic:${NC}"
+    class_counter=1
+    declare -a class_paths
+
+    while IFS= read -r file; do
+        rel_path=${file#$topic_dir/out/}
+        package_path=$(dirname "$rel_path")
+        class_name=$(basename "$file" .class)
+        echo -e "$class_counter. ${BLUE}${package_path}${NC} - ${class_name}"
+        class_paths[$class_counter]="$file"
+        ((class_counter++))
+    done <<< "$class_files"
+
+    # Ask user to select class by number
+    read -p "Enter the number of the class to run: " class_number
+
+    # Validate input
+    if ! [[ "$class_number" =~ ^[0-9]+$ ]] || [ "$class_number" -lt 1 ] || [ "$class_number" -ge "$class_counter" ]; then
+        echo -e "${RED}Error:${NC} Invalid selection!"
+        return
+    fi
+
+    # Get the selected class path
+    selected_class="${class_paths[$class_number]}"
+    class_name=$(basename "$selected_class" .class)
+
+    # Extract the package path for running
+    out_path=${selected_class#$topic_dir/out/}
+    package_path=$(dirname "$out_path")
+
+    # Run the Java program
+    echo -e "${GREEN}Running${NC} $class_name from package $package_path"
+
+    # Construct fully qualified class name
+    FULLY_QUALIFIED_NAME="${package_path}.${class_name}"
+    FULLY_QUALIFIED_NAME=$(echo "$FULLY_QUALIFIED_NAME" | tr '/' '.')
+
+    # Run the program
+    cd "$topic_dir" || return
+    java -cp out "$FULLY_QUALIFIED_NAME"
+
+    # Capture the exit status of the Java program
+    JAVA_EXIT_STATUS=$?
+
+    # Check if the Java program ran successfully
+    if [ $JAVA_EXIT_STATUS -eq 0 ]; then
+        echo "Program ran successfully."
+
+        # Try to find the matching source file for potential recompilation
+        SRC_DIR="src"
+        SOURCE_FILE=$(find "$topic_dir/$SRC_DIR" -name "${class_name}.java")
+
+        if [ -n "$SOURCE_FILE" ]; then
+            JAVA_FILE=${SOURCE_FILE#$topic_dir/}
+
+            # Ask if user wants to recompile and run again
+            recompile_loop "$topic_dir" "$JAVA_FILE" "$FULLY_QUALIFIED_NAME"
+        fi
+
+        return 0
+    else
+        echo "Program encountered an error."
+        return 1
+    fi
+}
+
 
 list_topics() {
     echo -e "${BLUE}Listing all DSA topics and their Java files${NC}"

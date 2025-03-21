@@ -5,16 +5,63 @@ import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Comprehensive demonstration of the Java Collections Framework
- * This class provides detailed examples of the various collection interfaces,
- * implementations, algorithms, and utility methods.
+/*
+    Here are the main collection frameworks in Java:
+
+    1. List
+        - ArrayList
+        - LinkedList
+        - Vector
+        - Stack
+
+    2. Set
+        - HashSet
+        - LinkedHashSet
+        - TreeSet
+
+    3. Queue
+        - PriorityQueue
+        - ArrayDeque
+        - LinkedList (also implements Queue)
+
+    4. Map (technically not part of Collection interface, but part of Collections Framework)
+        - HashMap
+        - LinkedHashMap
+        - TreeMap
+        - Hashtable
+        - Properties
+
+    5. Legacy collections (older implementations)
+        - Vector
+        - Stack
+        - Hashtable
+        - Properties
+        - Dictionary
+        - Enumeration (interface)
+
+    These collections are organized under the java.util package and follow a hierarchy with interfaces and implementations.
+    Most of these collections also have concurrent versions in the java.util.concurrent package like ConcurrentHashMap, CopyOnWriteArrayList, etc.
+    _______________________________________________________________________________________________________________________________
+
+    In addition to the core collection interfaces we have covered the following topics in this tutorial:
+
+    a. Collections Utility Class - It is a utility class that provides static methods for common collection operations like sorting
+        and searching. It also provides methods to create immutable collections, synchronized collections, etc.
+
+    b. Concurrent Collections - These are thread-safe collections that are designed to be used in a multi-threaded environment.
+        Examples include ConcurrentHashMap, CopyOnWriteArrayList, etc.
+
+    c. Streams with Collections - Java 8 introduced the Stream API that allows us to perform functional-style operations on collections.
+        We can use streams to filter, map, reduce, and perform other operations on collections.
+
+    d. Collections with Custom Objects - We have demonstrated how to use custom objects with collections. We have used a custom class
+        called Person and demonstrated how to sort, search, and perform other operations on collections of custom objects.
  */
 
 @SuppressWarnings("unused")
 public class CollectionFramework {
     public static void main(String[] args) {
-        System.out.println("\n========== COMPREHENSIVE JAVA COLLECTIONS FRAMEWORK TUTORIAL ==========\n");
+        System.out.println("\n========== COMPREHENSIVE JAVA COLLECTIONS FRAMEWORK  ==========\n");
 
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
@@ -85,11 +132,17 @@ public class CollectionFramework {
         System.out.println("9. Exit");
     }
 
-    /**
+    // Simple enum for day of week for EnumSet/EnumMap examples
+    private enum DayOfWeek {
+        MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+    }
+
+    /*
      * SECTION 1: LIST INTERFACE
      * Demonstrates the List interface and its implementations
      * including ArrayList, LinkedList, and Vector
      */
+
     private static void demonstrateListInterface() {
         System.out.println("\n===== 1. LIST INTERFACE & IMPLEMENTATIONS =====");
         System.out.println("[INFO] List is an ordered collection that allows duplicates");
@@ -1222,13 +1275,6 @@ public class CollectionFramework {
             // Natural ordering by age
             return Integer.compare(this.age, other.age);
         }
-    }
-
-    /**
-     * Simple enum for day of week for EnumSet/EnumMap examples
-     */
-    private enum DayOfWeek {
-        MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
     }
 
 }
