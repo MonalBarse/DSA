@@ -104,7 +104,9 @@ public class BinarySearchInMatrix {
     int rows = matrix.length;
     int cols = matrix[0].length;
 
-    // Start from top-right corner
+    // Start from top right corner - row = 0, col = cols - 1
+    // If the target is greater than the current element, move down
+    // If the target is less than the current element, move left
     int row = 0;
     int col = cols - 1;
 
@@ -112,10 +114,10 @@ public class BinarySearchInMatrix {
       if (matrix[row][col] == target) {
         return new int[] { row, col };
       } else if (matrix[row][col] < target) {
-        // Eliminate current row
+        // Move Down
         row++;
       } else {
-        // Eliminate current column
+        // Move Left
         col--;
       }
     }
