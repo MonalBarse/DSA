@@ -1,7 +1,7 @@
 package com.monal.BinarySearch;
 
 /*
- 🔹 Advanced Problem 2: Median of Two Sorted Arrays
+ 🔹 Median of Two Sorted Arrays
     Problem Statement:
       You are given two sorted arrays, nums1[] and nums2[], of sizes n and m.
       Find the median of the two sorted arrays in O(log(min(n, m))) time complexity.
@@ -29,11 +29,17 @@ package com.monal.BinarySearch;
     But merging takes O(n + m) time ❌.
     Instead, we use Binary Search to partition the arrays optimally.
 
-  2. Binary Search on Partitioning
+  2.1 Why we did not do BS on answer?
+    We cannot apply Binary Search on the answer because the median is not necessarily present in the arrays.
+    We need to find the median from the two arrays.
+
+  2.2 Binary Search on Partitioning
     We divide the two arrays into left and right halves such that:
-    Left half has smaller elements
-    Right half has larger elements
+      left half of nums1 + left half of nums2 = (n + m + 1) / 2
+
+
     Median is found from the left and right boundary elements
+
 
   3. Conditions for partitioning
     We partition the smaller array (nums1) at index mid1 and the larger array (nums2) at mid2, where:
@@ -47,10 +53,11 @@ package com.monal.BinarySearch;
  */
 public class P005 {
 
-  private double findMedian(int[] nums1, int[] nums2, int n, int m) {
+  private double findMedian(int[] nums1, int[] nums2) {
+    int n = nums1.length, m = nums2.length;
     // swap the arrays, we want nums1 to be the smaller array
     if (n > m)
-      return findMedian(nums2, nums1, m, n);
+      return findMedian(nums2, nums1);
 
     int start = 0, end = n;
     // Step 1: Apply Binary Search on the smaller array
@@ -59,21 +66,23 @@ public class P005 {
       int mid2 = (n + m + 1) / 2 - mid1;
 
       // Step 2: Compute the left and right boundary elements
-      int leftMax1 = (mid1 == 0) ? Integer.MIN_VALUE : nums1[mid1 - 1];
-      int rightMin1 = (mid1 == n) ? Integer.MAX_VALUE : nums1[mid1];
+      int Aleft = (mid1 > 0) ? nums1[mid1 - 1] : Integer.MIN_VALUE;
+      int Aright = (mid1 < m) ? nums1[mid1] : Integer.MAX_VALUE;
 
-      int leftMax2 = (mid2 == 0) ? Integer.MIN_VALUE : nums2[mid2 - 1];
-      int rightMin2 = (mid2 == m) ? Integer.MAX_VALUE : nums2[mid2];
+      int Bleft = (mid2 > 0) ? nums2[mid2 - 1] : Integer.MIN_VALUE;
+      int Bright = (mid2 < n) ? nums2[mid2] : Integer.MAX_VALUE;
 
       // Step 3: Check if the partition is valid
-      if (leftMax1 <= rightMin2 && leftMax2 <= rightMin1) {
+      if (Aleft <= Bright && Bleft <= Aright) {
         // Step 4: Compute the median
+        // if the total number of elements is even, return average of two middle elem
+        // if its odd then its max of left partition
         if ((n + m) % 2 == 0) {
-          return (Math.max(leftMax1, leftMax2) + Math.min(rightMin1, rightMin2)) / 2.0;
+          return (Math.max(Aleft, Bleft) + Math.min(Aright, Bright)) / 2.0;
         } else {
-          return Math.max(leftMax1, leftMax2);
+          return Math.max(Aleft, Bleft);
         }
-      } else if (leftMax1 > rightMin2) {
+      } else if (Aleft > Bright) {
         end = mid1 - 1;
       } else {
         start = mid1 + 1;
@@ -87,18 +96,15 @@ public class P005 {
     P005 obj = new P005();
     int[] nums1 = { 1, 4, 13 };
     int[] nums2 = { 2, 3, 5, 7, 88 };
-    int n = nums1.length, m = nums2.length;
-    System.out.println(obj.findMedian(nums1, nums2, n, m));
+    System.out.println(obj.findMedian(nums1, nums2));
 
     int[] nums3 = { 1, 2, 35, 66, 78, 199 };
     int[] nums4 = { 3, 4, 5, 7, 9, 17, 18, 20, 79, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210 };
-    int n1 = nums3.length, m1 = nums4.length;
-    System.out.println(obj.findMedian(nums3, nums4, n1, m1));
+    System.out.println(obj.findMedian(nums3, nums4));
 
     int[] nums5 = { 2, 32, 45, 67, 89, 112, 123, 134, 145, 156, 167, 178, 189 };
     int[] nums6 = { 1, 3, 5, 7, 9, 12, 15, 18, 40, 78, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 210 };
-    int n2 = nums5.length, m2 = nums6.length;
-    System.out.println(obj.findMedian(nums5, nums6, n2, m2));
+    System.out.println(obj.findMedian(nums5, nums6));
 
   }
 }

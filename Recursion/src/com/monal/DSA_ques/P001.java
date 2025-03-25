@@ -1,9 +1,6 @@
 // MEDIUM
 package com.monal.DSA_ques;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /*
   Number of Substrings Containing All Three Characters
     Given a string s consisting only of characters a, b and c.
@@ -96,11 +93,11 @@ public class P001 {
    * char[] ch = s.toCharArray();
    * int[] abc = {-1, -1, -1};
    * int count = 0, right = 0;
-   * 
+   *
    * while(right < ch.length){
-   * 
+   *
    * abc[ch[right] - 'a'] = right; // update latest index of curr char
-   * 
+   *
    * int min = Integer.MAX_VALUE;
    * for(int i=0; i<3; i++){
    * min = Math.min(min, abc[i]);
@@ -111,7 +108,7 @@ public class P001 {
    * return count;
    * }
    *
-   * 
+   *
    */
 
 }

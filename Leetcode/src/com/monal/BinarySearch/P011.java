@@ -27,6 +27,7 @@ Example 2:
 Example 3:
   Input: arr[] = [22, 23, 67], k = 1
   Output: 112
+
 */
 
 public class P011 {
@@ -97,18 +98,17 @@ public class P011 {
   }
 
   public static void main(String[] args) {
-    P011.Solution solution = new P011().new Solution();
     int[] arr1 = { 12, 34, 67, 90 };
     int k1 = 2;
-    System.out.println(solution.findPages(arr1, k1)); // Output: 113
+    System.out.println(P011.Solution.findPages(arr1, k1)); // Output: 113
 
     int[] arr2 = { 15, 17, 20 };
     int k2 = 5;
-    System.out.println(solution.findPages(arr2, k2)); // Output: -1
+    System.out.println(P011.Solution.findPages(arr2, k2)); // Output: -1
 
     int[] arr3 = { 22, 23, 67 };
     int k3 = 1;
-    System.out.println(solution.findPages(arr3, k3)); // Output: 112
+    System.out.println(P011.Solution.findPages(arr3, k3)); // Output: 112
 
   }
 }
