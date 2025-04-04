@@ -106,6 +106,28 @@ public class Subsequence {
     return subsetsWithoutFirst;
   }
 
+  // ------------------------------------------------------------------------ //
+  // Ques 3.0 - Subsets of a list using recursion
+  public List<List<Integer>> subsets(int[] arr) {
+    List<List<Integer>> result = new ArrayList<>();
+    generateSubsets(arr, 0, new ArrayList<>(), result);
+    return result;
+  }
+
+  private void generateSubsets(int[] arr, int index, List<Integer> processed, List<List<Integer>> result) {
+    // Base case: when index reaches the end of the array
+    if (index == arr.length) {
+      result.add(new ArrayList<>(processed)); // Store a copy of the current subset
+      return;
+    }
+    // Choice 1: Exclude the current element (unprocessed)
+    generateSubsets(arr, index + 1, processed, result);
+    // Choice 2: Include the current element (processed)
+    processed.add(arr[index]); // Add the current element
+    generateSubsets(arr, index + 1, processed, result);
+    processed.remove(processed.size() - 1); // Backtrack to remove last added element
+  }
+
   // Ques 3.1: Given a string, return all the possible subsequence of the string.
   /*
    * public static ArrayList<String> question_4(String processed, String
@@ -195,12 +217,11 @@ public class Subsequence {
   public static List<List<Integer>> subsetWithDuplicateRecr(int[] arr) {
     List<List<Integer>> result = new ArrayList<>();
     Arrays.sort(arr); // Sort to bring duplicates together
-    generateSubsetsRecr("", arr, 0, result, new ArrayList<>());
+    generateSubsetsRecr(arr, 0, result, new ArrayList<>());
     return result;
   }
 
-  private static void generateSubsetsRecr(String path, int[] arr, int index, List<List<Integer>> result,
-      List<Integer> processed) {
+  private static void generateSubsetsRecr(int[] arr, int index, List<List<Integer>> result, List<Integer> processed) {
     result.add(new ArrayList<>(processed));
 
     for (int i = index; i < arr.length; i++) {
@@ -208,9 +229,57 @@ public class Subsequence {
         continue;
       }
       processed.add(arr[i]);
-      generateSubsetsRecr(path + arr[i], arr, i + 1, result, processed);
+      generateSubsetsRecr(arr, i + 1, result, processed);
       processed.remove(processed.size() - 1);
     }
+  }
+
+  // Premutation with spaces
+  /*
+   * In this problem we are given a string `str` and we have to add spaces
+   * between the characters of the string to form all possible combinations.
+   * except the first and last character
+   *
+   * Input: str = "readf"
+   * Output: ["readf", "rea df", "rea d f", "re adf", "re a df",
+   * "re a d f", "r eadf", "r e adf", "r e a df", "r e a d f"]
+   */
+
+  public List<String> addSpaces(String str) {
+    List<String> result = new ArrayList<>();
+    if (str == null || str.length() <= 1) {
+      if (str != null)
+        result.add(str);
+      return result;
+    }
+
+    // Start with the first character already in the current string
+    // We don't add space before the first character
+    addSpacesHelper(str, 1, Character.toString(str.charAt(0)), result);
+    return result;
+  }
+
+  /**
+   * Helper method that uses backtracking to generate all permutations.
+   *
+   * @param str     The original input string
+   * @param idx     Current position in the string being processed
+   * @param current Current permutation being built
+   * @param result  List to store all valid permutations
+   */
+  private void addSpacesHelper(String str, int idx, String current, List<String> result) {
+    // Base case: reached the end of string
+    if (idx == str.length()) {
+      result.add(current);
+      return;
+    }
+
+    // Option 1: Add current character without adding a space before it
+    addSpacesHelper(str, idx + 1, current + str.charAt(idx), result);
+
+    // Option 2: Add a space before the current character
+    // We can add space before any character except the first one
+    addSpacesHelper(str, idx + 1, current + " " + str.charAt(idx), result);
   }
 
   // ------------------------------------- //
@@ -220,16 +289,6 @@ public class Subsequence {
   // Given a list of Strings, return the number of subsequences
   // that have a vowel count less that or equal to a given threshold.
   // Method to count vowels in a string
-  public static int countVowels(String s) {
-    String vowels = "aeiouAEIOU";
-    int count = 0;
-    for (char c : s.toCharArray()) {
-      if (vowels.indexOf(c) != -1) {
-        count++;
-      }
-    }
-    return count;
-  }
 
   public static ArrayList<ArrayList<String>> generateSubsequences(ArrayList<String> list) {
     if (list.isEmpty()) {
@@ -269,6 +328,17 @@ public class Subsequence {
     }
     // Subtract 1 to exclude the empty subsequence
     return count - 1;
+  }
+
+  public static int countVowels(String s) {
+    String vowels = "aeiouAEIOU";
+    int count = 0;
+    for (char c : s.toCharArray()) {
+      if (vowels.indexOf(c) != -1) {
+        count++;
+      }
+    }
+    return count;
   }
 
   // ------------------------------------------------------------------------ //
