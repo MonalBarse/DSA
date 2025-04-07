@@ -22,6 +22,7 @@ public class P001 {
     public List<String> printBinaryStrings(int N) {
 
         List<String> result = new ArrayList<>();
+        // Decided to use 'lastChar' to avoid using a counter for 1's and 0's
         generateStrings(N, "", result, '0'); // Start with an empty string and a last character as '0'
         return result;
     }

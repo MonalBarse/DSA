@@ -1,0 +1,484 @@
+package com.monal;
+
+/**
+ * Topics covered:
+ * 1. Simple recursion
+ * 2. Recursion with memoization (top-down DP)
+ * 3. Tabulation (bottom-up DP)
+ * 4. Space optimization techniques
+ *
+ * Example problems:
+ * - Fibonacci sequence
+ * - Climbing stairs problem
+ * - Knapsack problem
+ * - Longest common subsequence
+ */
+
+public class DynamicProgramming101 {
+
+    // ====================== FIBONACCI SEQUENCE =====================//
+
+    /**
+     * Simple recursive implementation of Fibonacci
+     * Time Complexity: O(2^n) - exponential
+     * Space Complexity: O(n) - recursion stack
+     */
+    public int fibRecursive(int n) {
+        // Base cases
+        if (n <= 1)
+            return n;
+
+        // Recursive case: fib(n) = fib(n-1) + fib(n-2)
+        return fibRecursive(n - 1) + fibRecursive(n - 2);
+    }
+
+    /**
+     * Memoized (top-down) implementation of Fibonacci
+     * Time Complexity: O(n)
+     * Space Complexity: O(n)
+     */
+    public int fibMemoized(int n) {
+        // Create memoization array
+        Integer[] memo = new Integer[n + 1];
+        return fibMemoizedHelper(n, memo);
+    }
+
+    private int fibMemoizedHelper(int n, Integer[] memo) {
+        // Base cases
+        if (n <= 1)
+            return n;
+
+        // Check if already computed
+        if (memo[n] != null)
+            return memo[n];
+
+        // Compute and store result
+        memo[n] = fibMemoizedHelper(n - 1, memo) + fibMemoizedHelper(n - 2, memo);
+        return memo[n];
+    }
+
+    /**
+     * Tabulated (bottom-up) implementation of Fibonacci
+     * Time Complexity: O(n)
+     * Space Complexity: O(n)
+     */
+    public int fibTabulated(int n) {
+        // Handle base cases
+        if (n <= 1)
+            return n;
+
+        // Create and initialize table
+        int[] dp = new int[n + 1];
+        dp[0] = 0;
+        dp[1] = 1;
+
+        // Fill the table
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        return dp[n];
+    }
+
+    /**
+     * Space-optimized implementation of Fibonacci
+     * Time Complexity: O(n)
+     * Space Complexity: O(1)
+     */
+    public int fibOptimized(int n) {
+        // Handle base cases
+        if (n <= 1)
+            return n;
+
+        // Use only variables instead of an array
+        int prev2 = 0;
+        int prev1 = 1;
+        int current = 0;
+
+        for (int i = 2; i <= n; i++) {
+            current = prev1 + prev2;
+            prev2 = prev1;
+            prev1 = current;
+        }
+
+        return current;
+    }
+
+    // ====================== CLIMBING STAIRS PROBLEM =====================//
+
+    /**
+     * Recursive implementation of the climbing stairs problem
+     * You can climb 1 or 2 steps at a time. How many ways to reach the top?
+     * Time Complexity: O(2^n)
+     * Space Complexity: O(n) - recursion stack
+     */
+    public int climbStairsRecursive(int n) {
+        // Base cases
+        if (n <= 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        if (n == 2)
+            return 2;
+
+        // Recursive case: ways(n) = ways(n-1) + ways(n-2)
+        return climbStairsRecursive(n - 1) + climbStairsRecursive(n - 2);
+    }
+
+    /**
+     * Memoized implementation of the climbing stairs problem
+     * Time Complexity: O(n)
+     * Space Complexity: O(n)
+     */
+    public int climbStairsMemoized(int n) {
+        Integer[] memo = new Integer[n + 1];
+        return climbStairsMemoizedHelper(n, memo);
+    }
+
+    private int climbStairsMemoizedHelper(int n, Integer[] memo) {
+        // Base cases
+        if (n <= 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        if (n == 2)
+            return 2;
+
+        // Check if already computed
+        if (memo[n] != null)
+            return memo[n];
+
+        // Compute and store result
+        memo[n] = climbStairsMemoizedHelper(n - 1, memo) + climbStairsMemoizedHelper(n - 2, memo);
+        return memo[n];
+    }
+
+    /**
+     * Tabulated implementation of the climbing stairs problem
+     * Time Complexity: O(n)
+     * Space Complexity: O(n)
+     */
+    public int climbStairsTabulated(int n) {
+        // Handle base cases
+        if (n <= 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        if (n == 2)
+            return 2;
+
+        // Create and initialize table
+        int[] dp = new int[n + 1];
+        dp[1] = 1;
+        dp[2] = 2;
+
+        // Fill the table
+        for (int i = 3; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        return dp[n];
+    }
+
+    // SPace optimized
+    public int climbStairsSpaceOpt(int n) {
+        // Handle base cases
+        if (n <= 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        if (n == 2)
+            return 2;
+
+        int prev1 = 1; // ways to reach step 1
+        int prev2 = 2; // ways to reach step 2
+
+        int curr = 0; // ways to reach current step
+        for (int i = 3; i <= n; i++) {
+            curr = prev1 + prev2;
+            prev1 = prev2;
+            prev2 = curr;
+        }
+
+        return curr;
+    }
+
+    // ====================== 0/1 KNAPSACK PROBLEM =====================//
+
+    /**
+     * Recursive implementation of the 0/1 Knapsack problem
+     * Time Complexity: O(2^n)
+     * Space Complexity: O(n) - recursion stack
+     */
+    /*
+     * Knapsack problem: Given weights and values of n items, put these items
+     * in a knapsack of capacity W to get the maximum total value in the knapsack.
+     * You cannot break an item, either pick it or not.
+     *
+     * Example:
+     * weights = [2,3,5,12,23,30] values = [220, 320, 121, 240, 200, 100]
+     * capacity = 49
+     *
+     * Output: 620
+     */
+    public int knapsackRecursive(int[] weights, int[] values, int capacity, int n) {
+        // Base case: no items or no capacity
+        if (n == 0 || capacity == 0)
+            return 0;
+
+        // If weight of nth item is greater than capacity, skip it
+        if (weights[n - 1] > capacity) {
+            return knapsackRecursive(weights, values, capacity, n - 1);
+        }
+
+        // Return max of two cases:
+        // 1. Item is included
+        // 2. Item is excluded
+        return Math.max(
+                values[n - 1] + knapsackRecursive(weights, values, capacity - weights[n - 1], n - 1),
+                knapsackRecursive(weights, values, capacity, n - 1));
+    }
+
+    /**
+     * Memoized implementation of the 0/1 Knapsack problem
+     * Time Complexity: O(n * capacity)
+     * Space Complexity: O(n * capacity)
+     */
+    public int knapsackMemoized(int[] weights, int[] values, int capacity, int n) {
+        // Create memoization table
+        Integer[][] memo = new Integer[n + 1][capacity + 1];
+        return knapsackMemoizedHelper(weights, values, capacity, n, memo);
+    }
+
+    private int knapsackMemoizedHelper(int[] weights, int[] values, int capacity, int n, Integer[][] memo) {
+        // Base case
+        if (n == 0 || capacity == 0)
+            return 0;
+
+        // Check if already computed
+        if (memo[n][capacity] != null)
+            return memo[n][capacity];
+
+        // If weight of nth item is greater than capacity, skip it
+        if (weights[n - 1] > capacity) {
+            memo[n][capacity] = knapsackMemoizedHelper(weights, values, capacity, n - 1, memo);
+            return memo[n][capacity];
+        }
+
+        // Store the result of max value
+        memo[n][capacity] = Math.max(
+                values[n - 1] + knapsackMemoizedHelper(weights, values, capacity - weights[n - 1], n - 1, memo),
+                knapsackMemoizedHelper(weights, values, capacity, n - 1, memo));
+
+        return memo[n][capacity];
+    }
+
+    /**
+     * Tabulated implementation of the 0/1 Knapsack problem
+     * Time Complexity: O(n * capacity)
+     * Space Complexity: O(n * capacity)
+     */
+    public int knapsackTabulated(int[] weights, int[] values, int capacity, int n) {
+        // Create and initialize table
+        int[][] dp = new int[n + 1][capacity + 1];
+
+        // Fill the table
+        for (int i = 0; i <= n; i++) {
+            for (int w = 0; w <= capacity; w++) {
+                // Base case
+                if (i == 0 || w == 0) {
+                    dp[i][w] = 0;
+                }
+                // If current item's weight fits
+                else if (weights[i - 1] <= w) {
+                    dp[i][w] = Math.max(
+                            values[i - 1] + dp[i - 1][w - weights[i - 1]],
+                            dp[i - 1][w]);
+                }
+                // If current item's weight doesn't fit
+                else {
+                    dp[i][w] = dp[i - 1][w];
+                }
+            }
+        }
+
+        return dp[n][capacity];
+    }
+
+    // ====================== LONGEST COMMON SUBSEQUENCE =====================//
+
+    /**
+     * Recursive implementation of the Longest Common Subsequence (LCS) problem
+     * Time Complexity: O(2^(m+n))
+     * Space Complexity: O(m+n) - recursion stack
+     */
+    public int lcsRecursive(String text1, String text2, int m, int n) {
+        // Base case
+        if (m == 0 || n == 0)
+            return 0;
+
+        // If last characters match
+        if (text1.charAt(m - 1) == text2.charAt(n - 1)) {
+            return 1 + lcsRecursive(text1, text2, m - 1, n - 1);
+        }
+
+        // If last characters don't match
+        return Math.max(
+                lcsRecursive(text1, text2, m - 1, n),
+                lcsRecursive(text1, text2, m, n - 1));
+    }
+
+    /**
+     * Memoized implementation of the LCS problem
+     * Time Complexity: O(m * n)
+     * Space Complexity: O(m * n)
+     */
+    public int lcsMemoized(String text1, String text2) {
+        int m = text1.length();
+        int n = text2.length();
+        Integer[][] memo = new Integer[m + 1][n + 1];
+        return lcsMemoizedHelper(text1, text2, m, n, memo);
+    }
+
+    private int lcsMemoizedHelper(String text1, String text2, int m, int n, Integer[][] memo) {
+        // Base case
+        if (m == 0 || n == 0)
+            return 0;
+
+        // Check if already computed
+        if (memo[m][n] != null)
+            return memo[m][n];
+
+        // If last characters match
+        if (text1.charAt(m - 1) == text2.charAt(n - 1)) {
+            memo[m][n] = 1 + lcsMemoizedHelper(text1, text2, m - 1, n - 1, memo);
+        } else {
+            // If last characters don't match
+            memo[m][n] = Math.max(
+                    lcsMemoizedHelper(text1, text2, m - 1, n, memo),
+                    lcsMemoizedHelper(text1, text2, m, n - 1, memo));
+        }
+
+        return memo[m][n];
+    }
+
+    /**
+     * Tabulated implementation of the LCS problem
+     * Time Complexity: O(m * n)
+     * Space Complexity: O(m * n)
+     */
+    public int lcsTabulated(String text1, String text2) {
+        int m = text1.length();
+        int n = text2.length();
+
+        // Create and initialize table
+        int[][] dp = new int[m + 1][n + 1];
+
+        // Fill the table
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                // Base case
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                }
+                // If characters match
+                else if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    dp[i][j] = 1 + dp[i - 1][j - 1];
+                }
+                // If characters don't match
+                else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+
+    public static void main(String[] args) {
+        DynamicProgramming101 dp = new DynamicProgramming101();
+
+        System.out.println("========== FIBONACCI SEQUENCE ==========");
+        int n = 30;
+
+        // 1. Simple recursion
+        long startTime = System.nanoTime();
+        System.out.println("Recursive Fibonacci of " + n + ": " + dp.fibRecursive(n));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        // 2. Memoization (top-down DP)
+        startTime = System.nanoTime();
+        System.out.println("Memoized Fibonacci of " + n + ": " + dp.fibMemoized(n));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        // 3. Tabulation (bottom-up DP)
+        startTime = System.nanoTime();
+        System.out.println("Tabulated Fibonacci of " + n + ": " + dp.fibTabulated(n));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        // 4. Space optimization
+        startTime = System.nanoTime();
+        System.out.println("Space-optimized Fibonacci of " + n + ": " + dp.fibOptimized(n));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        System.out.println("========== CLIMBING STAIRS PROBLEM ==========");
+        int stairs = 30;
+
+        startTime = System.nanoTime();
+        System.out.println("Ways to climb " + stairs + " stairs (recursive): " + dp.climbStairsRecursive(stairs));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        startTime = System.nanoTime();
+        System.out.println("Ways to climb " + stairs + " stairs (memoized): " + dp.climbStairsMemoized(stairs));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        startTime = System.nanoTime();
+        System.out.println("Ways to climb " + stairs + " stairs (tabulated): " + dp.climbStairsTabulated(stairs));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        System.out.println("========== 0/1 KNAPSACK PROBLEM ==========");
+        int[] weights = { 10, 30, 20, 50, 40 };
+        int[] values = { 60, 100, 120, 240, 200 };
+        int capacity = 50;
+
+        startTime = System.nanoTime();
+        System.out.println(
+                "Maximum value (recursive): " + dp.knapsackRecursive(weights, values, capacity, values.length));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        startTime = System.nanoTime();
+        System.out
+                .println("Maximum value (memoized): " + dp.knapsackMemoized(weights, values, capacity, values.length));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        startTime = System.nanoTime();
+        System.out.println(
+                "Maximum value (tabulated): " + dp.knapsackTabulated(weights, values, capacity, values.length));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        System.out.println("========== LONGEST COMMON SUBSEQUENCE ==========");
+        String text1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String text2 = "ABCXDEFYHIJZKFLMGNOPQRSTUVWXYZ";
+
+        startTime = System.nanoTime();
+        System.out.println("LCS length (recursive): " + dp.lcsRecursive(text1, text2, text1.length(), text2.length()));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        startTime = System.nanoTime();
+        System.out.println("LCS length (memoized): " + dp.lcsMemoized(text1, text2));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        startTime = System.nanoTime();
+        System.out.println("LCS length (tabulated): " + dp.lcsTabulated(text1, text2));
+        System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
+
+        System.out.println("========== DP PATTERNS SUMMARY ==========");
+        System.out.println("1. Identify if problem has optimal substructure and overlapping subproblems");
+        System.out.println("2. Define the state clearly (what each position in your array/table represents)");
+        System.out.println("3. Establish the recurrence relation (how states relate to each other)");
+        System.out.println("4. Identify base cases");
+        System.out
+                .println("5. Decide implementation approach (recursive with memoization or iterative with tabulation)");
+        System.out.println("6. Consider space optimizations if applicable");
+    }
+}

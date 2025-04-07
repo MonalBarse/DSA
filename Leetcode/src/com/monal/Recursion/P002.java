@@ -32,6 +32,9 @@ public class P002 {
   private static void findSubsequence(ArrayList<Integer> arr, int k) {
     ArrayList<ArrayList<Integer>> result = new ArrayList<>();
     ArrayList<Integer> processed = new ArrayList<>();
+
+    // we have two choices for every elem in the array
+    // either to include it in the subsequence or not include it
     helper_fn(arr, processed, 0, k, result);
     System.out.println(result);
   }

@@ -34,35 +34,35 @@ Example 3:
   Let's define a recursive function wordBreak(s) that returns true if s can be split into words from wordDict and false otherwise.
 */
 public class P010 {
-  // class Solution {
-  // public boolean wordBreak(String s, List<String> wordDict) {
+  class Solution1 {
+    public boolean wordBreak(String s, List<String> wordDict) {
 
-  // // Create a set of words for faster lookup
-  // Set<String> wordSer = new HashSet<>(wordDict); // O(1) lookup
-  // Map<Integer, Boolean> memo = new HashMap<>(); // memoization map
+      // Create a set of words for faster lookup
+      Set<String> wordSer = new HashSet<>(wordDict); // O(1) lookup
+      Map<Integer, Boolean> memo = new HashMap<>(); // memoization map
 
-  // return helper_fn(s, 0, wordSer, memo);
-  // }
+      return helper_fn(s, 0, wordSer, memo);
+    }
 
-  // private boolean helper_fn(String s, int start, Set<String> wordSet,
-  // Map<Integer, Boolean> memo) {
-  // if (start == s.length())
-  // return true;
-  // if (memo.containsKey(start))
-  // return memo.get(start);
+    private boolean helper_fn(String s, int start, Set<String> wordSet,
+        Map<Integer, Boolean> memo) {
+      if (start == s.length())
+        return true;
+      if (memo.containsKey(start))
+        return memo.get(start);
 
-  // for (int end = start + 1; end <= s.length(); end++) {
-  // if (wordSet.contains(s.substring(start, end)) && helper_fn(s, end, wordSet,
-  // memo)) {
-  // memo.put(start, true);
-  // return true;
-  // }
-  // }
+      for (int end = start + 1; end <= s.length(); end++) {
+        if (wordSet.contains(s.substring(start, end)) && helper_fn(s, end, wordSet,
+            memo)) {
+          memo.put(start, true);
+          return true;
+        }
+      }
 
-  // memo.put(start, false);
-  // return false;
-  // }
-  // }
+      memo.put(start, false);
+      return false;
+    }
+  }
 
   /**
    * Solution for the Word Break problem.

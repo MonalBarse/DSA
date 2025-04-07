@@ -42,7 +42,6 @@ public class P004 {
         return result;
       }
       helper_fn(digits, 0, new StringBuilder(), result);
-
       return result;
     }
 
