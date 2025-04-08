@@ -222,21 +222,28 @@ public class DynamicProgramming101 {
      * Output: 620
      */
     public int knapsackRecursive(int[] weights, int[] values, int capacity, int n) {
-        // Base case: no items or no capacity
-        if (n == 0 || capacity == 0)
-            return 0;
+        return helper_fn1(weights, values, capacity, 0, n);
+    }
 
-        // If weight of nth item is greater than capacity, skip it
-        if (weights[n - 1] > capacity) {
-            return knapsackRecursive(weights, values, capacity, n - 1);
+    private int helper_fn1(int[] W, int[] V, int capacity, int idx, int n) {
+        // Base cases
+        if (idx == n || capacity == 0) {
+            return 0; // No more value can be obtained
         }
 
-        // Return max of two cases:
-        // 1. Item is included
-        // 2. Item is excluded
-        return Math.max(
-                values[n - 1] + knapsackRecursive(weights, values, capacity - weights[n - 1], n - 1),
-                knapsackRecursive(weights, values, capacity, n - 1));
+        // If current item is too heavy, skip it
+        if (W[idx] > capacity) {
+            return helper_fn1(W, V, capacity, idx + 1, n);
+        }
+
+        // Try including the current item
+        int include = V[idx] + helper_fn1(W, V, capacity - W[idx], idx + 1, n);
+
+        // Try excluding the current item
+        int exclude = helper_fn1(W, V, capacity, idx + 1, n);
+
+        // Return the better option
+        return Math.max(include, exclude);
     }
 
     /**
@@ -265,10 +272,10 @@ public class DynamicProgramming101 {
             return memo[n][capacity];
         }
 
+        int include = values[n - 1] + knapsackMemoizedHelper(weights, values, capacity - weights[n - 1], n - 1, memo);
+        int exclude = knapsackMemoizedHelper(weights, values, capacity, n - 1, memo);
         // Store the result of max value
-        memo[n][capacity] = Math.max(
-                values[n - 1] + knapsackMemoizedHelper(weights, values, capacity - weights[n - 1], n - 1, memo),
-                knapsackMemoizedHelper(weights, values, capacity, n - 1, memo));
+        memo[n][capacity] = Math.max(include, exclude);
 
         return memo[n][capacity];
     }
@@ -278,30 +285,32 @@ public class DynamicProgramming101 {
      * Time Complexity: O(n * capacity)
      * Space Complexity: O(n * capacity)
      */
-    public int knapsackTabulated(int[] weights, int[] values, int capacity, int n) {
-        // Create and initialize table
+    public int knapsackBottomUp(int[] weights, int[] values, int capacity, int n) {
+        // Create DP table of size [n+1][capacity+1]
         int[][] dp = new int[n + 1][capacity + 1];
 
-        // Fill the table
+        // Fill the DP table bottom-up
         for (int i = 0; i <= n; i++) {
             for (int w = 0; w <= capacity; w++) {
-                // Base case
+                // Base case: no items or no capacity
                 if (i == 0 || w == 0) {
                     dp[i][w] = 0;
                 }
-                // If current item's weight fits
+                // If current item's weight can fit in the knapsack
                 else if (weights[i - 1] <= w) {
+                    // Max of: (1) including current item, (2) excluding current item
                     dp[i][w] = Math.max(
-                            values[i - 1] + dp[i - 1][w - weights[i - 1]],
-                            dp[i - 1][w]);
+                            values[i - 1] + dp[i - 1][w - weights[i - 1]], // Include item
+                            dp[i - 1][w] // Exclude item
+                    );
                 }
-                // If current item's weight doesn't fit
+                // If current item is too heavy, skip it
                 else {
                     dp[i][w] = dp[i - 1][w];
                 }
             }
         }
-
+        // Return the maximum value that can be obtained
         return dp[n][capacity];
     }
 
@@ -312,6 +321,23 @@ public class DynamicProgramming101 {
      * Time Complexity: O(2^(m+n))
      * Space Complexity: O(m+n) - recursion stack
      */
+
+    /*
+     * LCS problem: Given two strings, find the length of the longest subsequence
+     * present in both of them.
+     * Example 1:
+     * text1 = "ABCXDEFYHIJZKFLMGNOPQRSTUVWXYZ"
+     * text2 = "ABCXDEFYHIJZKFLMGNOPQRSTUVWXYZ"
+     * Output: 26
+     *
+     * Example 2:
+     * text1 = "abcdetuvwxyz"
+     * text2 = "abcdefghijkl"
+     *
+     * Output: 5
+     * Explanation: The longest common subsequence is "abcde".
+     */
+
     public int lcsRecursive(String text1, String text2, int m, int n) {
         // Base case
         if (m == 0 || n == 0)
@@ -367,6 +393,7 @@ public class DynamicProgramming101 {
      * Time Complexity: O(m * n)
      * Space Complexity: O(m * n)
      */
+
     public int lcsTabulated(String text1, String text2) {
         int m = text1.length();
         int n = text2.length();
@@ -453,7 +480,7 @@ public class DynamicProgramming101 {
 
         startTime = System.nanoTime();
         System.out.println(
-                "Maximum value (tabulated): " + dp.knapsackTabulated(weights, values, capacity, values.length));
+                "Maximum value (tabulated): " + dp.knapsackBottomUp(weights, values, capacity, values.length));
         System.out.println("Time taken: " + (System.nanoTime() - startTime) / 1000000 + " ms\n");
 
         System.out.println("========== LONGEST COMMON SUBSEQUENCE ==========");
