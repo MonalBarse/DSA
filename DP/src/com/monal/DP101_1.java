@@ -14,7 +14,7 @@ package com.monal;
  * - Longest common subsequence
  */
 
-public class DynamicProgramming101 {
+public class DP101_1 {
 
     // ====================== FIBONACCI SEQUENCE =====================//
 
@@ -182,25 +182,19 @@ public class DynamicProgramming101 {
 
     // SPace optimized
     public int climbStairsSpaceOpt(int n) {
-        // Handle base cases
-        if (n <= 0)
-            return 0;
-        if (n == 1)
-            return 1;
-        if (n == 2)
-            return 2;
+        if (n <= 2)
+            return n;
 
-        int prev1 = 1; // ways to reach step 1
-        int prev2 = 2; // ways to reach step 2
+        int first = 1;
+        int second = 2;
 
-        int curr = 0; // ways to reach current step
         for (int i = 3; i <= n; i++) {
-            curr = prev1 + prev2;
-            prev1 = prev2;
-            prev2 = curr;
+            int current = first + second;
+            first = second;
+            second = current;
         }
 
-        return curr;
+        return second;
     }
 
     // ====================== 0/1 KNAPSACK PROBLEM =====================//
@@ -423,7 +417,7 @@ public class DynamicProgramming101 {
     }
 
     public static void main(String[] args) {
-        DynamicProgramming101 dp = new DynamicProgramming101();
+        DP101_1 dp = new DP101_1();
 
         System.out.println("========== FIBONACCI SEQUENCE ==========");
         int n = 30;
