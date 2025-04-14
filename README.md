@@ -12,84 +12,22 @@
 
 ## Bash Scripts
 
-### compile.sh
+- `automation.sh`: A bash script to automate many things:
+  - Create a new Topic folder
+  - Add a subtopic to existing Topic
+  - Compile a Java file
+  - Run a compiled class
+  - Quick compile and run
+  - List all Topics and it's subtopics
+  - Basic Git Operations - Push to your remote repository
 
-A script to compile all Java files in the `src/` directory and place the compiled `.class` files in the `bin/` directory.
-
-### run.sh
-
-A script to compile the Java files using `compile.sh` and then run a specified Java class.
-
-## Add a ./compile.sh file to each directory
-
-- for eg. in Recusion directory, add a compile.sh file
-
-```bash
-
-    #!/bin/bash
-
-    # Directory paths
-    SRC_DIR="src"
-    BIN_DIR="bin"
-
-    # Create the bin directory if it doesn't exist
-    mkdir -p $BIN_DIR
-
-    # Compile all .java files in src/ and place .class files into bin/
-    javac -d $BIN_DIR $SRC_DIR/com/monal/*.java
-
-    # Check if compilation was successful
-    if [ $? -eq 0 ]; then
-    echo "Compilation successful."
-    else
-    echo "Compilation failed."
-    fi
-
-
-```
-
-- Create a run.sh file in the same directory
+Make sure you find the `automation.sh` file here - [./automation.sh](./automation.sh) and Change the variable for creating topics
+it is currently src/com/monal, edit it to add yours.
 
 ```bash
-
-
-#!/bin/bash
-
-# Compile Java files using compile.sh
-./compile.sh
-
-# Check if compilation was successful
-if [ $? -eq 0 ]; then
-    # Navigate to the bin/ directory
-    cd ../bin
-
-    # Run the specified Java class
-    java com.monal.$1
-
-    # Navigate back to the original directory
-    cd -
-else
-    echo "Compilation failed. Please fix errors before running."
-fi
-
+    chmod +x automation.sh
+    ./automation.sh
 ```
-
-- Make sure both compile.sh and run.sh have executable permissions (chmod +x compile.sh run.sh).
-
-## How to Use
-
-1. **Compile Java Files**:
-
-   ```sh
-   ./Topic/
-       ./compile.sh
-   ```
-
-2. **Run Class Files**:
-   ```sh
-   ./Topic/
-       ./run.sh Filename
-   ```
 
 # CheckList
 
@@ -201,28 +139,33 @@ fi
 - [x] Classes & its instances
 - [x] this keyword in Java
 - [x] Properties
-- [ ] Inheritance
-- [ ] Abstraction
-- [ ] Polymorphism
-- [ ] Encapsulation
-- [ ] Overloading & Overriding
-- [ ] Static & Non-Static
-- [ ] Access Control
-- [ ] Interfaces
-- [ ] Abstract Classes
-- [ ] Singleton Class
-- [ ] final, finalize, finally
-- [ ] Exception Handling
+- [x] Inheritance
+- [x] Abstraction
+- [x] Polymorphism
+- [x] Encapsulation
+- [x] Overloading & Overriding
+- [x] Static & Non-Static
+- [x] Access Control
+- [x] Interfaces
+- [x] Abstract Classes
+- [x] Singleton Class
+- [x] final, finalize, finally
+- [x] Exception Handling
 
-## Linked List
+## Dynamic Programming
 
-- [ ] Introduction
-- [ ] Singly and Doubly Linked List
-- [ ] Circular Linked List
-- [ ] Fast and slow pointer
-- [ ] Cycle Detection
-- [ ] Reversing of LinkedList
-- [ ] Linked List Interview questions
+- [x] Introduction
+- [x] Recursion + Recursion DP + Iteration + Iteration Space Optimized
+- [x] Complexity Analysis
+- [x] 1D DP
+- [x] 0/1 Knapsack
+- [ ] 2D/3D DP and DP on Grids
+- [ ] DP on Subsequences
+- [ ] DP on Strings
+- [ ] DP on Stocks
+- [ ] DP on LIS (Longest Increasing Subsequence)
+- [ ] MCM DP | Partition DP
+- [ ] DP on Squares
 
 ## Stacks & Queues
 
@@ -232,17 +175,6 @@ fi
 - [ ] Pop efficient
 - [ ] Queue using Stack and Vice versa
 - [ ] Circular Queue
-
-## Dynamic Programming
-
-- [ ] Introduction
-- [ ] Recursion + Recursion DP + Iteration + Iteration Space Optimized
-- [ ] Complexity Analysis
-- [ ] 0/1 Knapsack
-- [ ] Subset Questions
-- [ ] Unbounded Knapsack
-- [ ] Subseq questions
-- [ ] String DP
 
 ## Hashmaps
 
@@ -255,6 +187,16 @@ fi
 - [ ] Chaining
 - [ ] Probing
 - [ ] Huffman-Encoder
+
+## Linked List
+
+- [ ] Introduction
+- [ ] Singly and Doubly Linked List
+- [ ] Circular Linked List
+- [ ] Fast and slow pointer
+- [ ] Cycle Detection
+- [ ] Reversing of LinkedList
+- [ ] Linked List Interview questions
 
 ## Trees
 

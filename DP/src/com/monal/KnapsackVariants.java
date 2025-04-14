@@ -461,14 +461,13 @@ public class KnapsackVariants {
     if (weights[n - 1] > capacity) {
       memo[n][capacity] = unboundedKnapsackMemo(values, weights, n - 1, capacity, memo);
       return memo[n][capacity];
+    } else {
+      // Either include or exclude current item
+      // Note: When including, we don't reduce n (allowing reuse)
+      memo[n][capacity] = Math.max(
+          values[n - 1] + unboundedKnapsackMemo(values, weights, n, capacity - weights[n - 1], memo),
+          unboundedKnapsackMemo(values, weights, n - 1, capacity, memo));
     }
-
-    // Either include or exclude current item
-    // Note: When including, we don't reduce n (allowing reuse)
-    memo[n][capacity] = Math.max(
-        values[n - 1] + unboundedKnapsackMemo(values, weights, n, capacity - weights[n - 1], memo),
-        unboundedKnapsackMemo(values, weights, n - 1, capacity, memo));
-
     return memo[n][capacity];
   }
 
@@ -509,6 +508,8 @@ public class KnapsackVariants {
     for (int i = 0; i <= capacity; i++) {
       for (int j = 0; j < n; j++) {
         if (weights[j] <= i) {
+          // if weight is less than or equal to cap we
+          // either include w
           dp[i] = Math.max(dp[i], dp[i - weights[j]] + values[j]);
         }
       }
@@ -675,40 +676,86 @@ public class KnapsackVariants {
   }
 
   private static int minCoinsMemoized(int[] coins, int n, int amt, int[][] memo) {
-
+    // Base cases
     if (amt == 0)
       return 0; // 0 coins needed to make 0
     if (n == 0)
-      return Integer.MAX_VALUE - 1; // Cannot make amount with 0 coins
+      return Integer.MAX_VALUE; // Cannot make amount with 0 coins
 
+    // Return memoized result if available
     if (memo[n][amt] != -1)
       return memo[n][amt];
 
+    // If current coin value is greater than remaining amount, skip it
     if (coins[n - 1] > amt) {
-      return memo[n][amt] = coinChangeMemo(coins, n - 1, amt, memo);
+      return memo[n][amt] = minCoinsMemoized(coins, n - 1, amt, memo);
     }
 
-    int include = 1 + coinChangeMemo(coins, n, amt - coins[n - 1], memo); // take current coin again
-    int exclude = coinChangeMemo(coins, n - 1, amt, memo); // skip current coin
+    // Two choices: include current coin or exclude it
+    int include = minCoinsMemoized(coins, n, amt - coins[n - 1], memo);
+    // Only add 1 if include path is valid
+    if (include != Integer.MAX_VALUE)
+      include = 1 + include;
 
-    return Math.min(include, exclude);
+    int exclude = minCoinsMemoized(coins, n - 1, amt, memo);
 
+    // Take minimum of the two choices
+    return memo[n][amt] = Math.min(include, exclude);
   }
 
   @SuppressWarnings("unused")
-  private static int minCoinsTabulated(int[] coins, int n, int amt) {
-    int dp[][] = new int[n + 1][amt + 1];
+  private static int minCoinsTabulated(int[] coins, int n, int amount) {
+    int[][] dp = new int[n + 1][amount + 1];
 
-    for (int i = 0; i <= n; i++) {
-      dp[i][0] = 0; // 0 coins needed
+    // Initialize first row with MAX_VALUE (except dp[0][0])
+    for (int j = 1; j <= amount; j++) {
+      dp[0][j] = Integer.MAX_VALUE;
     }
-    // fill the dp table
-    for (int i = 1; i <= coins.length; i++) {
-      for (int j = 1; j <= amt; j++) {
-        dp[i][j] = (coins[i - 1] > j) ? dp[i - 1][j] : Math.min(dp[i - 1][j], 1 + dp[i][j - coins[i - 1]]);
+
+    // Fill the dp table
+    for (int i = 1; i <= n; i++) {
+      for (int j = 0; j <= amount; j++) {
+        if (j == 0) {
+          dp[i][j] = 0; // 0 coins needed to make amount 0
+        } else if (coins[i - 1] > j) {
+          // Can't use current coin, take value from above
+          dp[i][j] = dp[i - 1][j];
+        } else {
+          // Two choices: include current coin or exclude it
+          int include = dp[i][j - coins[i - 1]];
+          // Only add 1 if include path is valid
+          if (include != Integer.MAX_VALUE) {
+            include = 1 + include;
+          }
+
+          int exclude = dp[i - 1][j];
+
+          dp[i][j] = Math.min(include, exclude);
+        }
       }
     }
-    return dp[n][amt];
+
+    return dp[n][amount];
+  }
+
+  // Space Optimized approach
+  public int coinChangeI(int[] coins, int amount) {
+    int[] dp = new int[amount + 1];
+    Arrays.fill(dp, 1000001);
+
+    dp[0] = 0;
+
+    for (int a = 1; a <= amount; a++) {
+      for (int coin : coins) {
+        // If the coin can be used to make the amount
+        // So for every a, we ask:
+        // Is it better to not use coin c, or use it and solve for a - c?
+        if (a - coin >= 0) {
+          dp[a] = Math.min(dp[a], dp[a - coin] + 1);
+        }
+      }
+    }
+    return dp[amount] == 1000001 ? -1 : dp[amount];
   }
 
   /**
