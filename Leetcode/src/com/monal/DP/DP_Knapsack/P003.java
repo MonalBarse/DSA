@@ -1,4 +1,4 @@
-package com.monal.DP.Knapsack;
+package com.monal.DP.DP_Knapsack;
 
 import java.util.Arrays;
 

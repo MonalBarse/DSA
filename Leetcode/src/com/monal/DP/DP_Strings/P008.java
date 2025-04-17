@@ -1,4 +1,4 @@
-package com.monal.DP.Strings;
+package com.monal.DP.DP_Strings;
 
 import java.util.Arrays;
 

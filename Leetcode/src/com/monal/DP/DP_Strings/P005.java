@@ -1,4 +1,4 @@
-package com.monal.DP.Strings;
+package com.monal.DP.DP_Strings;
 
 /**
  * 🧩 Problem: Longest Palindromic Subsequence (LPS)
@@ -44,6 +44,7 @@ public class P005 {
     }
 
     // Fill the table
+    // i starts from n-1 to 0 and j moves from i+1 to n-1
     for (int i = n - 1; i >= 0; i--) {
       for (int j = i + 1; j < n; j++) {
         if (S.charAt(i) == S.charAt(j)) {
