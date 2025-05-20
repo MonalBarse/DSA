@@ -1,14 +1,18 @@
+
+package com.monal;
+
 import java.util.*;
 
 public class CF_FirstProblem {
   public static String findPalindrome(int k, String s) {
     int n = s.length();
     char[] title = s.toCharArray();
-    boolean[] alreadyUsed =
-        new boolean[k]; // to be used as a hashmap to store the used characters (default all false)
-    // From the title, we can check which character is already used from the given k available
+    boolean[] alreadyUsed = new boolean[k]; // to be used as a hashmap to store the used characters (default all false)
+    // From the title, we can check which character is already used from the given k
+    // available
     // characters
-    // condition will be if charachter is not ? and should be less than k (characher - 'a' => 0 to
+    // condition will be if charachter is not ? and should be less than k (characher
+    // - 'a' => 0 to
     // k-1)
     // charachter - 'a' => true or false
     for (char ch : title) {
@@ -58,13 +62,15 @@ public class CF_FirstProblem {
     }
 
     // CHECK : IF all the k letters are used or not, if not then return "IMPOSSIBLE"
-    /* int usedCount = 0;
-    for (int i = 0; i < k; i++) {
-      if (alreadyUsed[i]) {
-             usedCount++;
-      }
-    }
-    if (usedCount < k) return "IMPOSSIBLE";  */
+    /*
+     * int usedCount = 0;
+     * for (int i = 0; i < k; i++) {
+     * if (alreadyUsed[i]) {
+     * usedCount++;
+     * }
+     * }
+     * if (usedCount < k) return "IMPOSSIBLE";
+     */
 
     Set<Character> usedSet = new HashSet<>();
     for (char c : title) {
@@ -72,7 +78,8 @@ public class CF_FirstProblem {
         usedSet.add(c);
       }
     }
-    if (usedSet.size() < k) return "IMPOSSIBLE";
+    if (usedSet.size() < k)
+      return "IMPOSSIBLE";
 
     return new String(title);
   }

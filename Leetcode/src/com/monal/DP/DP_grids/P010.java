@@ -45,6 +45,56 @@ public class P010 {
       }
       return dp[m - 1][n - 1]; // return the bottom-right cell
     }
+
+    public int uniquePathsMemo(int m, int n) {
+      int memo[][] = new int[m][n];
+      for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+          memo[i][j] = -1; // initialize memoization table
+        }
+      }
+      return uniquePathsHelper(m - 1, n - 1, memo);
+    }
+
+    private int uniquePathsHelper(int i, int j, int[][] memo) {
+      // base case
+      if (i == 0 || j == 0) {
+        return 1; // only one way to reach first row or first column
+      }
+
+      if (memo[i][j] != -1) {
+        return memo[i][j]; // return already computed value
+      }
+
+      // case
+      int goDown = uniquePathsHelper(i - 1, j, memo); // the down path is equal to sum of the top cell
+      int goRight = uniquePathsHelper(i, j - 1, memo); // the right path is equal to sum of the left cell
+
+      memo[i][j] = goDown + goRight; // store the result in memoization table
+      return memo[i][j]; // return the result
+
+    }
+
+    @SuppressWarnings("unused")
+    private int uniquePathsSpaceOptimized(int m, int n) {
+      // we note that we only need the last row and the current row
+      int[] prev = new int[n]; // dp[i-1]
+      int[] curr = new int[n]; // dp[i]
+
+      // initialize
+      for (int i = 0; i < n; i++) {
+        prev[i] = 1; // only one way to reach first row
+      }
+      for (int i = 1; i < m; i++) {
+        curr[0] = 1; // only one way to reach first column
+        for (int j = 1; j < n; j++) {
+          curr[j] = prev[j] + curr[j - 1]; // sum of top and left cells
+        }
+        prev = curr.clone(); // update prev to current row
+
+      }
+      return prev[n - 1]; // return the bottom-right cell
+    }
   }
 
   class SolutionII {

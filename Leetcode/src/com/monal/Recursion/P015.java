@@ -36,8 +36,7 @@ public class P015 {
     private void helper_fn(String s, int start, List<String> path, List<List<String>> result) {
       // Base case: if we reached the end of the string
       if (start == s.length()) {
-        // Check if current path used minimum cuts
-        int cuts = path.size() - 1;
+        int cuts = path.size() - 1; // set cuts to the number of palindromes - 1
         if (cuts < minCuts) {
           result.clear(); // we found a better (shorter cut) path
           result.add(new ArrayList<>(path));

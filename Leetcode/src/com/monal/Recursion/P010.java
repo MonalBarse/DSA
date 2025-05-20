@@ -38,28 +38,30 @@ public class P010 {
     public boolean wordBreak(String s, List<String> wordDict) {
 
       // Create a set of words for faster lookup
-      Set<String> wordSer = new HashSet<>(wordDict); // O(1) lookup
+      Set<String> setOfWords = new HashSet<>(wordDict); // O(1) lookup
       Map<Integer, Boolean> memo = new HashMap<>(); // memoization map
 
-      return helper_fn(s, 0, wordSer, memo);
+      return helper_fn(s, 0, setOfWords, memo);
     }
 
-    private boolean helper_fn(String s, int start, Set<String> wordSet,
+    private boolean helper_fn(String s, int index, Set<String> wordSet,
         Map<Integer, Boolean> memo) {
-      if (start == s.length())
-        return true;
-      if (memo.containsKey(start))
-        return memo.get(start);
 
-      for (int end = start + 1; end <= s.length(); end++) {
-        if (wordSet.contains(s.substring(start, end)) && helper_fn(s, end, wordSet,
+      if (index == s.length())
+        return true;
+
+      if (memo.containsKey(index))
+        return memo.get(index);
+
+      for (int end = index + 1; end <= s.length(); end++) {
+        if (wordSet.contains(s.substring(index, end)) && helper_fn(s, end, wordSet,
             memo)) {
-          memo.put(start, true);
+          memo.put(index, true);
           return true;
         }
       }
 
-      memo.put(start, false);
+      memo.put(index, false);
       return false;
     }
   }

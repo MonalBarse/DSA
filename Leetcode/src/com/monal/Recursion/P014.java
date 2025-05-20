@@ -27,6 +27,7 @@ public class P014 {
       int winner = findTheWinner(n - 1, k);
       // Adjust the position based on the current circle size and step size
       // The formula (winner + k - 1) % n gives the new position in the current circle
+      // The +1 is added to convert from 0-based index to 1-based index
       return (winner + k - 1) % n + 1;
     }
   }

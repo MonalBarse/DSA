@@ -5,7 +5,6 @@ import java.util.*;
 // Ques : 1-2 for understanding string manipulation using recursion
 // Ques : 3 for Subsets/Subsequence of a list using recursion
 // Ques : 5~ Random subsequences and subsets questions
-
 public class Subsequence {
 
   // Ques 1 : Given a string, edit it such that it has no 'a' or 'A' in it.
@@ -163,14 +162,11 @@ public class Subsequence {
     // Iterate over each number in the input array
     for (int num : arr) {
       int n = outer.size(); // Current size of the outer list
-
       // Iterate over all existing subsets
       for (int i = 0; i < n; i++) {
-
         // Create a new subset from the existing subset
         List<Integer> internal = new ArrayList<>(outer.get(i));
         internal.add(num); // Add the current number to this new subset
-
         // Add this new subset to the outer list
         outer.add(internal);
       }
@@ -182,7 +178,6 @@ public class Subsequence {
   // Ques 3.3: Same as question 3 but it has duplicates in the array
   public static List<List<Integer>> subsetwitdDuplicate(int[] arr) {
     List<List<Integer>> subsets = new ArrayList<>(); // This will store all the subsets
-
     // Start with an empty subset
     subsets.add(new ArrayList<>());
 
@@ -223,7 +218,6 @@ public class Subsequence {
 
   private static void generateSubsetsRecr(int[] arr, int index, List<List<Integer>> result, List<Integer> processed) {
     result.add(new ArrayList<>(processed));
-
     for (int i = index; i < arr.length; i++) {
       if (i > index && arr[i] == arr[i - 1]) {
         continue;
@@ -252,7 +246,6 @@ public class Subsequence {
         result.add(str);
       return result;
     }
-
     // Start with the first character already in the current string
     // We don't add space before the first character
     addSpacesHelper(str, 1, Character.toString(str.charAt(0)), result);
@@ -283,7 +276,6 @@ public class Subsequence {
   }
 
   // ------------------------------------- //
-
   // AMAZON QUESTION
 
   // Given a list of Strings, return the number of subsequences
@@ -308,7 +300,6 @@ public class Subsequence {
       newSubset.add(0, firstElement); // Add the first element at the beginning
       subsetsWithFirst.add(newSubset);
     }
-
     subsetsWithoutFirst.addAll(subsetsWithFirst);
     return subsetsWithoutFirst;
   }
@@ -344,10 +335,11 @@ public class Subsequence {
   // ------------------------------------------------------------------------ //
   // GOOGLE QUESTION
   /*
-   * using Backtraking Given a string containing digits from 2-9 inclusive, return
-   * all possible letter
-   * tcombinations tha the number could represent. Return the answer in any order.
-   * (A mapping of digits to letters just like on the telephone buttons).
+   * using Backtraking
+   * Given a string containing digits from 2-9 inclusive, return
+   * all possible letter combinations that the number could represent.
+   * Return the answer in any order. (A mapping of digits to letters just like on
+   * the telephone buttons).
    * Note that 1 does not map to any letters.
    * Input: digits = "23"
    * Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
@@ -363,7 +355,6 @@ public class Subsequence {
     List<String> res = new ArrayList<>();
     if (digits.length() == 0)
       return res;
-
     combinations(digits, 0, new StringBuilder(), res);
     return res;
   }
@@ -373,7 +364,8 @@ public class Subsequence {
       res.add(new String(sb));
       return;
     }
-
+    // this is not subsequence que here we are no including and excluding elements
+    // we are only including the elements and forming the combinations
     String letters = mapping[digits.charAt(pos) - '2'];
     for (int i = 0; i < letters.length(); i++) {
       sb.append(letters.charAt(i));
@@ -409,11 +401,9 @@ public class Subsequence {
     List<String> result = new ArrayList<>();
 
     for (int i = 1; i <= 6 && i <= target; i++) {
-
       result.addAll(diceRollHelper(p + i, target - i));
       // p + i will add the number to the string
     }
-
     return result;
   }
 
@@ -444,9 +434,9 @@ public class Subsequence {
   }
 
   public static void main(String[] args) {
-
     // Q1: Given a string, edit it such that it has no 'a' or 'A' in it.
     // For example, if the input string is "apple", the output should be "pple".
+
     String str, str2;
     str = "BlushA & aGalaoawa";
     str2 = "Adioapples";

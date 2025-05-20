@@ -1,6 +1,7 @@
 package com.monal.Recursion;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /*
 Given an array arr[] of length n and a number k, the task is to find all the subsequences of the array with sum of its elements equal to k.
@@ -45,10 +46,13 @@ public class P002 {
     // Base case
     if (index == unprocessed.size()) {
       int sum = 0;
+      // sum till what we have processed
       for (int i = 0; i < processed.size(); i++) {
         sum += processed.get(i);
       }
+      // check if the sum is equal to k
       if (sum == k) {
+        // add the subsequence to the result if the sum is equal to k
         result.add(new ArrayList<>(processed));
       }
       return;
@@ -62,6 +66,29 @@ public class P002 {
     // Donot include the current elem
     helper_fn(unprocessed, processed, index + 1, k, result);
 
+  }
+
+  public static List<String> subsequence(String str) {
+    List<String> res = new ArrayList<>();
+    helperfn(res, str, "");
+    return res;
+  }
+
+  private static void helperfn(List<String> result, String up, String p) {
+    // base case
+    if (up.isEmpty()) {
+      result.add(p);
+      return;
+    }
+
+    char first = up.charAt(0);
+    String rest = up.substring(1);
+
+    // take
+    helperfn(result, rest, p + first);
+
+    // not take
+    helperfn(result, rest, p);
   }
 
   public static void main(String[] args) {

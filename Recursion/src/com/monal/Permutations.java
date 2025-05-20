@@ -3,37 +3,19 @@ package com.monal;
 import java.util.*;
 
 public class Permutations {
-  public static void main(String[] args) {
 
-    // List<String> list = new ArrayList<>();
-    // list.add("wex");
-    // list.add("mon");
-    // list.add("imat");
-    // List<List<String>> result = question_one(list);
-    // for (List<String> permList : result) {
-    // System.out.println(permList);
-    // }
-    // // Expected : [[wex, wxe, ewx, exw, xwe, xew], [mon, mno, omn, onm, nom,
-    // nmo],
-    // // [imat, imta, iamt, iamt, itma, itam, mait, mait, mtia, mtai
-
-    // For permutations with case changes
-    List<String> result = new Permutations().permutationWithCaseChange("a1b");
-    System.out.println(result);
-    // Expected : [a1b, A1b, a1B, A1B]
-
-    List<String> result2 = new Permutations().permutationWithCaseChange("awb");
-    System.out.println(result2);
-    // Expected : [awb, Awb, aWb, AWb, awb, AwB, aWB, AWB]
-
-    List<String> result3 = new Permutations().permutationWithCaseChange("AB2c");
-    System.out.println(result3);
-    // Expected : [AB2c, Ab2c, aB2c, ab2c, AB2C, Ab2C, aB2C, ab2C,
-
-  }
-
+  /*
+   * Ques: Given a List of Strings create all possible substrings with all
+   * possible permutations like
+   * Example:
+   * Input: ["wex", "mon", "imat"]
+   * Output: [
+   * ["wex", "wxe", "ewx", "exw", "xwe", "xew"],
+   * ["mon", "mno", "omn", "onm", "nom", "nmo"],
+   * ["imat", "imta", "iamt", "iatm", "itma", "itam"]
+   * ]
+   */
   public static List<List<String>> question_one(List<String> list) {
-    // ["wex", "mon"]
     List<List<String>> result = new ArrayList<>();
 
     // Process each word in the list
@@ -144,5 +126,34 @@ public class Permutations {
       // If it's not a letter, we just move to the next character
       helper_1(str, idx + 1, res);
     }
+  }
+
+  public static void main(String[] args) {
+
+    // List<String> list = new ArrayList<>();
+    // list.add("wex");
+    // list.add("mon");
+    // list.add("imat");
+    // List<List<String>> result = question_one(list);
+    // for (List<String> permList : result) {
+    // System.out.println(permList);
+    // }
+    // // Expected : [[wex, wxe, ewx, exw, xwe, xew], [mon, mno, omn, onm, nom,
+    // nmo],
+    // // [imat, imta, iamt, iamt, itma, itam, mait, mait, mtia, mtai
+
+    // For permutations with case changes
+    List<String> result = new Permutations().permutationWithCaseChange("a1b");
+    System.out.println(result);
+    // Expected : [a1b, A1b, a1B, A1B]
+
+    List<String> result2 = new Permutations().permutationWithCaseChange("awb");
+    System.out.println(result2);
+    // Expected : [awb, Awb, aWb, AWb, awb, AwB, aWB, AWB]
+
+    List<String> result3 = new Permutations().permutationWithCaseChange("AB2c");
+    System.out.println(result3);
+    // Expected : [AB2c, Ab2c, aB2c, ab2c, AB2C, Ab2C, aB2C, ab2C,
+
   }
 }

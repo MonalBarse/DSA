@@ -1,7 +1,5 @@
 package com.monal.DP.DP_grids;
 
-import java.util.Arrays;
-
 /**
  * You are given an n x n grid representing a field of cherries, each cell is
  * one of three possible integers.

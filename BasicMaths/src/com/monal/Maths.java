@@ -9,9 +9,11 @@ public class Maths {
 
   public static int factorOfNumber(int number) {
     // Given a number find the factors of the number
-    // We can solve this problem by iterating from 1 to the square root of the number
+    // We can solve this problem by iterating from 1 to the square root of the
+    // number
     // and checking if the number is divisible by the current number
-    // If it is divisible then we can add the number and the number divided by the current number
+    // If it is divisible then we can add the number and the number divided by the
+    // current number
     // to the list of factors
     // The time complexity of this algorithm is O(sqrt(n))
 
@@ -34,12 +36,12 @@ public class Maths {
     public static double sqrtNR(int number, int precision) {
       double x = number; // A guess
       double root;
-      double threshold =
-          Math.pow(10, -precision); // Precision threshold based on the desired precision
+      double threshold = Math.pow(10, -precision); // Precision threshold based on the desired precision
 
       while (true) {
         root = 0.5 * (x + (number / x)); // Raphson formula
-        // Check if the difference between the new and old guess is within the precision threshold
+        // Check if the difference between the new and old guess is within the precision
+        // threshold
         if (Math.abs(root - x) < threshold) {
           break; // If within the threshold, stop the iteration
         }
@@ -87,7 +89,8 @@ public class Maths {
       }
 
       // we also need to round off the number to the given precision
-      // we can do this by multiplying the number by 10^precision, rounding it off and then dividing
+      // we can do this by multiplying the number by 10^precision, rounding it off and
+      // then dividing
       // it by 10^precision
 
       root = root - increment;
@@ -99,7 +102,8 @@ public class Maths {
      * int number = 50;
      * int precision = 3;
      * double sqrt = sqrtBS(number, precision);
-     * System.out.println("Square root of " + number + " with precision " + precision + " is: " + sqrt);
+     * System.out.println("Square root of " + number + " with precision " +
+     * precision + " is: " + sqrt);
      */
   }
 
@@ -108,20 +112,23 @@ public class Maths {
   public static void seive(int number) {
     // Given a number find all the prime numbers less than or equal to it
     // We can solve this problem using Seive of Eratosthenes
-    // The algorithm works by marking the multiples of each prime number starting from 2 as
+    // The algorithm works by marking the multiples of each prime number starting
+    // from 2 as
     // composites
     // and then finding the next prime number and repeating the process
-    // The time complexity of this algorithm is O(nlog(logn)) and space complexity is O(n)
-    // The algorithm is efficient for finding all prime numbers up to 10 million and not efficient
+    // The time complexity of this algorithm is O(nlog(logn)) and space complexity
+    // is O(n)
+    // The algorithm is efficient for finding all prime numbers up to 10 million and
+    // not efficient
     // for finding in a range.
 
     // We will mark the prime numbers as true and the non prime numbers as false
-    boolean[] isPrime =
-        new boolean[number + 1]; // Initialzing an empty array puts all the values to false
+    boolean[] isPrime = new boolean[number + 1]; // Initialzing an empty array puts all the values to false
     for (int i = 2; i <= number; i++) {
       isPrime[i] = true;
     }
-    // We are marking all the numbers as true as we are assuming all the numbers to be prime
+    // We are marking all the numbers as true as we are assuming all the numbers to
+    // be prime
     // and the prime numbers as true
     for (int i = 2; i * i <= number; i++) {
       if (isPrime[i]) {

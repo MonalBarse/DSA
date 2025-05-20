@@ -17,9 +17,6 @@ package com.monal.Recursion;
 public class P012 {
   public class Solution {
     /**
-     * Note: Despite accepting source, destination, and auxiliary peg parameters,
-     * this implementation doesn't actually use them for the calculation.
-     *
      * @param n    The number of disks
      * @param from The source peg
      * @param to   The destination peg
@@ -63,7 +60,7 @@ public class P012 {
     /**
      * This method calculates the number of steps required to solve the Tower of
      * Hanoi problem using pure recursion.
-     * 
+     *
      * @param n    The number of disks
      * @param from The source peg
      * @param to   The destination peg

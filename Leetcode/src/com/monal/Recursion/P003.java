@@ -67,9 +67,8 @@ public class P003 {
   /*
    * COMBINATION SUM 2
    * Given a collection of candidate numbers (candidates) and a target number
-   * (target),
-   * find all unique combinations in candidates where the candidate numbers sum to
-   * target.
+   * (target), find all unique combinations in candidates where the candidate
+   * numbers sum to target.
    * Each number in candidates may only be used once in the combination.
    * Note: The solution set must not contain duplicate combinations.
    *
@@ -99,9 +98,10 @@ public class P003 {
     return result;
   }
 
-  // Here unlike prev prob, we donot have two choices, we need to include curr
-  // elem
-  // if its not duplicate of previous elem
+  // Here unlike prev problem, we can only use each element once
+  // and if we have two same elements, we can only use one of them
+  // so we need to skip the duplicates
+  // we can do this by sorting the array and skipping the duplicates
   public void helper_fn2(int[] arr, int remaining, int idx, ArrayList<Integer> current, List<List<Integer>> result) {
     // when remaiing == 0, we have found a valid combination
     if (remaining < 0)
@@ -165,6 +165,7 @@ public class P003 {
   public void helper_fn3(int k, int remaining, int idx, ArrayList<Integer> current, List<List<Integer>> result) {
     if (remaining < 0)
       return;
+    // we do current.size() == k to check if we have reached the required size
     if (remaining == 0 && current.size() == k) {
       result.add(new ArrayList<>(current));
       return;

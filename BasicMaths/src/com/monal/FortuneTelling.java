@@ -1,3 +1,6 @@
+
+package com.monal;
+
 import java.util.*;
 
 public class FortuneTelling {
@@ -22,7 +25,8 @@ public class FortuneTelling {
     }
     scanner.close();
 
-    // If there is at least one odd number, remove the smallest odd number from the sum.
+    // If there is at least one odd number, remove the smallest odd number from the
+    // sum.
     // If all petals are even, it's impossible to make the sum odd → print 0.
     // If total sum is odd, return it
     if (totalSum % 2 == 1) {

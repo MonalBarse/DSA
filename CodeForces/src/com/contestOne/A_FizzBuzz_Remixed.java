@@ -1,4 +1,4 @@
-package com.monal.contestOne;
+package DSA.CodeForces.src.com.contestOne;
 
 import java.io.BufferedReader;
 import java.io.IOException;

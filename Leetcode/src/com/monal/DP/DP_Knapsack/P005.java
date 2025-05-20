@@ -30,7 +30,7 @@ import java.util.*;
  * You may assume that you have an infinite number of each kind of coin.
  */
 
-public class P009 {
+public class P005 {
 
   public static int coinChange(int[] coins, int amount) {
     // return coinChangeRecursive(coins, coins.length, amount);
