@@ -96,7 +96,13 @@ public class P005 {
 
   // ----------------------------------------------------- //
   // Problem 2: Coin Change II - Minimum coins
-
+  /*
+   * Problem: Given an integer array coins representing coins of different
+   * denominations and an integer amount representing a total amount of money.
+   * Return the fewest number of coins that you need to make up that amount. If
+   * that amount of money cannot be made up by any combination of the coins,
+   * return -1.
+   */
   public static int minCoins(int coins[], int amount) {
     int[][] memo = new int[coins.length + 1][amount + 1];
     for (int m = 0; m < coins.length + 1; m++) {

@@ -326,17 +326,16 @@ public class P001 {
    * Sum
    * S1 - S2 = diff, S1 + S2 = total_sum → S1 = (total_sum + diff)/2
    */
+
   public static int countSubsetsWithDiff(int[] arr, int diff) {
     int totalSum = 0;
     for (int num : arr) {
       totalSum += num;
     }
-
     // If totalSum + diff is odd or diff > totalSum, no solution exists
     if ((totalSum + diff) % 2 != 0 || diff > totalSum) {
       return 0;
     }
-
     int targetSum = (totalSum + diff) / 2;
     return countSubsetSumTabulation(arr, targetSum);
   }
@@ -352,9 +351,8 @@ public class P001 {
    * ✅ Why?
    * Because each 0 can be either included or not — and it doesn't change the sum.
    * So for every subset that makes the target, each zero gives 2 choices (±0).
-   *
-   *
    */
+
   public static int countSubsetsWithDiffZeroAware(int[] arr, int diff) {
     int n = arr.length, S = 0, zeroCount = 0;
     for (int elem : arr) {

@@ -1,109 +1,107 @@
 package com.monal.DP.DP_Strings;
 
+import java.util.Arrays;
+
+/**
+ * Given two strings str1 and str2, return the length of the shortest string
+ * that has both str1 and str2 as subsequences.
+ *
+ * 🧠 A supersequence is a string that contains both original strings as
+ * subsequences (characters in the same order, not necessarily contiguous).
+ *
+ * Example 1 :
+ * Input: str1 = "abac", str2 = "cab"
+ * Output: 5
+ * Explanation: One of the shortest supersequences is "cabac"
+ *
+ * Example 2 :
+ * Input: str1 = "abc", str2 = "def"
+ * Output: 6
+ * Explanation: One of the shortest supersequences is "abcdef"
+ *
+ * Example 3 :
+ * Input: str1 = "abc", str2 = "abc"
+ * Output: 3
+ * Explanation: One of the shortest supersequences is "abc"
+ *
+ * Appraoch:
+ * 1. Find the length of the longest common subsequence (LCS) of str1 and str2.
+ * 2. The length of the shortest supersequence is given by:
+ * length of str1 + length of str2 - length of LCS
+ * 3. This is because the characters in the LCS are counted in both str1 and
+ * str2, so we subtract them once to avoid double counting.
+ * 4. The result is the total length of both strings minus the length of LCS.
+ * 5. The LCS can be found using dynamic programming.
+ *
+ */
 public class P004 {
-  // ====================== LONGEST COMMON SUBSEQUENCE =====================//
-  /**
-   * Recursive implementation of the Longest Common Subsequence (LCS) problem
-   * Time Complexity: O(2^(m+n))
-   * Space Complexity: O(m+n) - recursion stack
-   */
+  public int shortestSupersequence(String s1, String s2) {
+    int m = s2.length(), n = s1.length();
+    int[][] memo = new int[n + 1][m + 1];
+    for (int[] arr : memo) {
+      Arrays.fill(arr, -1);
+    }
+    // int lcs = lcsRecursive(s1, s1.length(), s2, s2.length());
+    int lcs = lcsMemoized(s1, n, s2, m, memo);
+    // int lcs = lcsTabulated(s1, n, s2, m);
+    return n + m - lcs;
+  }
 
-  /*
-   * LCS problem: Given two strings, find the length of the longest subsequence
-   * present in both of them.
-   * Example 1:
-   * text1 = "ABCXDEFYHIJZKFLMGNOPQRSTUVWXYZ"
-   * text2 = "ABCXDEFYHIJZKFLMGNOPQRSTUVWXYZ"
-   * Output: 26
-   *
-   * Example 2:
-   * text1 = "abcdetuvwxyz"
-   * text2 = "abcdefghijkl"
-   * Output: 5
-   * Explanation: The longest common subsequence is "abcde".
-   */
-
-  public int lcsRecursive(String text1, String text2, int m, int n) {
-    // Base case
+  @SuppressWarnings("unused")
+  private int lcsRecursive(String text1, int n, String text2, int m) {
     if (m == 0 || n == 0)
       return 0;
 
     // If last characters match
-    if (text1.charAt(m - 1) == text2.charAt(n - 1)) {
-      return 1 + lcsRecursive(text1, text2, m - 1, n - 1);
+    if (text1.charAt(n - 1) == text2.charAt(m - 1)) {
+      return 1 + lcsRecursive(text1, n - 1, text2, m - 1);
     }
-
     // If last characters don't match
     return Math.max(
-        lcsRecursive(text1, text2, m - 1, n),
-        lcsRecursive(text1, text2, m, n - 1));
+        lcsRecursive(text1, n, text2, m - 1),
+        lcsRecursive(text1, n - 1, text2, m));
   }
 
-  /**
-   * Memoized implementation of the LCS problem
-   * Time Complexity: O(m * n)
-   * Space Complexity: O(m * n)
-   */
-  public int lcsMemoized(String text1, String text2) {
-    int m = text1.length();
-    int n = text2.length();
-    Integer[][] memo = new Integer[m + 1][n + 1];
-    return lcsMemoizedHelper(text1, text2, m, n, memo);
-  }
+  private int lcsMemoized(String S1, int n, String S2, int m, int[][] memo) {
 
-  private int lcsMemoizedHelper(String text1, String text2, int m, int n, Integer[][] memo) {
-    // Base case
     if (m == 0 || n == 0)
       return 0;
-
-    // Check if already computed
-    if (memo[m][n] != null)
-      return memo[m][n];
+    if (memo[n][m] != -1)
+      return memo[n][m];
 
     // If last characters match
-    if (text1.charAt(m - 1) == text2.charAt(n - 1)) {
-      memo[m][n] = 1 + lcsMemoizedHelper(text1, text2, m - 1, n - 1, memo);
+    if (S1.charAt(n - 1) == S2.charAt(m - 1)) {
+      memo[n][m] = 1 + lcsMemoized(S1, n - 1, S2, m - 1, memo);
+      return memo[n][m];
     } else {
-      // If last characters don't match
-      memo[m][n] = Math.max(
-          lcsMemoizedHelper(text1, text2, m - 1, n, memo),
-          lcsMemoizedHelper(text1, text2, m, n - 1, memo));
+      memo[n][m] = Math.max(lcsMemoized(S1, n - 1, S2, m, memo), lcsMemoized(S1, n, S2, m - 1, memo));
     }
 
-    return memo[m][n];
+    return memo[n][m];
   }
 
-  /**
-   * Tabulated implementation of the LCS problem
-   * Time Complexity: O(m * n)
-   * Space Complexity: O(m * n)
-   */
+  @SuppressWarnings("unused")
+  private int lcsTabulated(String S1, int n, String S2, int m) {
+    int[][] dp = new int[n + 1][m + 1];
+    // Initaialize
+    for (int i = 0; i <= n; i++) {
+      for (int j = 0; j <= m; j++) {
+        dp[0][j] = 0;
+        dp[i][0] = 0;
+      }
+    }
 
-  public int lcsTabulated(String text1, String text2) {
-    int m = text1.length();
-    int n = text2.length();
-
-    // Create and initialize table
-    int[][] dp = new int[m + 1][n + 1];
-
-    // Fill the table
-    for (int i = 0; i <= m; i++) {
-      for (int j = 0; j <= n; j++) {
-        // Base case
-        if (i == 0 || j == 0) {
-          dp[i][j] = 0;
-        }
-        // If characters match
-        else if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+    // fill the table
+    for (int i = 1; i <= n; i++) {
+      for (int j = 1; j <= m; j++) {
+        if (S1.charAt(i - 1) == S2.charAt(j - 1)) {
           dp[i][j] = 1 + dp[i - 1][j - 1];
-        }
-        // If characters don't match
-        else {
+        } else {
           dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
         }
       }
     }
 
-    return dp[m][n];
+    return dp[n][m];
   }
 }

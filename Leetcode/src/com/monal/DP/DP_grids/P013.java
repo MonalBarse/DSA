@@ -38,11 +38,10 @@ package com.monal.DP.DP_grids;
 
 public class P013 {
   // Two people starting at (0, 0), moving to (n-1, n-1) at the same time,
-  // collecting cherries.
-  // Each step, both move either down or right, so total steps t = r1 + c1 = r2 +
-  // c2.
-  // If they land on the same cell, count the cherry only once.
-  // We use a 3D DP: dp[r1][c1][c2] (we derive r2 = r1 + c1 - c2).
+  // collecting cherries. Each step, both move either down or right,
+  // so total steps t = r1 + c1 = r2 + c2. If they land on the same cell,
+  // count the cherry only once. We use a 3D DP: dp[r1][c1][c2]
+  // (we derive r2 = r1 + c1 - c2).
 
   public class Solution {
     public int cherryPickup(int[][] grid) {

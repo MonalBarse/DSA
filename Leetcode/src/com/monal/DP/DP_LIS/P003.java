@@ -23,19 +23,20 @@ public class P003 {
             Arrays.sort(arr); // Sort to ensure divisibility works left to r
             // does not affect answer since it's asking for subset not subseq
             int n = arr.length;
-            int[] dp = new int[n]; // dp[i] = size of largest subset ending at i
+            int[] curr = new int[n]; // dp[i] = size of largest subset ending at i
             int[] prev = new int[n]; // prev[i] = previous index in path
-            Arrays.fill(dp, 1);
+            Arrays.fill(curr, 1);
             Arrays.fill(prev, -1);
             int maxIndex = 0;
             for (int i = 1; i < n; i++) {
                 for (int j = 0; j < i; j++) {
-                    if (arr[i] % arr[j] == 0 && dp[j] + 1 > dp[i]) {
-                        dp[i] = dp[j] + 1;
+                    if (arr[i] % arr[j] == 0 && curr[j] + 1 > curr[i]) {
+                        curr[i] = curr[j] + 1;
+
                         prev[i] = j;
                     }
                 }
-                if (dp[i] > dp[maxIndex]) {
+                if (curr[i] > curr[maxIndex]) {
                     maxIndex = i;
                 }
             }

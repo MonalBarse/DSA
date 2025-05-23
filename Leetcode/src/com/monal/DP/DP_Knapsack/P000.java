@@ -123,6 +123,33 @@ public class P000 {
     return dp[n][capacity];
   }
 
+  public int knapsackBottomUp1(int[] weights, int[] values, int capacity, int n) {
+    int[] prev = new int[capacity + 1];
+
+    // Fill the DP table bottom-up
+
+    for (int i = 0; i <= n; i++) {
+      int[] curr = new int[capacity + 1];
+      for (int w = 0; w <= capacity; w++) {
+        // Base case: no items or no capacity
+        if (i == 0 || w == 0) {
+          curr[w] = 0;
+        } else if (weights[i - 1] <= w) {
+          curr[w] = Math.max(
+              values[i - 1] + prev[w - weights[i - 1]], // Include item
+              prev[w] // Exclude item
+          );
+        } else {
+          curr[w] = prev[w];
+        }
+      }
+      // Update prev to the current row
+      prev = curr;
+    }
+    // Return the maximum value that can be obtained
+    return prev[capacity];
+  }
+
   /**
    * Space-optimized implementation of the 0/1 Knapsack problem
    * Time Complexity: O(n * capacity)
@@ -146,6 +173,11 @@ public class P000 {
 
   // ====================== UNBOUNDED KNAPSACK PROBLEM =====================//
   /**
+   * The problem states that:
+   * Given weigts and values of n items, put these items in a knapsack of capacity
+   * W, to get the maximum total value in the knapsack. The same type of item can
+   * be picked multiple times. (consider unlimited supply of each item)
+   *
    * Recursive implementation of the Unbounded Knapsack problem
    * Time Complexity: O(2^n)
    * Space Complexity: O(n) - recursion stack

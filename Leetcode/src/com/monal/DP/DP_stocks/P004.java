@@ -46,12 +46,10 @@ public class P004 {
               int hold = dp[day + 1][0][transactionsLeft]; // skip
               profit = Math.max(sell, hold);
             }
-
             dp[day][canBuy][transactionsLeft] = profit;
           }
         }
       }
-
       return dp[0][1][k]; // we start on day 0, can buy stock, and k transactions left
     }
   }

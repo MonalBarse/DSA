@@ -22,6 +22,10 @@ Example 3:
 */
 public class P003 {
   class Solution {
+
+    // ===================================================== //
+    // ----------------- Tabulation ------------------------ //
+    // ===================================================== //
     public int maxProfit(int[] prices) {
       int n = prices.length;
       int dp[][][] = new int[n + 1][2][3]; // dp[day][canBuy][transactionsLeft]:
@@ -59,9 +63,53 @@ public class P003 {
 
       return dp[0][1][2]; // we start on day 0, can buy stock, and 2 transactions left
     }
+
+    // ====================================================== //
+    // --------------- Space Optimization ------------------- //
+    // ====================================================== //
+
+    public static int maxProfitSpaceOpt(int[] prices) {
+      int n = prices.length;
+      int next[][] = new int[2][3]; // dp[day][canBuy][transactionsLeft]:
+
+      // day from 0 to n
+      // canBuy = 1 if we can buy, 0 if we can sell
+      // transactionsLeft from 0 to 2 (i.e., at most 2 transactions allowed)
+      // we have two arr (curr and next) our final asnwer will be
+      // next[1][2] we start on day 0, can buy stock, and 2
+
+      // transactions left
+      for (int i = n - 1; i >= 0; i--) {
+        int curr[][] = new int[2][3];
+        for (int j = 0; j < 2; j++) {
+          for (int cap = 1; cap < 3; cap++) {
+            int profit = 0;
+            if (j == 1) {
+              // i.e we can buy, so options: buy or skip
+              int buy = next[0][cap] - prices[i];
+              int skip = next[1][cap];
+              profit = Math.max(buy, skip);
+            } else {
+              // i.e we cannot buy, so options: sell or skip
+              int sell = next[1][cap - 1] + prices[i];
+              int hold = next[0][cap];
+              profit = Math.max(sell, hold);
+            }
+            curr[j][cap] = profit;
+          }
+        }
+
+        // update next to curr
+        for (int j = 0; j <= 1; j++) {
+          for (int k = 0; k <= 2; k++) {
+            next[j][k] = curr[j][k];
+          }
+        }
+      }
+
+      return next[1][2]; // we start on day 0, can buy stock, and 2 transactions left
+    }
+
   }
 
-  public static void main(String[] args) {
-
-  }
 }
