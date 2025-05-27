@@ -31,6 +31,7 @@ public class P001 {
       int not_take = LISrecursive(arr, curr + 1, prev);
       if (prev == -1 || arr[curr] > arr[prev]) {
         // take the current element
+        // 1 is added to the length of LIS since we are taking the current element
         int take = 1 + LISrecursive(arr, curr + 1, curr);
         return Math.max(take, not_take);
       } else {

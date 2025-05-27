@@ -1,5 +1,5 @@
 #!/bin/bash
-DSA_ROOT="$HOME/Desktop/MAIN/DSA"
+DSA_ROOT="$HOME/Desktop/DSA"
 SCRIPT_NAME="automation.sh"
 
 # Color codes for better readability

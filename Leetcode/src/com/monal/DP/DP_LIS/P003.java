@@ -30,9 +30,12 @@ public class P003 {
             int maxIndex = 0;
             for (int i = 1; i < n; i++) {
                 for (int j = 0; j < i; j++) {
+                    // two conditions:
+                    // 1. prev num is divisible by curr num
+                    // 2. size of subset ending at j (+1) is greater than size of subset ending at i
                     if (arr[i] % arr[j] == 0 && curr[j] + 1 > curr[i]) {
+                        // then we can add arr[i] to the subset ending at j
                         curr[i] = curr[j] + 1;
-
                         prev[i] = j;
                     }
                 }

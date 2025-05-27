@@ -15,7 +15,7 @@ Return the length of the longest possible word chain with words chosen from the 
 Example 1:
   Input: words = ["a","b","ba","bca","bda","bdca"]
   Output: 4
-  Explanation: One of the longest word chains is ["a","ba","bda","bdca"].
+  Explanation: One of the longest word chains is ["a","ba","bda","bdca"] or ["b","ba","bda","bdca"].
 Example 2:
   Input: words = ["xbc","pcxbcf","xb","cxbc","pcxbc"]
   Output: 5
@@ -33,21 +33,20 @@ public class P004 {
       int n = words.length;
       int[] dp = new int[n]; // dp[i] = size of largest chain ending at i
 
+      Arrays.sort(words, Comparator.comparingInt(String::length));
       Arrays.fill(dp, 1);
 
-      int maxI = 0;
-      for (int i = 1; i < n; i++) {
+      int maxLength = 1;
+      for (int i = 0; i < n; i++) {
         for (int j = 0; j < i; j++) {
+          // check if words[j] is a predecessor of words[i]
           if (compare(words[i], words[j]) && dp[j] + 1 > dp[i]) {
             dp[i] = dp[j] + 1;
           }
         }
-        if (dp[i] > dp[maxI]) {
-          maxI = i;
-        }
+        maxLength = Math.max(maxLength, dp[i]);
       }
-      return dp[maxI];
-
+      return maxLength;
     }
   }
 

@@ -18,7 +18,6 @@ Example 3:
 */
 public class P002 {
   class Solution {
-
     public List<Integer> getLIS(int[] nums) {
       int n = nums.length;
       int[] dp = new int[n];

@@ -1,58 +1,91 @@
 package com.monal.DP.DP_LIS;
 
 import java.util.*;
+
 /*
-Given an integer array nums, return the number of longest increasing subsequences.
-Notice that the sequence has to be strictly increasing.
+You are given an array of words where each word consists of lowercase English letters.
+wordA is a predecessor of wordB if and only if we can insert exactly one letter
+anywhere in wordA without changing the order of the other characters to make it equal to wordB.
+
+For example, "abc" is a predecessor of "abac", while "cba" is not a predecessor of "bcad".
+A word chain is a sequence of words [word1, word2, ..., wordk] with k >= 1,
+where word1 is a predecessor of word2, word2 is a predecessor of word3, and so on.
+A single word is trivially a word chain with k == 1.
+
+Return the longest possible word chain with words chosen from the given list of words.
 
 Example 1:
-  Input: nums = [1,3,5,4,7]
-  Output: 2
-  Explanation: The two longest increasing subsequences are [1, 3, 4, 7] and [1, 3, 5, 7].
+  Input: words = ["a","b","ba","bca","bda","bdca"]
+  Output: ["a","ba","bda","bdca"] or ["b","ba","bda","bdca"] or ["a","ba", "bca","bdca"] or ["b","ba","bca","bdca"]
 Example 2:
-  Input: nums = [2,2,2,2,2]
-  Output: 5
-  Explanation: The length of the longest increasing subsequence is 1, and there are 5 increasing subsequences of length 1, so output 5.
+  Input: words = ["xbc","pcxbcf","xb","cxbc","pcxbc"]
+  Output: ["xb", "xbc", "cxbc", "pcxbc", "pcxbcf"]
+Example 3:
+  Input: words = ["abcd","dbqca"]
+  output: ["abcd"] or ["dbqca"]
 */
-
 public class P005 {
-  class Solution {
-    public int findNumberOfLIS(int[] nums) {
-      int n = nums.length;
-      int[] dp = new int[n]; // length of longest increasing subsequence ending at i
-      int[] count = new int[n]; // count of longest increasing subsequences ending at i
-      Arrays.fill(dp, 1); // every single elem is inc subseq of len 1
-      Arrays.fill(count, 1); // there's at least one way forming subseq of len 1
-      int maxLen = 1;
+  public class LongestStringChain {
+    public static void main(String[] args) {
+      String[] words = { "a", "b", "ba", "bca", "bda", "bdca" };
+      Solution sol = new Solution();
+      int length = sol.longestStrChain(words);
+      System.out.println("Length of Longest String Chain: " + length);
+    }
 
-      for (int i = 0; i < n; i++) {
-        for (int j = 0; j < i; j++) {
-          // if current element is greater than previous element, we can extend
-          if (nums[j] < nums[i]) {
-            // if we found a longer increasing subsequence, update dp and reset count
-            if (dp[j] + 1 > dp[i]) {
-              dp[i] = dp[j] + 1; // new length is one more than previous longest increasing subsequence
-              count[i] = count[j]; // reset count to the count of previous longest increasing subsequence
-            }
-            // if we found another way to get the same length of increasing
-            // subsequence add to the count
-            else if (dp[j] + 1 == dp[i]) {
-              count[i] += count[j]; // add count of previous longest increasing subsequence to current count
+    static class Solution {
+      public int longestStrChain(String[] words) {
+        Arrays.sort(words, Comparator.comparingInt(String::length));
+        int n = words.length;
+        int[] dp = new int[n]; // dp[i] = length of longest chain ending at i
+        int[] prev = new int[n]; // prev[i] = index of previous word in the chain
+
+        Arrays.fill(dp, 1);
+        Arrays.fill(prev, -1);
+
+        int maxLength = 1;
+        int lastIndex = 0;
+
+        for (int i = 1; i < n; i++) {
+          for (int j = 0; j < i; j++) {
+            if (compare(words[i], words[j]) && dp[j] + 1 > dp[i]) {
+              dp[i] = dp[j] + 1;
+              prev[i] = j;
             }
           }
+          if (dp[i] > maxLength) {
+            maxLength = dp[i];
+            lastIndex = i;
+          }
         }
-        maxLen = Math.max(maxLen, dp[i]);
+
+        // Reconstruct the chain
+        List<String> chain = new ArrayList<>();
+        while (lastIndex != -1) {
+          chain.add(words[lastIndex]);
+          lastIndex = prev[lastIndex];
+        }
+        Collections.reverse(chain);
+        System.out.println("Longest String Chain: " + chain);
+        return maxLength;
       }
 
-      int total = 0;
-      for (int i = 0; i < n; i++) {
-        // if the length of increasing subsequence ending at i is equal to maxLen, add
-        // count to total
-        if (dp[i] == maxLen) {
-          total += count[i];
+      private boolean compare(String longer, String shorter) {
+        if (longer.length() != shorter.length() + 1)
+          return false;
+
+        int i = 0, j = 0;
+        while (i < longer.length()) {
+          if (j < shorter.length() && longer.charAt(i) == shorter.charAt(j)) {
+            i++;
+            j++;
+          } else {
+            i++;
+          }
         }
+        return j == shorter.length();
       }
-      return total;
     }
   }
+
 }
