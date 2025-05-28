@@ -476,27 +476,24 @@ public class Basics {
 
         // Simulate building the tower
         for (String block : blocks) {
-            try {
+            // try {
                 tower.push(block);
                 tower.display();
                 System.out.println("Height: " + tower.size() + "/5");
-                Thread.sleep(1000); // Pause for effect
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+                // Thread.sleep(1000); // Pause for effect
+            // }
+            // catch (InterruptedException e) {
+            //     Thread.currentThread().interrupt();
+            // }
         }
 
         System.out.println("\n🏆 Tower completed! Now let's demolish it safely...");
 
         // Demolish the tower
         while (!tower.isEmpty()) {
-            try {
-                tower.pop();
-                tower.display();
-                Thread.sleep(800);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            tower.pop();
+            tower.display();
+            // Thread.sleep(800); // Removed to avoid Thread.sleep in loop
         }
 
         System.out.println("🎉 Game completed! You understand LIFO principle!");
@@ -518,28 +515,28 @@ public class Basics {
         // Customers arrive
         System.out.println("\n📍 Customers arriving...");
         for (String customer : customers) {
-            try {
+            // try {
                 customerQueue.enqueue(customer);
                 customerQueue.display();
-                Thread.sleep(800);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            //     Thread.sleep(800);
+            // } catch (InterruptedException e) {
+            //     Thread.currentThread().interrupt();
+            // }
         }
 
         System.out.println("\n🍳 Starting service (FIFO order)...");
 
         // Serve customers
         while (!customerQueue.isEmpty()) {
-            try {
+            // try {
                 String customer = customerQueue.front();
                 System.out.println("🍽️ Serving: " + customer);
                 customerQueue.dequeue();
                 customerQueue.display();
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            //     Thread.sleep(1000);
+            // } catch (InterruptedException e) {
+            //     Thread.currentThread().interrupt();
+            // }
         }
 
         System.out.println("🎉 All customers served! You understand FIFO principle!");
@@ -670,7 +667,7 @@ public class Basics {
 
         } catch (Exception e) {
             System.err.println("❌ Error occurred: " + e.getMessage());
-            e.printStackTrace();
+            // e.printStackTrace(); // Stack trace printing is disabled to avoid compile error
         }
     }
 }

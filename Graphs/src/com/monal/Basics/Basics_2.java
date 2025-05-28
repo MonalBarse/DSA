@@ -63,7 +63,7 @@ public class Basics_2 {
     }
 
     // Edge class for weighted graphs
-    static class Edge {
+    public static class Edge {
         int to, weight;
 
         Edge(int to, int weight) {
@@ -223,7 +223,8 @@ public class Basics_2 {
 
     // Union Find implementation with path compression and union by rank
     static class UnionFind {
-        private int[] parent, rank;
+        private final int[] parent;
+        private final int[] rank;
         private int components;
 
         public UnionFind(int n) {

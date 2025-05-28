@@ -40,7 +40,6 @@ myCircularQueue.Rear();     // return 4
 */
 public class P006 {
 
-  @SuppressWarnings("unused")
   class MyCircularQueue {
     final int[] queue; // Array to store the elements of the circular queue
     final int size; // Maximum size of the circular queue
@@ -104,5 +103,18 @@ public class P006 {
 
     }
 
+  }
+
+  public static void main(String[] args) {
+    MyCircularQueue myCircularQueue = new P006().new MyCircularQueue(3);
+    System.out.println(myCircularQueue.enQueue(1)); // return True
+    System.out.println(myCircularQueue.enQueue(2)); // return True
+    System.out.println(myCircularQueue.enQueue(3)); // return True
+    System.out.println(myCircularQueue.enQueue(4)); // return False
+    System.out.println(myCircularQueue.Rear()); // return 3
+    System.out.println(myCircularQueue.isFull()); // return True
+    System.out.println(myCircularQueue.deQueue()); // return True
+    System.out.println(myCircularQueue.enQueue(4)); // return True
+    System.out.println(myCircularQueue.Rear()); // return 4
   }
 }

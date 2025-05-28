@@ -33,7 +33,6 @@ Example 3:
 */
 
 public class P007 {
-  @SuppressWarnings("unused")
   class Solution {
     public int[] maxSlidingWindow(int[] arr, int k) {
       int n = arr.length;
@@ -61,6 +60,22 @@ public class P007 {
       }
       return res;
     }
+  }
+
+  public static void main(String[] args) {
+    P007 p007 = new P007();
+    Solution solution = p007.new Solution();
+    int[] nums1 = { 1, 3, -1, -3, 5, 3, 6, 7 };
+    int k1 = 3;
+    System.out.println(Arrays.toString(solution.maxSlidingWindow(nums1, k1))); // Output: [3, 3, 5, 5, 6, 7]
+
+    int[] nums2 = { 1 };
+    int k2 = 1;
+    System.out.println(Arrays.toString(solution.maxSlidingWindow(nums2, k2))); // Output: [1]
+
+    int[] nums3 = { 2, 3, -12, -1, 5, -2, -1, 1, 2, 2, -2, -5, -1 };
+    int k3 = 4;
+    System.out.println(Arrays.toString(solution.maxSlidingWindow(nums3, k3))); // Output: [3, 5, 5, 5, 5, 2]
   }
 
 }

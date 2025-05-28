@@ -20,7 +20,7 @@ Constraints:
   0 <= heights[i] <= 104
  */
 class P003 {
-  @SuppressWarnings("unused")
+
   class Solution {
     public int largestRectangleArea(int[] heights) {
       // We decide to use stack because it allows us to efficiently keep track
@@ -47,5 +47,14 @@ class P003 {
       return maxArea; // Return the maximum area found
 
     }
+  }
+
+  public static void main(String[] args) {
+    Solution solution = new P003().new Solution();
+    int[] heights1 = {2, 1, 5, 6, 2, 3};
+    System.out.println(solution.largestRectangleArea(heights1)); // Output: 10
+
+    int[] heights2 = {2, 4};
+    System.out.println(solution.largestRectangleArea(heights2)); // Output: 4
   }
 }
