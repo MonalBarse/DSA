@@ -26,7 +26,7 @@ import java.util.*;
  * - What's the shortest path? (BFS for unweighted graphs)
  *
  */
-public class Basics {
+public class Basics_0 {
     // ======================================================== //
     // ---------- Two Main Representations of Graphs ---------- //
     // ======================================================== //
@@ -147,6 +147,19 @@ public class Basics {
         System.out.println();
     }
 
+    // Edge class for weighted graphs
+    public static class Edge {
+        int to;
+        @SuppressWarnings("unused")
+        int weight;
+
+        @SuppressWarnings("unused")
+        Edge(int to, int weight) {
+            this.to = to;
+            this.weight = weight;
+        }
+    }
+
     // Helper method to add undirected edge
     /**
      * Adds an undirected edge between nodes u and v in the graph.
@@ -186,6 +199,32 @@ public class Basics {
         System.out.println();
     }
 
+    // BFS for weighted graphs
+    public void bfsweighted(ArrayList<ArrayList<Edge>> graph, int start) {
+        boolean[] visited = new boolean[graph.size()];
+        Queue<Integer> queue = new ArrayDeque<>();
+        // Start BFS from given node
+        queue.add(start);
+        visited[start] = true;
+
+        System.out.print("BFS Order: ");
+        while (!queue.isEmpty()) {
+            int node = queue.poll(); // Remove from front of queue
+            System.out.print(node + " ");
+
+            // Visit all neighbors of current node
+            for (Edge edge : graph.get(node)) {
+                int neighbor = edge.to; // Get the neighbor node
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    queue.add(neighbor); // Add to back of queue
+                }
+            }
+        }
+
+        System.out.println();
+    }
+
     // =================== DFS IMPLEMENTATION ==================== //
     public static void dfs(ArrayList<ArrayList<Integer>> graph, int node, boolean[] visited) {
         visited[node] = true;
@@ -197,9 +236,33 @@ public class Basics {
                 dfs(graph, neighbor, visited); // Recursive call
             }
         }
-
         if (node == 0)
             System.out.println("(DFS Order)");
+    }
+
+    // DFS using Stacks
+    public static void DFS(ArrayList<ArrayList<Edge>> graph, int start) {
+        boolean[] visited = new boolean[graph.size()];
+        Stack<Integer> stk = new Stack<>();
+
+        // Start DFS from given node
+        stk.push(start);
+        visited[start] = true;
+        System.out.print("DFS Order: ");
+
+        while (!stk.isEmpty()) {
+            int node = stk.pop();
+            System.out.print(node + " ");
+
+            for (Edge edge : graph.get(node)) {
+                int relative = edge.to;
+                if (!visited[relative]) {
+                    visited[relative] = true;
+                    stk.push(relative); // Add to stack
+                }
+            }
+        }
+        System.out.println();
     }
 
     // ========================================================== //
@@ -207,9 +270,7 @@ public class Basics {
     // ========================================================== //
 
     public static void demonstratePathFinding() {
-
         System.out.println("8. FINDING PATH BETWEEN TWO NODES:");
-
         // Create same graph as before
         ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
@@ -251,13 +312,11 @@ public class Basics {
 
         while (!queue.isEmpty()) {
             int node = queue.poll();
-
             // Check all neighbors
             for (int neighbor : graph.get(node)) {
                 if (neighbor == end) {
-                    return true; // Found the target!
+                    return true; // Reached the target
                 }
-
                 if (!visited[neighbor]) {
                     visited[neighbor] = true;
                     queue.add(neighbor);
@@ -266,6 +325,119 @@ public class Basics {
         }
 
         return false; // No path found
+    }
+
+    public static boolean hasPathDFS(ArrayList<ArrayList<Integer>> graph, int start, int end) {
+        boolean[] visited = new boolean[graph.size()];
+        return dfsPath(start, end, visited, graph);
+    }
+
+    private static boolean dfsPath(int node, int target, boolean[] visited, ArrayList<ArrayList<Integer>> graph) {
+        if (node == target)
+            return true;
+
+        visited[node] = true;
+
+        for (int neighbor : graph.get(node)) {
+            if (!visited[neighbor]) {
+                // checks
+                if (dfsPath(neighbor, target, visited, graph))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    // ========================================================= //
+    // -------------------- Cycle Detection -------------------- //
+    // ========================================================= //
+
+    public static void cycleDetection() {
+        System.out.println("9. CYCLE DETECTION IN GRAPH:");
+        // Create a simple graph with a cycle
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            graph.add(new ArrayList<>());
+        }
+        addEdge(graph, 0, 1);
+        addEdge(graph, 0, 2);
+        addEdge(graph, 1, 3);
+        addEdge(graph, 3, 4);
+        addEdge(graph, 3, 6);
+        addEdge(graph, 4, 5);
+        addEdge(graph, 5, 6); // This creates a cycle: 3 -> 6 -> 5 -> 4 -> 3
+
+        boolean hasCycle = detectCycleInGraph(graph);
+        System.out.println("Graph has cycle: " + hasCycle);
+    }
+
+    // works for disjoint graphs
+    private static boolean detectCycleInGraph(ArrayList<ArrayList<Integer>> graph) {
+        boolean[] visited = new boolean[graph.size()];
+
+        // Check each component of the graph
+        for (int i = 0; i < graph.size(); i++) {
+            if (!visited[i]) {
+                if (detectCycle(graph, i, visited, -1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean detectCycle(ArrayList<ArrayList<Integer>> graph, int node, boolean[] visited, int parent) {
+        visited[node] = true;
+
+        for (int neighbor : graph.get(node)) {
+            if (!visited[neighbor]) {
+                // pass 'node' as parent and next node as neighbor
+                if (detectCycle(graph, neighbor, visited, node)) {
+                    return true;
+                }
+            } else if (neighbor != parent) {
+                // Found a back edge (cycle detected)
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean detectCycleBFS(ArrayList<ArrayList<Integer>> graph) {
+        boolean visited[] = new boolean[graph.size()];
+        for (int i = 0; i < graph.size(); i++) {
+            if (!visited[i]) {
+                if (detectCycleBFS_helper(graph, i, visited)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean detectCycleBFS_helper(ArrayList<ArrayList<Integer>> graph, int startNode, boolean[] visited) {
+        Queue<Integer> q = new LinkedList<>();
+        int[] parent = new int[graph.size()]; // Track parent of each node
+        Arrays.fill(parent, -1); // Initialize all parents to -1
+
+        q.add(startNode);
+        visited[startNode] = true;
+
+        while (!q.isEmpty()) {
+
+            int curr = q.poll();
+            for (int neighbor : graph.get(curr)) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    parent[neighbor] = curr; // Set parent of neighbor
+                    q.add(neighbor);
+                } else if (parent[curr] != neighbor) { // Fixed: proper cycle detection
+                    return true; // Cycle found
+                }
+            }
+        }
+        return false;
     }
 
     public static void main(String[] args) {
@@ -301,6 +473,7 @@ public class Basics {
         System.out.println("- Count number of connected components");
         System.out.println("- Detect cycle in graph");
         System.out.println("- Find shortest path (unweighted)");
+        System.out.println("The BFS is the best for unweighted shortest path");
         System.out.println();
         demonstratePathFinding();
 
