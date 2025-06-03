@@ -372,7 +372,9 @@ public class Basics_0 {
         System.out.println("Graph has cycle: " + hasCycle);
     }
 
-    // works for disjoint graphs
+    // -------------------------------------- //
+    // ------- Detect Cycle using DFS ------- //
+    // -------------------------------------- //
     private static boolean detectCycleInGraph(ArrayList<ArrayList<Integer>> graph) {
         boolean[] visited = new boolean[graph.size()];
 
@@ -404,6 +406,10 @@ public class Basics_0 {
         return false;
     }
 
+
+    // -------------------------------------- //
+    // ------- Detect Cycle using BFS ------- //
+    // -------------------------------------- //
     public boolean detectCycleBFS(ArrayList<ArrayList<Integer>> graph) {
         boolean visited[] = new boolean[graph.size()];
         for (int i = 0; i < graph.size(); i++) {
@@ -425,14 +431,13 @@ public class Basics_0 {
         visited[startNode] = true;
 
         while (!q.isEmpty()) {
-
             int curr = q.poll();
             for (int neighbor : graph.get(curr)) {
                 if (!visited[neighbor]) {
                     visited[neighbor] = true;
                     parent[neighbor] = curr; // Set parent of neighbor
                     q.add(neighbor);
-                } else if (parent[curr] != neighbor) { // Fixed: proper cycle detection
+                } else if (parent[curr] != neighbor) {
                     return true; // Cycle found
                 }
             }

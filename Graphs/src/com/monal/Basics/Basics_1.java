@@ -199,7 +199,6 @@ public class Basics_1 {
   // UNDIRECTED GRAPH CYCLE DETECTION
   public static boolean hasCycleUndirected(Map<Integer, List<Integer>> graph) {
     Set<Integer> visited = new HashSet<>();
-
     // Check each component separately
     for (int node : graph.keySet()) {
       if (!visited.contains(node)) {
@@ -208,14 +207,13 @@ public class Basics_1 {
         }
       }
     }
-
     return false;
   }
 
   private static boolean dfsCheckCycleUndirected(Map<Integer, List<Integer>> graph, int current, int parent,
       Set<Integer> visited) {
-    visited.add(current);
 
+    visited.add(current);
     for (int neighbor : graph.get(current)) {
       if (neighbor == parent)
         continue; // Skip parent to avoid false positive
@@ -423,43 +421,73 @@ public class Basics_1 {
     return graph;
   }
 
-  // ==============================================================================
-  // //
-  // ================ TOPOLOGICAL SORT (Directed Acyclic Graph)
-  // =================== //
-  // ==============================================================================
-  // //
+  // ========================================================================== //
+  // ============ TOPOLOGICAL SORT (Directed Acyclic Graph) =================== //
+  // ========================================================================== //
 
   // DFS-based topological sort
-  public static List<Integer> topologicalSortDFS(Map<Integer, List<Integer>> graph) {
-    Set<Integer> visited = new HashSet<>();
+  /*
+   * Graph: A → B → C
+   * A → D → C
+   *
+   * DFS Journey:
+   * 1. Start A → go to B → go to C (C has no children)
+   * 2. C finishes first → stack.push(C)
+   * 3. Back to B (B done) → stack.push(B)
+   * 4. Back to A → go to D → go to C (already visited)
+   * 5. D finishes → stack.push(D)
+   * 6. A finishes → stack.push(A)
+   *
+   * Stack (bottom to top): [C, B, D, A]
+   * Pop order: A, D, B, C ✓ (Valid topological order!)
+   */
+  public static List<Integer> topologicalSortDFS(int V, List<List<Integer>> adj) {
+    boolean[] visited = new boolean[V];
+    boolean[] recStack = new boolean[V]; // To detect cycles
     Stack<Integer> stack = new Stack<>();
 
-    for (int node : graph.keySet()) {
-      if (!visited.contains(node)) {
-        topoDFS(graph, node, visited, stack);
+    // Try DFS from each unvisited node
+    for (int i = 0; i < V; i++) {
+      if (!visited[i]) {
+        if (helper_hasCycle(i, adj, visited, recStack, stack)) {
+          return new ArrayList<>(); // Cycle detected!
+        }
       }
     }
 
+    // Pop from stack to get topological order
     List<Integer> result = new ArrayList<>();
     while (!stack.isEmpty()) {
       result.add(stack.pop());
     }
+
     return result;
   }
 
-  private static void topoDFS(Map<Integer, List<Integer>> graph, int node, Set<Integer> visited, Stack<Integer> stack) {
-    visited.add(node);
-    for (int neighbor : graph.get(node)) {
-      if (!visited.contains(neighbor)) {
-        topoDFS(graph, neighbor, visited, stack);
+  private static boolean helper_hasCycle(int node, List<List<Integer>> adj,
+      boolean[] visited, boolean[] recStack,
+      Stack<Integer> stack) {
+    visited[node] = true;
+    recStack[node] = true; // Currently in recursion path
+
+    for (int neighbor : adj.get(node)) {
+      if (!visited[neighbor]) {
+        if (helper_hasCycle(neighbor, adj, visited, recStack, stack)) {
+          return true;
+        }
+      } else if (recStack[neighbor]) {
+        return true; // Back edge = cycle!
       }
     }
-    stack.push(node); // Add to stack after processing all neighbors
+
+    recStack[node] = false; // Done with this path
+    stack.push(node); // Add to result (reverse order)
+    return false;
   }
 
   // Kahn's Algorithm (BFS-based)
   public static List<Integer> topologicalSortKahn(Map<Integer, List<Integer>> graph, int[] indegree) {
+    // A map of graph represents - key : [neighbors]
     Queue<Integer> queue = new LinkedList<>();
     List<Integer> result = new ArrayList<>();
 
@@ -485,37 +513,117 @@ public class Basics_1 {
     return result.size() == graph.size() ? result : new ArrayList<>(); // Empty if cycle exists
   }
 
+  public static List<Integer> topologicalSortBFS(int V, List<List<Integer>> adj) {
+    // Step 1: Count prerequisites (indegree)
+    int[] indegree = new int[V];
+    for (int i = 0; i < V; i++) {
+      for (int neighbor : adj.get(i)) {
+        indegree[neighbor]++;
+      }
+    }
+
+    // Step 2: Find courses with NO prerequisites
+    Queue<Integer> queue = new LinkedList<>();
+    for (int i = 0; i < V; i++) {
+      if (indegree[i] == 0) {
+        queue.offer(i); // Can take these courses first!
+      }
+    }
+
+    List<Integer> result = new ArrayList<>();
+
+    // Step 3: BFS - Take courses and unlock next ones
+    while (!queue.isEmpty()) {
+      int course = queue.poll();
+      result.add(course);
+
+      // This course is done! Reduce prerequisites for next courses
+      for (int nextCourse : adj.get(course)) {
+        indegree[nextCourse]--;
+        if (indegree[nextCourse] == 0) {
+          queue.offer(nextCourse); // Now this course can be taken!
+        }
+      }
+    }
+
+    return result.size() == V ? result : new ArrayList<>(); // Empty if cycle exists
+  }
+
   // ====================================================================== //
   // ====================== BIPARTITE GRAPH CHECK ======================== //
   // ====================================================================== //
 
-  public static boolean isBipartite(Map<Integer, List<Integer>> graph) {
-    Map<Integer, Integer> color = new HashMap<>();
+  public static boolean isBipartiteBFS(int V, List<List<Integer>> adj) {
+    int[] color = new int[V];
+    Arrays.fill(color, -1); // -1 means uncolored
 
-    for (int node : graph.keySet()) {
-      if (!color.containsKey(node)) {
-        if (!dfsColorBipartite(graph, node, 0, color)) {
+    // Check each component (graph might be disconnected)
+    for (int i = 0; i < V; i++) {
+      if (color[i] == -1) {
+        if (!bfsColorCheck(i, adj, color)) {
           return false;
         }
       }
     }
+
     return true;
   }
 
-  private static boolean dfsColorBipartite(Map<Integer, List<Integer>> graph, int node, int c,
-      Map<Integer, Integer> color) {
-    color.put(node, c);
+  private static boolean bfsColorCheck(int start, List<List<Integer>> adj, int[] color) {
+    Queue<Integer> queue = new LinkedList<>();
+    queue.offer(start);
+    color[start] = 0; // Start with color 0 (Red Building)
 
-    for (int neighbor : graph.get(node)) {
-      if (color.containsKey(neighbor)) {
-        if (color.get(neighbor) == c)
-          return false; // Same color as current
-      } else {
-        if (!dfsColorBipartite(graph, neighbor, 1 - c, color)) {
+    while (!queue.isEmpty()) {
+      int student = queue.poll();
+
+      // Check all friends/roommates
+      for (int friend : adj.get(student)) {
+        if (color[friend] == -1) {
+          // Uncolored friend - assign opposite color
+          color[friend] = 1 - color[student]; // 0→1, 1→0
+          queue.offer(friend);
+        } else if (color[friend] == color[student]) {
+          // Same color as current student - CONFLICT!
+          return false; // Not bipartite
+        }
+      }
+    }
+
+    return true;
+  }
+
+  public static boolean isBipartiteDFS(int V, List<List<Integer>> adj) {
+    int[] color = new int[V];
+    Arrays.fill(color, -1);
+
+    for (int i = 0; i < V; i++) {
+      if (color[i] == -1) {
+        if (!dfsColorCheck(i, 0, adj, color)) {
           return false;
         }
       }
     }
+
+    return true;
+  }
+
+  private static boolean dfsColorCheck(int node, int nodeColor,
+      List<List<Integer>> adj, int[] color) {
+    color[node] = nodeColor;
+
+    for (int neighbor : adj.get(node)) {
+      if (color[neighbor] == -1) {
+        // Uncolored - assign opposite color
+        if (!dfsColorCheck(neighbor, 1 - nodeColor, adj, color)) {
+          return false;
+        }
+      } else if (color[neighbor] == nodeColor) {
+        // Same color - conflict!
+        return false;
+      }
+    }
+
     return true;
   }
 
@@ -693,23 +801,43 @@ public class Basics_1 {
     // Test topological sort
     // Example directed graph for topological sort: 5 -> 2, 5 -> 0, 4 -> 0, 4 -> 1,
     // 2 -> 3, 3 -> 1
-    int[][] directedEdges = { { 5, 2 }, { 5, 0 }, { 4, 0 }, { 4, 1 }, { 2, 3 }, { 3, 1 } };
-    Map<Integer, List<Integer>> directedGraph = new HashMap<>();
-    for (int i = 0; i < 6; i++)
-      directedGraph.put(i, new ArrayList<>());
-    for (int[] edge : directedEdges)
-      directedGraph.get(edge[0]).add(edge[1]);
-    System.out.println("Topological sort: " + topologicalSortDFS(directedGraph));
 
-    // Test bipartite
-    System.out.println("Is bipartite: " + isBipartite(graph1));
+    List<List<Integer>> adj = new ArrayList<>();
+    for (int i = 0; i < 6; i++) {
+      adj.add(new ArrayList<>());
+    }
+    adj.get(5).add(2);
+    adj.get(5).add(0);
+    adj.get(4).add(0);
+    adj.get(4).add(1);
+    adj.get(2).add(3);
+    adj.get(3).add(1);
+    System.out.println("\n=== TEST CASE 4: Topological Sort ===");
+    List<Integer> topoSortDFS = topologicalSortDFS(6, adj);
+    System.out.println("Topological Sort (DFS): " + topoSortDFS);
 
-    // Test all paths
-    System.out.println("All paths 0->3: " + findAllPaths(graph1, 0, 3));
+    // Test Bipartite check
+    List<List<Integer>> bipartiteAdj = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      bipartiteAdj.add(new ArrayList<>());
+    }
 
-    // Test MST
-    List<Edge> edges = Arrays.asList(new Edge(0, 1, 4), new Edge(0, 2, 3), new Edge(1, 2, 1), new Edge(1, 3, 2));
-    System.out.println("MST edges: " + kruskalMST(edges, 4));
+    // [1, 3], [0, 2], [1, 4], [0, 4], [2, 3]
+    bipartiteAdj.get(0).add(1);
+    bipartiteAdj.get(0).add(3);
+    bipartiteAdj.get(1).add(0);
+    bipartiteAdj.get(1).add(2);
+    bipartiteAdj.get(2).add(1);
+    bipartiteAdj.get(2).add(4);
+    bipartiteAdj.get(3).add(0);
+    bipartiteAdj.get(3).add(4);
+    bipartiteAdj.get(4).add(2);
+    bipartiteAdj.get(4).add(3);
+
+    System.out.println("\n=== TEST CASE 5: Bipartite Check ===");
+
+    boolean isBipartite = isBipartiteBFS(5, bipartiteAdj);
+    System.out.println("Is Bipartite (BFS): " + isBipartite); // Expected: true
 
   }
 }

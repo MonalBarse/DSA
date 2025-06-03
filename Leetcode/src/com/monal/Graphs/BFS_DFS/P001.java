@@ -1,4 +1,4 @@
-package com.monal.Graphs;
+package com.monal.Graphs.BFS_DFS;
 
 import java.util.*;
 

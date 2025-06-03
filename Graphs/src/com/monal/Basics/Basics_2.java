@@ -37,6 +37,50 @@ import java.util.*;
  * 5. Always consider if Union-Find can simplify the solution
  */
 public class Basics_2 {
+
+    public static void patternsCovered() {
+        System.out.println("GRAPH PATTERNS COVERED:");
+        System.out.println();
+
+        System.out.println("1. SHORTEST PATH:");
+        System.out.println("   - Unweighted: BFS");
+        System.out.println("   - Weighted (positive): Dijkstra");
+        System.out.println("   - With negative edges: Bellman-Ford");
+        System.out.println();
+
+        System.out.println("2. CONNECTIVITY:");
+        System.out.println("   - Connected components: DFS/BFS or Union-Find");
+        System.out.println("   - Bridge finding: Tarjan's algorithm");
+        System.out.println("   - Articulation points: Tarjan's algorithm");
+        System.out.println();
+
+        System.out.println("3. ORDERING:");
+        System.out.println("   - Topological sort: DFS or Kahn's algorithm");
+        System.out.println("   - Course scheduling: Topological sort + cycle detection");
+        System.out.println();
+
+        System.out.println("4. CYCLE DETECTION:");
+        System.out.println("   - Undirected: DFS with parent or Union-Find");
+        System.out.println("   - Directed: 3-color DFS");
+        System.out.println();
+
+        System.out.println("5. SPECIAL GRAPHS:");
+        System.out.println("   - Bipartite: 2-coloring with BFS/DFS");
+        System.out.println("   - Trees: N nodes, N-1 edges, connected");
+        System.out.println();
+
+        System.out.println("6. GRID PROBLEMS:");
+        System.out.println("   - Islands: DFS/BFS on 2D array");
+        System.out.println("   - Shortest path in grid: BFS");
+        System.out.println("   - Multi-source: Add all sources to queue initially");
+        System.out.println();
+
+        System.out.println("7. ADVANCED:");
+        System.out.println("   - Minimum Spanning Tree: Kruskal's (Union-Find) or Prim's");
+        System.out.println("   - Strongly Connected Components: Kosaraju's or Tarjan's");
+        System.out.println("   - Maximum Flow: Ford-Fulkerson, Edmonds-Karp");
+    }
+
     // ========== DIJKSTRA'S ALGORITHM FOR SHORTEST PATH ==========
     public static void demonstrateDijkstra() {
         System.out.println("1. DIJKSTRA'S ALGORITHM - SHORTEST PATH IN WEIGHTED GRAPHS");
@@ -550,50 +594,6 @@ public class Basics_2 {
         }
     }
 
-    // ========== LEETCODE PATTERNS SUMMARY ==========
-    public static void printLeetCodePatterns() {
-        System.out.println("COMMON LEETCODE GRAPH PATTERNS:");
-        System.out.println();
-
-        System.out.println("1. SHORTEST PATH:");
-        System.out.println("   - Unweighted: BFS");
-        System.out.println("   - Weighted (positive): Dijkstra");
-        System.out.println("   - With negative edges: Bellman-Ford");
-        System.out.println();
-
-        System.out.println("2. CONNECTIVITY:");
-        System.out.println("   - Connected components: DFS/BFS or Union-Find");
-        System.out.println("   - Bridge finding: Tarjan's algorithm");
-        System.out.println("   - Articulation points: Tarjan's algorithm");
-        System.out.println();
-
-        System.out.println("3. ORDERING:");
-        System.out.println("   - Topological sort: DFS or Kahn's algorithm");
-        System.out.println("   - Course scheduling: Topological sort + cycle detection");
-        System.out.println();
-
-        System.out.println("4. CYCLE DETECTION:");
-        System.out.println("   - Undirected: DFS with parent or Union-Find");
-        System.out.println("   - Directed: 3-color DFS");
-        System.out.println();
-
-        System.out.println("5. SPECIAL GRAPHS:");
-        System.out.println("   - Bipartite: 2-coloring with BFS/DFS");
-        System.out.println("   - Trees: N nodes, N-1 edges, connected");
-        System.out.println();
-
-        System.out.println("6. GRID PROBLEMS:");
-        System.out.println("   - Islands: DFS/BFS on 2D array");
-        System.out.println("   - Shortest path in grid: BFS");
-        System.out.println("   - Multi-source: Add all sources to queue initially");
-        System.out.println();
-
-        System.out.println("7. ADVANCED:");
-        System.out.println("   - Minimum Spanning Tree: Kruskal's (Union-Find) or Prim's");
-        System.out.println("   - Strongly Connected Components: Kosaraju's or Tarjan's");
-        System.out.println("   - Maximum Flow: Ford-Fulkerson, Edmonds-Karp");
-    }
-
     public static void main(String[] args) {
         System.out.println("=== ADVANCED GRAPH TECHNIQUES FOR MEDIUM PROBLEMS ===\n");
 
@@ -619,6 +619,6 @@ public class Basics_2 {
         demonstrateMultiSourceBFS();
 
         System.out.println("\n=== LEETCODE PATTERNS SUMMARY ===");
-        printLeetCodePatterns();
+        patternsCovered();
     }
 }
