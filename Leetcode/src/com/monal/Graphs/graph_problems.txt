@@ -1,0 +1,57 @@
+# Graph Problems List
+# Format: subtopic|problem_name|difficulty
+# Example: BFS/DFS|Number of Islands|Medium
+
+# ===== STRIVER A-Z GRAPH PROBLEMS =====
+
+# Section 1: BFS/DFS Problems (14 problems)
+BFS/DFS|Number of provinces (leetcode)|Medium
+BFS/DFS|Connected Components Problem in Matrix|Hard
+BFS/DFS|Rotten Oranges|Medium
+BFS/DFS|Flood fill|Hard
+BFS/DFS|Cycle Detection in undirected Graph (bfs)|Hard
+BFS/DFS|Cycle Detection in undirected Graph (dfs)|Hard
+BFS/DFS|O/J Matrix (Bfs Problem)|Medium
+BFS/DFS|Surrounded Regions (dfs)|Hard
+BFS/DFS|Number of Enclaves (flood fill implementation – multisource)|Hard
+BFS/DFS|Word ladder – 1|Hard
+BFS/DFS|Word ladder – 2|Hard
+BFS/DFS|Number of Distinct Islands (dfs multisource)|Hard
+BFS/DFS|Bipartite Graph (DFS)|Medium
+BFS/DFS|Cycle Detection in Directed Graph (DFS)|Hard
+
+# Section 2: Topological Sort (7 problems)
+Topo Sort|Topo Sort|Medium
+Topo Sort|Kahn's Algorithm|Medium
+Topo Sort|Cycle Detection in Directed Graph (BFS)|Medium
+Topo Sort|Course Schedule - I|Hard
+Topo Sort|Course Schedule - II|Hard
+Topo Sort|Find eventual safe states|Hard
+Topo Sort|Alien dictionary|Hard
+
+# Section 3: Shortest Path (12 problems)
+Shortest Path|Shortest Path in UG with unit weights|Medium
+Shortest Path|Shortest Path in DAG|Medium
+Shortest Path|Dijkstra's Algorithm|Medium
+Shortest Path|Shortest path in a binary maze|Medium
+Shortest Path|Path with minimum effort|Medium
+Shortest Path|Cheapest flights within k stops|Hard
+Shortest Path|Network Delay time|Medium
+Shortest Path|Number of ways to arrive at destination|Medium
+Shortest Path|Minimum steps to reach end from start by performing multiplication and mod operations with array elements|Hard
+Shortest Path|Bellman Ford Algorithm|Hard
+Shortest Path|Floyd Warshall Algorithm|Hard
+Shortest Path|Find the city with the smallest number of neighbors in a threshold distance|Hard
+
+# Section 4: Disjoint Sets/MST (11 problems)
+DSU/MST|Minimum Spanning Tree|Medium
+DSU/MST|Prim's Algorithm|Medium
+DSU/MST|Disjoint Set Union by Rank|Medium
+DSU/MST|Disjoint Set Union by Size|Medium
+DSU/MST|Kruskal's Algorithm|Medium
+DSU/MST|Number of operations to make network connected|Medium
+DSU/MST|Most stones removed with same rows or columns|Medium
+DSU/MST|Accounts merge|Hard
+DSU/MST|Number of island II|Hard
+DSU/MST|Making a Large Island|Hard
+DSU/MST|Swim in rising water|Hard

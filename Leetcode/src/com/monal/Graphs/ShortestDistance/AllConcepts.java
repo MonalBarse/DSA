@@ -181,6 +181,7 @@ public class AllConcepts {
      * 3. DIJKSTRA'S ALGORITHM - Most Important for Interviews!
      * Time: O((V + E) log V), Space: O(V)
      *
+     *
      * Key Insight: Always pick the unvisited node with minimum distance
      * Greedy approach works because edge weights are non-negative
      *
@@ -227,47 +228,48 @@ public class AllConcepts {
       return dist;
     }
 
-    // Using Set for Dijkstra's algorithm
-    public static int[] dijkstraWidSet(List<List<Prerequisites.Edge>> graph, int src) {
+    public static int[] dijkstraOptimizedSet(List<List<Prerequisites.Edge>> graph, int src) {
       int n = graph.size();
-
       int[] dist = new int[n];
       Arrays.fill(dist, Integer.MAX_VALUE);
       dist[src] = 0;
 
-      // Set to track unvisited nodes
-      Set<Integer> unvisited = new HashSet<>();
+      // TreeSet to maintain nodes sorted by distance
+      // Format: [distance, node] - TreeSet sorts by distance first
+      TreeSet<int[]> unvisited = new TreeSet<>((a, b) -> {
+        if (a[0] != b[0])
+          return a[0] - b[0]; // Compare by distance first
+        return a[1] - b[1]; // If distances equal, compare by node ID
+      });
+
+      // Add all nodes to the set
       for (int i = 0; i < n; i++) {
-        unvisited.add(i);
+        unvisited.add(new int[] { dist[i], i });
       }
 
-      // Start with the source node
-      int currentNode = src;
       while (!unvisited.isEmpty()) {
-        // Find the unvisited node with the smallest distance
-        int minDist = Integer.MAX_VALUE;
-        for (int node : unvisited) {
-          if (dist[node] < minDist) {
-            minDist = dist[node];
-            currentNode = node;
-          }
-        }
-        // Mark visited
-        unvisited.remove(currentNode);
+        // Get node with minimum distance - O(log V)
+        int[] current = unvisited.pollFirst();
+        int currentNode = current[1];
+        int currentDist = current[0];
 
-        // Relax all edges from the current node
+        // Skip if we've found a better path (shouldn't happen with TreeSet)
+        if (currentDist > dist[currentNode])
+          continue;
+
+        // Relax all adjacent edges
         for (Prerequisites.Edge edge : graph.get(currentNode)) {
-          if (unvisited.contains(edge.to)) {
-            int newDist = dist[currentNode] + edge.weight;
-            if (newDist < dist[edge.to]) {
-              dist[edge.to] = newDist;
-            }
-          }
-        }
+          int newDist = dist[currentNode] + edge.weight;
+          if (newDist < dist[edge.to]) {
+            // Remove old entry from TreeSet
+            unvisited.remove(new int[] { dist[edge.to], edge.to });
 
-        // If we can't reach any more nodes, break
-        if (minDist == Integer.MAX_VALUE) {
-          break;
+            // Update distance
+            dist[edge.to] = newDist;
+
+            // Add updated entry to TreeSet
+            unvisited.add(new int[] { newDist, edge.to });
+          }
         }
       }
 
@@ -277,43 +279,58 @@ public class AllConcepts {
           dist[i] = -1;
         }
       }
+
       return dist;
     }
 
     /**
      * 4. SHORTEST PATH IN BINARY MAZE
-     * Time: O(MN), Space: O(MN)
+     * Given an n x n binary matrix grid, return the length of the shortest clear
+     * path in the matrix. If there is no clear path, return -1.
      *
-     * Key Insight: Treat maze as graph where each cell is a node
-     * Use BFS since all edge weights are 1 (moving to adjacent cell)
+     * A clear path in a binary matrix is a path from the top-left cell (i.e., (0,
+     * 0)) to the bottom-right cell (i.e., (n - 1, n - 1)) such that:
+     *
+     * All the visited cells of the path are 0.
+     * All the adjacent cells of the path are 8-directionally connected (i.e., they
+     * are different and they share an edge or a corner).
+     * The length of a clear path is the number of visited cells of this path.
      */
-    public static int shortestPathBinaryMaze(int[][] maze, int[] start, int[] destination) {
-      int m = maze.length, n = maze[0].length;
-      if (maze[start[0]][start[1]] == 1 || maze[destination[0]][destination[1]] == 1) {
-        return -1; // Start or end is blocked
+    public static int shortestPathBinaryMatrix(int[][] grid) {
+      int n = grid.length;
+      if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1) {
+        return -1; // No path possible
       }
+      // BFS queue
+      Queue<int[]> queue = new ArrayDeque<>();
+      queue.offer(new int[] { 0, 0, 1 }); // {row, col, distance }
+      boolean[][] visited = new boolean[n][n];
+      visited[0][0] = true;
 
-      int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-      boolean[][] visited = new boolean[m][n];
-      Queue<int[]> queue = new LinkedList<>();
+      int[][] directions = {
+          { -1, -1 }, { -1, 0 }, { -1, 1 },
+          { 0, -1 }, { 0, 1 },
+          { 1, -1 }, { 1, 0 }, { 1, 1 }
+      };
 
-      queue.offer(new int[] { start[0], start[1], 0 }); // row, col, distance
-      visited[start[0]][start[1]] = true;
-
+      // Loop
       while (!queue.isEmpty()) {
         int[] current = queue.poll();
         int row = current[0], col = current[1], dist = current[2];
 
-        if (row == destination[0] && col == destination[1]) {
+        // If we reached the bottom-right corner
+        if (row == n - 1 && col == n - 1) {
           return dist;
         }
 
+        // Explore all 8 directions
         for (int[] dir : directions) {
           int newRow = row + dir[0];
           int newCol = col + dir[1];
 
-          if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n
-              && maze[newRow][newCol] == 0 && !visited[newRow][newCol]) {
+          // Check bounds and if cell is clear
+          if (newRow >= 0 && newRow < n && newCol >= 0 && newCol < n &&
+              grid[newRow][newCol] == 0 && !visited[newRow][newCol]) {
             visited[newRow][newCol] = true;
             queue.offer(new int[] { newRow, newCol, dist + 1 });
           }
@@ -801,7 +818,7 @@ public class AllConcepts {
           { 1, 1, 0, 1, 1 },
           { 0, 0, 0, 0, 0 }
       };
-      int shortestMazePath = Concepts.shortestPathBinaryMaze(maze, new int[] { 0, 0 }, new int[] { 4, 4 });
+      int shortestMazePath = Concepts.shortestPathBinaryMatrix(maze);
       System.out.println("Shortest path from (0,0) to (4,4): " + shortestMazePath + " steps");
       System.out.println("Explanation: Treat maze as graph, use BFS since all moves have equal cost\n");
 

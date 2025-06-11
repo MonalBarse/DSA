@@ -985,8 +985,8 @@ main_menu() {
     echo "4. Run a compiled class"
     echo "5. Quick compile and run"
     echo "6. List all topics and files"
-    echo "7. Git operations"         # New option added here
-    echo "8. Exit"                   # Changed from 7 to 8
+    echo "7. Git operations"
+    echo "8. Exit"                   
     echo
 
     read -p "Enter your choice (1-8): " choice  # Changed from 1-7 to 1-8

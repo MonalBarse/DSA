@@ -1,0 +1,20 @@
+{
+  "solved": [
+    "BFS/DFS|Number of provinces (leetcode)|Medium|1749654600",
+    "BFS/DFS|Connected Components Problem in Matrix|Hard|1749654709",
+    "BFS/DFS|Rotten Oranges|Medium|1749654721",
+    "BFS/DFS|Flood fill|Hard|1749654735",
+    "BFS/DFS|Cycle Detection in undirected Graph (bfs)|Hard|1749654751",
+    "BFS/DFS|Cycle Detection in undirected Graph (dfs)|Hard|1749654776",
+    "BFS/DFS|O/J Matrix (Bfs Problem)|Medium|1749654794",
+    "BFS/DFS|Surrounded Regions (dfs)|Hard|1749655178",
+    "BFS/DFS|Number of Enclaves (flood fill implementation – multisource)|Hard|1749655184",
+    "BFS/DFS|Word ladder – 2|Hard|1749655217",
+    "BFS/DFS|Bipartite Graph (DFS)|Medium|1749655241",
+    "BFS/DFS|Cycle Detection in Directed Graph (DFS)|Hard|1749655246",
+    "Topo Sort|Topo Sort|Medium|1749655261",
+    "Topo Sort|Kahn's Algorithm|Medium|1749655272"
+  ],
+  "current_index": 16,
+  "total_solved": 14
+}

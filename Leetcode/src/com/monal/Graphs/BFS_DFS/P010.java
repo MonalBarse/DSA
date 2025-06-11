@@ -31,10 +31,10 @@ public class P010 {
         }
       }
     } else {
-      boolean[] pathVisited = new boolean[n]; // to track the current path
+      boolean[] isBeingVisited = new boolean[n]; // to track the current path
       for (int i = 0; i < n; i++) {
         if (!visited[i]) { // unvisited
-          if (dfsDetect(adjList, visited, pathVisited, i)) {
+          if (dfsDetect(adjList, visited, isBeingVisited, i)) {
             return true; // cycle detected
           }
         }
@@ -47,11 +47,11 @@ public class P010 {
   }
 
   public static boolean bfsDetect(List<List<Integer>> adjList, boolean[] visited, int start) {
-    boolean[] pathVisited = new boolean[adjList.size()];
+    boolean[] isBeingVisited = new boolean[adjList.size()];
     Queue<Integer> queue = new ArrayDeque<>();
     queue.offer(start);
 
-    pathVisited[start] = true;
+    isBeingVisited[start] = true;
     visited[start] = true;
 
     while (!queue.isEmpty()) {
@@ -59,31 +59,31 @@ public class P010 {
       for (int neighbor : adjList.get(node)) {
         if (!visited[neighbor]) {
           visited[neighbor] = true;
-          pathVisited[neighbor] = true;
+          isBeingVisited[neighbor] = true;
           queue.offer(neighbor);
-        } else if (pathVisited[neighbor]) {
+        } else if (isBeingVisited[neighbor]) {
           return true; // cycle detected
         }
       }
-      pathVisited[node] = false; // backtrack
+      isBeingVisited[node] = false; // backtrack
     }
     return false; // no cycle detected
   }
 
-  public static boolean dfsDetect(List<List<Integer>> adjList, boolean[] visited, boolean[] pathVisited, int node) {
+  public static boolean dfsDetect(List<List<Integer>> adjList, boolean[] visited, boolean[] isBeingVisited, int node) {
     visited[node] = true;
-    pathVisited[node] = true; // mark the node as part of the current path
+    isBeingVisited[node] = true; // mark the node as part of the current path
 
     for (int neighbor : adjList.get(node)) {
       if (!visited[neighbor]) {
-        if (dfsDetect(adjList, visited, pathVisited, neighbor)) {
+        if (dfsDetect(adjList, visited, isBeingVisited, neighbor)) {
           return true; // cycle detected in the recursive call
         }
-      } else if (pathVisited[neighbor]) {
+      } else if (isBeingVisited[neighbor]) {
         return true; // cycle detected in the current path
       }
     }
-    pathVisited[node] = false; // backtrack, unmark the node from the current path
+    isBeingVisited[node] = false; // backtrack, unmark the node from the current path
     return false; // no cycle detected
   }
 
