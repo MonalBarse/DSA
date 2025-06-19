@@ -190,6 +190,16 @@ public class AllConcepts {
     // Using PriorityQueue for Dijkstra's algorithm
     public static int[] dijkstra(List<List<Prerequisites.Edge>> graph, int src) {
       int n = graph.size();
+
+      // Difference from normal BFS:
+      // 1. We use a priority queue to always go to the optimal (min dis) node next
+      // 2. We maintain a distance array to track the shortest distance to each node
+      // we donot do that in BFS
+      // 3. We tend to relax edges, i.e., update the distance to adjacent nodes
+      // Relaxing means that if we are at node A 
+
+
+
       int[] dist = new int[n];
       Arrays.fill(dist, Integer.MAX_VALUE);
       dist[src] = 0;

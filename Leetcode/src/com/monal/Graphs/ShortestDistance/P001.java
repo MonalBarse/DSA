@@ -3,19 +3,15 @@ package com.monal.Graphs.ShortestDistance;
 import java.util.*;
 
 public class P001 {
+
+  /*
+   * Shortest Distance in a Directed Acyclic Graph (DAG) with weighted edges.
+   * In weighted graphs (if non cyclic), we can use Topological Sort to find the
+   * shortest distance from a source node to all other nodes.
+   */
   public class ShortestDistWeighted {
 
     // Shortest Distance in a DAG using TOPO
-    class Pair {
-      int node;
-      int wt;
-
-      Pair(int node, int wt) {
-        this.node = node;
-        this.wt = wt;
-      }
-    }
-
     private int[] shortestDist(int n, int[][] edges, int src) {
       // Build the adj list
       ArrayList<ArrayList<Pair>> adj = new ArrayList<>();
@@ -30,7 +26,7 @@ public class P001 {
         adj.get(u).add(new Pair(v, wt));
       }
 
-      // Topo sort
+      // Topo sort (Bfs - Kahn's Algorithm)
       int[] indegree = new int[n];
       for (int i = 0; i < n; i++) {
         for (Pair p : adj.get(i)) {
@@ -38,7 +34,7 @@ public class P001 {
         }
       }
 
-      // detect the starting point
+      // Detect the starting point
       Queue<Integer> queue = new LinkedList<>();
 
       for (int i = 0; i < n; i++) {
@@ -47,7 +43,12 @@ public class P001 {
         }
       }
 
-      List<Integer> order = new ArrayList<>();
+      List<Integer> order = new ArrayList<>(); // TO store the topological order
+
+      // loop is basically checking from queue that whatever was is the queue,
+      // we explore it first add it to order then explore what is connected to it
+      // and reduce the indegree of that node, if it becomes 0 (that means it is next
+      // in the topological order) then we add it to the queue.
       while (!queue.isEmpty()) {
         int node = queue.poll();
         order.add(node);
@@ -66,11 +67,19 @@ public class P001 {
       dist[src] = 0;
 
       // Relax edges in topological order
+      // relaxing means that we are checking if the distance to the node
+      // can be minimized by going through the current node.
+
+      // Start with first node in topological order (FIFO - we used queue)
       for (int node : order) {
+        // If the node is unreachable, skip it
         if (dist[node] == Integer.MAX_VALUE)
-          continue; // Skip unreachable nodes
+          continue;
         for (Pair p : adj.get(node)) {
-          dist[p.node] = Math.min(dist[p.node], dist[node] + p.wt);
+          int nextNode = p.node, weight = p.wt;
+          // the distance to next node is the minimum of the current distance
+          // and the distance to the current node plus the wt(dist) of the edge
+          dist[nextNode] = Math.min(dist[nextNode], dist[node] + weight);
         }
       }
       // Replace unreachable nodes with -1
@@ -138,12 +147,24 @@ public class P001 {
         }
       }
       st.add(node);
+    }
 
+    class Pair {
+      int node;
+      int wt;
+
+      Pair(int node, int wt) {
+        this.node = node;
+        this.wt = wt;
+      }
     }
   }
 
   public class ShortestDisUnweighted {
-
+    /*
+     * Whiles solving for unweighted graphs we can use normal BFS to find the
+     * shortest distance from a source node to all other nodes.
+     */
     private int[] shortestDistance(int[][] edges, int n, int m, int src) {
       // Create a AdjList
       ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
@@ -151,9 +172,11 @@ public class P001 {
       for (int i = 0; i < n; i++) {
         graph.add(new ArrayList<>());
       }
-      for (int i = 0; i < m; i++) {
-        int u = edges[i][0], v = edges[i][1];
+      for (int[] edge : edges) {
+        int u = edge[0];
+        int v = edge[1];
         graph.get(u).add(v);
+        graph.get(v).add(u); // since it is undirected
       }
 
       // start bfs from src

@@ -13,8 +13,15 @@
     "BFS/DFS|Bipartite Graph (DFS)|Medium|1749655241",
     "BFS/DFS|Cycle Detection in Directed Graph (DFS)|Hard|1749655246",
     "Topo Sort|Topo Sort|Medium|1749655261",
-    "Topo Sort|Kahn's Algorithm|Medium|1749655272"
+    "Topo Sort|Kahn's Algorithm|Medium|1749655272",
+    "Topo Sort|Cycle Detection in Directed Graph (BFS)|Medium|1749655630",
+    "Topo Sort|Course Schedule - I|Hard|1749655636",
+    "Topo Sort|Alien dictionary|Hard|1749655651",
+    "Shortest Path|Shortest Path in UG with unit weights|Medium|1749655659",
+    "Shortest Path|Shortest Path in DAG|Medium|1749655664",
+    "Shortest Path|Dijkstra's Algorithm|Medium|1749655670",
+    "Shortest Path|Shortest path in a binary maze|Medium|1749655678"
   ],
-  "current_index": 16,
-  "total_solved": 14
+  "current_index": 25,
+  "total_solved": 21
 }

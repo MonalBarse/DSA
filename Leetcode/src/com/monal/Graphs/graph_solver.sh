@@ -169,45 +169,48 @@ check_revision_needed() {
 }
 
 # Function to get revision problems
+# Function to get revision problems
 get_revision_problems() {
     local revision_type=$1
-    local solved_problems=$(jq -r '.solved[]' "$PROGRESS_FILE")
+    local solved_problems=$(jq -r '.solved[]' "$PROGRESS_FILE" | cut -d'|' -f1-3)
     local revision_list=()
 
     case $revision_type in
         "REVISE_SECTION")
             # Last 4 problems (section completion)
-            revision_list=($(echo "$solved_problems" | tail -4 | cut -d'|' -f1-3))
             echo -e "${YELLOW}📚 SECTION COMPLETE: Revise last 4 problems${NC}"
             echo -e "${BLUE}💡 Focus on: Pattern recognition and implementation differences${NC}"
+            echo ""
+            echo "$solved_problems" | tail -4
             ;;
         "REVISE_CROSS_SECTION")
             # 6-8 problems from previous sections (mix of difficulties)
-            revision_list=($(echo "$solved_problems" | head -$(($(echo "$solved_problems" | wc -l) - 7)) | cut -d'|' -f1-3 | cut -d'|' -f1-3 | shuf | head-7))
             echo -e "${YELLOW}📚 CROSS-SECTION REVISION: 7 problems from previous sections${NC}"
             echo -e "${BLUE}💡 Focus on: Connecting concepts across different graph techniques${NC}"
+            echo ""
+            echo "$solved_problems" | head -$(($(echo "$solved_problems" | wc -l) - 7)) | shuf | head -7
             ;;
         "REVISE_MAJOR")
             # 10-12 mixed problems with emphasis on Hard problems
-            local hard_problems=$(echo "$solved_problems" | grep "Hard" | cut -d'|' -f1-3 | shuf | head-6)
-            local other_problems=$(echo "$solved_problems" | grep -v "Hard" | cut -d'|' -f1-3 | shuf | head-6)
-            revision_list=($(echo -e "$hard_problems\n$other_problems" | head -10))
             echo -e "${YELLOW}📚 MAJOR REVISION: 10 mixed problems (emphasis on Hard)${NC}"
             echo -e "${BLUE}💡 Focus on: Time complexity optimization and edge cases${NC}"
+            echo ""
+            local hard_problems=$(echo "$solved_problems" | grep "Hard" | shuf | head -6)
+            local other_problems=$(echo "$solved_problems" | grep -v "Hard" | shuf | head -4)
+            echo -e "$hard_problems\n$other_problems" | head -10
             ;;
         "REVISE_FINAL")
             # Final comprehensive revision: 15-20 problems covering all sections
-            local bfs_dfs=$(echo "$solved_problems" | grep "BFS/DFS" | cut -d'|' -f1-3 | shuf | head-4)
-            local topo=$(echo "$solved_problems" | grep "Topo Sort" | cut -d'|' -f1-3 | shuf | head-3)
-            local shortest=$(echo "$solved_problems" | grep "Shortest Path" | cut -d'|' -f1-3 | shuf | head-4)
-            local mst=$(echo "$solved_problems" | grep "DSU/MST" | cut -d'|' -f1-3 | shuf | head-4)
-            revision_list=($(echo -e "$bfs_dfs\n$topo\n$shortest\n$mst"))
             echo -e "${YELLOW}🎉 FINAL COMPREHENSIVE REVISION: 15 problems across all sections${NC}"
             echo -e "${BLUE}💡 Focus on: Complete mastery and interview readiness${NC}"
+            echo ""
+            local bfs_dfs=$(echo "$solved_problems" | grep "BFS/DFS" | shuf | head -4)
+            local topo=$(echo "$solved_problems" | grep "Topo Sort" | shuf | head -3)
+            local shortest=$(echo "$solved_problems" | grep "Shortest Path" | shuf | head -4)
+            local mst=$(echo "$solved_problems" | grep "DSU/MST" | shuf | head -4)
+            echo -e "$bfs_dfs\n$topo\n$shortest\n$mst"
             ;;
     esac
-
-    printf '%s\n' "${revision_list[@]}"
 }
 
 # Function to mark problem as solved
@@ -327,14 +330,16 @@ main() {
             echo -e "${RED}⚠️  REVISION REQUIRED BEFORE PROCEEDING!${NC}"
             echo ""
 
-            local revision_problems=$(get_revision_problems "$revision_needed")
+            local revision_output=$(get_revision_problems "$revision_needed")
             local count=1
 
-            echo "$revision_problems" | while read -r problem_line; do
+            # Show the header and focus message first
+            echo "$revision_output" | head -3
+
+            # Then show the numbered problems
+            echo "$revision_output" | tail -n +4 | while read -r problem_line; do
                 if [ -n "$problem_line" ]; then
-                    # Extract just the problem info part (before timestamp)
-                    local prob_info=$(echo "$problem_line" | cut -d'|' -f1-3)
-                    IFS='|' read -r subtopic problem difficulty <<< "$prob_info"
+                    IFS='|' read -r subtopic problem difficulty <<< "$problem_line"
                     echo -e "${YELLOW}$count. [$subtopic] $problem ($difficulty)${NC}"
                     count=$((count + 1))
                 fi
@@ -346,13 +351,12 @@ main() {
             # Update last revision check
             local total_solved=$(jq -r '.total_solved' "$PROGRESS_FILE")
             jq --arg total "$total_solved" '.last_revision_check = ($total | tonumber)' \
-               "$REVISION_FILE" > tmp.json && mv tmp.json "$REVISION_FILE"
+            "$REVISION_FILE" > tmp.json && mv tmp.json "$REVISION_FILE"
 
             echo ""
             read -p "Press Enter when revision is complete..."
             continue
         fi
-
         # Show current problem
         show_current_problem
 
@@ -388,7 +392,7 @@ main() {
                 sleep 1
                 ;;
             3)
-                show_detailed_stats
+                show_stats
                 read -p "Press Enter to continue..."
                 ;;
             4)

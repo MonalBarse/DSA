@@ -1,70 +1,8 @@
-package com.monal.Graphs.MST_DisjointSet;
+package com.monal.Graphs.MST;
 
 import java.util.*;
 
-public class MST_DisjointSet {
-    /**
-     * PREREQUISITES: What students need to know before MST and Disjoint Set
-     * 1. Graph representation (Adjacency List, Edge List)
-     * 2. Basic graph traversal (DFS/BFS)
-     * 3. Sorting algorithms
-     * 4. Basic understanding of trees and cycles
-     */
-    class Prerequisites {
-
-        // Edge class - fundamental building block for MST algorithms
-        static class Edge implements Comparable<Edge> {
-            int src, dest, weight;
-
-            Edge(int src, int dest, int weight) {
-                this.src = src;
-                this.dest = dest;
-                this.weight = weight;
-            }
-
-            // For sorting edges by weight (used in Kruskal's)
-            @Override
-            public int compareTo(Edge other) {
-                return Integer.compare(this.weight, other.weight);
-            }
-
-            @Override
-            public String toString() {
-                return "(" + src + "->" + dest + ", w=" + weight + ")";
-            }
-        }
-
-        // Graph representation for MST problems
-        static class Graph {
-            int vertices;
-            List<Edge> edges;
-            List<List<Edge>> adjList;
-
-            Graph(int v) {
-                this.vertices = v;
-                this.edges = new ArrayList<>();
-                this.adjList = new ArrayList<>();
-                for (int i = 0; i < v; i++) {
-                    adjList.add(new ArrayList<>());
-                }
-            }
-
-            void addEdge(int src, int dest, int weight) {
-                Edge edge = new Edge(src, dest, weight);
-                edges.add(edge);
-                // For undirected graph, add both directions in adjacency list
-                adjList.get(src).add(new Edge(src, dest, weight));
-                adjList.get(dest).add(new Edge(dest, src, weight));
-            }
-
-            void printGraph() {
-                System.out.println("Graph Edges:");
-                for (Edge e : edges) {
-                    System.out.println(e);
-                }
-            }
-        }
-    }
+public class Basics01 {
 
     /**
      * CORE CONCEPTS: The theoretical foundation
@@ -317,11 +255,7 @@ public class MST_DisjointSet {
          */
     }
 
-    /**
-     * HARD PROBLEMS: Real interview questions that test deep understanding
-     * These problems combine MST/Disjoint Set with other concepts
-     */
-    class HardProblems {
+    class Examples {
 
         /**
          * PROBLEM 1: Number of Operations to Make Network Connected
@@ -346,17 +280,17 @@ public class MST_DisjointSet {
                 return -1;
             }
 
-            Concepts.DisjointSetUnionByRank ds = new Concepts.DisjointSetUnionByRank(n);
+            Concepts.DisjointSetUnionByRank disjointSet = new Concepts.DisjointSetUnionByRank(n);
 
             // Process all connections
             for (int[] connection : connections) {
-                ds.union(connection[0], connection[1]);
+                disjointSet.union(connection[0], connection[1]);
             }
 
             // Count number of connected components
             Set<Integer> components = new HashSet<>();
             for (int i = 0; i < n; i++) {
-                components.add(ds.findParent(i));
+                components.add(disjointSet.findParent(i));
             }
 
             // Need (components - 1) operations to connect all components
@@ -695,7 +629,7 @@ public class MST_DisjointSet {
     }
 
     public static void main(String[] args) {
-        MST_DisjointSet tutorial = new MST_DisjointSet();
+        Basics01 tutorial = new Basics01();
 
         // Run illustrations to show how algorithms work
         tutorial.new Illustrations().demonstrateDisjointSet();
@@ -705,7 +639,7 @@ public class MST_DisjointSet {
         // Test hard problems
         System.out.println("\n\n=== TESTING HARD PROBLEMS ===");
 
-        HardProblems problems = tutorial.new HardProblems();
+        Examples problems = tutorial.new Examples();
 
         // Test 1: Network Connection
         int[][] connections1 = { { 0, 1 }, { 0, 2 }, { 1, 2 } };
@@ -736,6 +670,69 @@ public class MST_DisjointSet {
         System.out.println("3. Solve advanced graph problems combining multiple concepts");
         System.out.println("4. Study time/space complexity analysis deeply");
         System.out.println("5. Practice explaining these algorithms in interviews");
+    }
+
+    /**
+     * PREREQUISITES: What students need to know before MST and Disjoint Set
+     * 1. Graph representation (Adjacency List, Edge List)
+     * 2. Basic graph traversal (DFS/BFS)
+     * 3. Sorting algorithms
+     * 4. Basic understanding of trees and cycles
+     */
+    class Prerequisites {
+
+        // Edge class - fundamental building block for MST algorithms
+        static class Edge implements Comparable<Edge> {
+            int src, dest, weight;
+
+            Edge(int src, int dest, int weight) {
+                this.src = src;
+                this.dest = dest;
+                this.weight = weight;
+            }
+
+            // For sorting edges by weight (used in Kruskal's)
+            @Override
+            public int compareTo(Edge other) {
+                return Integer.compare(this.weight, other.weight);
+            }
+
+            @Override
+            public String toString() {
+                return "(" + src + "->" + dest + ", w=" + weight + ")";
+            }
+        }
+
+        // Graph representation for MST problems
+        static class Graph {
+            int vertices;
+            List<Edge> edges;
+            List<List<Edge>> adjList;
+
+            Graph(int v) {
+                this.vertices = v;
+                this.edges = new ArrayList<>();
+                this.adjList = new ArrayList<>();
+                for (int i = 0; i < v; i++) {
+                    adjList.add(new ArrayList<>());
+                }
+            }
+
+            void addEdge(int src, int dest, int weight) {
+                Edge edge = new Edge(src, dest, weight);
+                edges.add(edge);
+                // For undirected graph, add both directions in adjacency list
+                adjList.get(src).add(new Edge(src, dest, weight));
+                adjList.get(dest).add(new Edge(dest, src, weight));
+            }
+
+            void printGraph() {
+                System.out.println("Graph Edges:");
+                for (Edge e : edges) {
+                    System.out.println(e);
+                }
+            }
+        }
     }
 }
 
