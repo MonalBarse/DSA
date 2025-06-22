@@ -70,12 +70,21 @@ public class BasicsOfTrees {
    * Use case: Creating a copy of tree, expression trees evaluation
    * Think: "Process current node BEFORE its children"
    */
-  public static void preorderTraversal(TreeNode root) {
-    if (root == null) return;
+  public static List<Intger> preorderTraversal(TreeNode root) {
+    List<Integer> result = new ArrayList<>();
+    preorderHelper(root, result);
+    return result;
+  }
 
-    System.out.print(root.val + " "); // Process current node FIRST
-    preorderTraversal(root.left); // Then left subtree
-    preorderTraversal(root.right); // Then right subtree
+  private static void preorderHelper(TreeNode node, List<Integer> result) {
+    if (node == null) return;
+
+    result.add(node.val);
+    // process left
+    preorderHelper(node.left, result);
+    // process right
+    preorderHelper(node.right, result);
+    // Note: No need to return anything, we are collecting results in the list
   }
 
   /*
@@ -107,19 +116,58 @@ public class BasicsOfTrees {
    * LEVEL ORDER TRAVERSAL (BFS): Level by level, left to right Use case: Printing tree level by
    * level, finding shortest path in unweighted tree This is your BFS knowledge applied to trees!
    */
-  public static void levelOrderTraversal(TreeNode root) {
-    if (root == null) return;
+  public static List<List<Integer>> levelOrderTraversal(TreeNode root) {
+    if (root == null) return new ArrayList<>();
+    List<List<Integer>> result = new ArrayList<>();
+    Queue<TreeNode> q = new ArrayDeque<>();
+    q.offer(root);
 
-    Queue<TreeNode> queue = new LinkedList<>();
-    queue.offer(root);
-
-    while (!queue.isEmpty()) {
-      TreeNode node = queue.poll();
-      System.out.print(node.val + " ");
-
-      if (node.left != null) queue.offer(node.left);
-      if (node.right != null) queue.offer(node.right);
+    while (!q.isEmpty()) {
+      int levelSize = q.size();
+      List<Integer> currentLevel = new ArrayList<>();
+      for (int i = 0; i < levelSize; i++) {
+        TreeNode node = q.poll();
+        currentLevel.add(node.val);
+        if (node.left != null) q.offer(node.left);
+        if (node.right != null) q.offer(node.right);
+      }
+      result.add(currentLevel);
     }
+    return result;
+  }
+
+  public static class AllTraversals {
+    List<Integer> preorder;
+    List<Integer> inorder;
+    List<Integer> postorder;
+  }
+
+  public static AllTraversals allTraversalsInOneTraversal(TreeNode root) {
+    AllTraversals traversals = new AllTraversals();
+    traversals.preorder = new ArrayList<>();
+    traversals.inorder = new ArrayList<>();
+    traversals.postorder = new ArrayList<>();
+    allTraversalsHelper(root, traversals);
+    return traversals;
+  }
+
+  private static void allTraversalsHelper(TreeNode node, AllTraversals traversals) {
+    if (node == null) return;
+
+    // Preorder - process current node first
+    traversals.preorder.add(node.val);
+
+    // Recursively process left subtree
+    allTraversalsHelper(node.left, traversals);
+
+    // Inorder - process current node after left subtree
+    traversals.inorder.add(node.val);
+
+    // Recursively process right subtree
+    allTraversalsHelper(node.right, traversals);
+
+    // Postorder - process current node after both subtrees
+    traversals.postorder.add(node.val);
   }
 
   /*
@@ -145,22 +193,20 @@ public class BasicsOfTrees {
         if (node.left != null) queue.offer(node.left);
         if (node.right != null) queue.offer(node.right);
       }
-
       result.add(currentLevel);
     }
-
     return result;
   }
 
   // ======================== TREE PROPERTIES & MEASUREMENTS ========================
 
-  /**
-   * HEIGHT of tree: Maximum depth from root to any leaf Height of empty tree = -1, Height of single
-   * node = 0
+  /*
+   * HEIGHT of tree: Maximum depth from root to any leaf
+   * Height of empty tree = -1, Height of single node = 0
    */
   public static int height(TreeNode root) {
     if (root == null) return -1;
-
+    // +1 since we count the root node itself
     return 1 + Math.max(height(root.left), height(root.right));
   }
 
