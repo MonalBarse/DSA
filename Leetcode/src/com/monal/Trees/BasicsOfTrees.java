@@ -210,41 +210,117 @@ public class BasicsOfTrees {
     return 1 + Math.max(height(root.left), height(root.right));
   }
 
-  /** DEPTH of a node: Distance from root to that node Root has depth 0 */
-  public static int depthOfNode(TreeNode root, int target, int currentDepth) {
+  /* DEPTH of a node: Distance from root to that node.
+   * Root has depth 0 */
+  public static int depthOfNode(TreeNode root, int target) {
     if (root == null) return -1;
+    if (root.val == target) return 0; // Found the target node
+
+    return depthOfNodeHelper(root, target, 0);
+  }
+
+  public static int depthOfNodeHelper(TreeNode root, int target, int currentDepth) {
+    if (root == null) return -1; // Node not found
     if (root.val == target) return currentDepth;
 
-    int leftDepth = depthOfNode(root.left, target, currentDepth + 1);
-    if (leftDepth != -1) return leftDepth;
+    // Search in left subtree
+    int leftDepth = depthOfNodeHelper(root.left, target, currentDepth + 1);
+    int rightDepth = depthOfNodeHelper(root.right, target, currentDepth + 1);
 
-    return depthOfNode(root.right, target, currentDepth + 1);
+    // If found in left subtree, return its depth
+    leftDepth = leftDepth != -1 ? leftDepth : rightDepth;
   }
 
   /** SIZE of tree: Total number of nodes */
   public static int size(TreeNode root) {
     if (root == null) return 0;
-
     return 1 + size(root.left) + size(root.right);
   }
 
-  /**
-   * DIAMETER of tree: Longest path between any two nodes Path may or may not pass through root This
-   * is a classic problem - understand the logic!
+  /*
+   * Check if tree is Balnced or not
+   * Balanced: For every node, height differnece between left and right is 0 or 1
+   *
+   * Approach: Recursively check balance of subtrees by:
+   * - Calculating height of left and right subtrees
+   * - Checking if height difference is withinh bounds
+   * * Time Complexity: O(n) where n is number of nodes
+   * * Space Complexity: O(h) where h is height of tree (due to recursion stack)
    */
-  public static int diameter(TreeNode root) {
-    if (root == null) return 0;
 
-    // Case 1: Diameter passes through root
-    int throughRoot = height(root.left) + height(root.right) + 2;
+  public boolean isBalanced(TreeNode root) {
+    return checkBalance(root) != -1;
+  }
 
-    // Case 2: Diameter is in left subtree
-    int leftDiameter = diameter(root.left);
+  private int checkBalance(TreeNode node) {
+    if (node == null) return 0; // Base case: empty subtree is balanced
+    // Recursively check left subtree
+    int leftHeight = checkBalance(node.left);
+    if (leftHeight == -1) return -1; // Left subtree is unbalanced
+    // Recursively check right subtree
+    int rightHeight = checkBalance(node.right);
+    if (rightHeight == -1) return -1; // Right subtree is unbalanced
 
-    // Case 3: Diameter is in right subtree
-    int rightDiameter = diameter(root.right);
+    // Check if current node is balanced
+    if (Math.abs(leftHeight - rightHeight) > 1) {
+      return -1; // Unbalanced
+    } else {
+      // Return height of current node
+      return Math.max(leftHeight, rightHeight) + 1;
+    }
+  }
 
-    return Math.max(throughRoot, Math.max(leftDiameter, rightDiameter));
+  /*
+   * DIAMETER of tree:
+   * Longest path between any two nodes
+   * Path may or may not pass through root
+   */
+
+  class DiameterOfBinaryTree {
+    private int diameter = 0;
+
+    public int diameterOfBinaryTree(TreeNode root) {
+      dfs(root);
+      return diameter;
+    }
+
+    private int dfs(TreeNode node) {
+      if (node == null) return 0;
+
+      int leftHeight = dfs(node.left);
+      int rightHeight = dfs(node.right);
+
+      diameter = Math.max(diameter, leftHeight + rightHeight);
+
+      return 1 + Math.max(leftHeight, rightHeight);
+    }
+  }
+
+  class MaximumPathSum {
+    private int maxSum = Integer.MIN_VALUE;
+
+    public int maxPathSum(TreeNode root) {
+      // if root is negative we return that value
+
+      calculateMaxPath(root);
+      return maxSum;
+    }
+
+    private int calculateMaxPath(TreeNode node) {
+      if (node == null) return 0;
+
+      // Calcuate max Path sum for left and right subtrees
+      // Ignore negative paths
+      int leftMax = Math.max(0, calculateMaxPath(node.left));
+      int rightMax = Math.max(0, calculateMaxPath(node.right));
+
+      // Update global max sum
+      // Current node can be part of the path
+      maxSum = Math.max(maxSum, node.val + leftMax + rightMax);
+      // Return max path sum including current node
+      // This is the maximum path sum that can be extended to parent
+      return node.val + Math.max(leftMax, rightMax);
+    }
   }
 
   // ======================== BINARY TREE VALIDATION ========================
