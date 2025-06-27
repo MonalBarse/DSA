@@ -1,5 +1,4 @@
 package com.monal.Trees;
-
 import java.util.*;
 
 /**
@@ -219,9 +218,16 @@ public class BasicsOfTrees {
     return result;
   }
 
-  // ======================== TREE PROPERTIES & MEASUREMENTS
-  // ========================
-
+  // ================== TREE PROPERTIES & MEASUREMENTS ================== //
+  /*
+   * This Section Includes:
+   * - Height of tree
+   * - Depth of a node
+   * - Diameter of tree
+   * - Size of tree
+   * - Balance check
+   * - Maximum path sum
+   */
   /*
    * HEIGHT of tree: Maximum depth from root to any leaf
    * Height of empty tree = -1, Height of single node = 0
@@ -286,6 +292,8 @@ public class BasicsOfTrees {
    */
 
   public static boolean isBalanced(TreeNode root) {
+    if (root == null)
+      return true; // An empty tree is balanced
     return checkIfBalanced(root) != -1;
   }
 
@@ -325,22 +333,26 @@ public class BasicsOfTrees {
     private int dfs(TreeNode node) {
       if (node == null)
         return 0;
-
       int leftHeight = dfs(node.left);
       int rightHeight = dfs(node.right);
-
       diameter = Math.max(diameter, leftHeight + rightHeight);
-
       return 1 + Math.max(leftHeight, rightHeight);
     }
+  }
+
+  /**
+   * Returns the diameter of the binary tree (longest path between any two nodes)
+   */
+  public static int diameter(TreeNode root) {
+    BasicsOfTrees outer = new BasicsOfTrees();
+    DiameterOfBinaryTree diameterCalculator = outer.new DiameterOfBinaryTree();
+    return diameterCalculator.diameterOfBinaryTree(root);
   }
 
   class MaximumPathSum {
     private int maxSum = Integer.MIN_VALUE;
 
     public int maxPathSum(TreeNode root) {
-      // if root is negative we return that value
-
       calculateMaxPath(root);
       return maxSum;
     }
@@ -348,7 +360,6 @@ public class BasicsOfTrees {
     private int calculateMaxPath(TreeNode node) {
       if (node == null)
         return 0;
-
       // Calcuate max Path sum for left and right subtrees
       // Ignore negative paths
       int leftMax = Math.max(0, calculateMaxPath(node.left));
@@ -364,13 +375,6 @@ public class BasicsOfTrees {
   }
 
   // ======================== BINARY TREE VALIDATION ========================
-
-  /** Returns the diameter of the binary tree (longest path between any two nodes) */
-  public static int diameter(TreeNode root) {
-    BasicsOfTrees outer = new BasicsOfTrees();
-    DiameterOfBinaryTree diameterCalculator = outer.new DiameterOfBinaryTree();
-    return diameterCalculator.diameterOfBinaryTree(root);
-  }
 
   /**
    * Check if tree is a BINARY SEARCH TREE BST Property: For each node, all left
@@ -393,16 +397,10 @@ public class BasicsOfTrees {
     return isValidBST(node.left, min, node.val) && isValidBST(node.right, node.val, max);
   }
 
-  /**
-   * Check if tree is BALANCED Balanced: For every node, height difference between
-   * left and right
-   * subtrees ≤ 1
-   */
-
-  /**
-   * Check if tree is COMPLETE Complete: All levels filled except possibly the
-   * last, and last level
-   * filled from left
+  /*
+   * Check if tree is COMPLETE
+   * Complete: All levels filled except possibly the
+   * last, and last fiilled from left
    */
   public static boolean isComplete(TreeNode root) {
     if (root == null)
@@ -428,12 +426,138 @@ public class BasicsOfTrees {
     return true;
   }
 
+  /*
+   * Are Tree SImilar??
+   * Two trees are similar if they have the same structure and node values
+   * Approach: Recursively check if both trees are null or have same value and
+   * structure
+   */
+  public boolean areTreesSimilar(TreeNode r1, TreeNode r2) {
+    if (r1 == null && r2 == null) {
+      return true; // Both trees are empty
+    }
+    if (r1 == null || r2 == null) {
+      return false; // One tree is empty, other is not
+    }
+    // Check current node values and recursively check left and right subtrees
+    return (r1.val == r2.val)
+        && areTreesSimilar(r1.left, r2.left)
+        && areTreesSimilar(r1.right, r2.right);
+  }
+  // =================== Views of Trees ========================= //
+  /*
+   * This Section consists of the algos which gives us the view from
+   * different angles of a tree
+   *
+   * 1. Top View of The Tree
+   * 2. Left/Right view of The Tree
+   * 3. Bottom view of the Tree
+   */
+
+  public class Views {
+    public class Pair {
+      TreeNode node;
+      int hd; // horizontal distance
+
+      Pair(TreeNode node, int hd) {
+        this.node = node;
+        this.hd = hd;
+      }
+    }
+
+    // ---- Right Side View of the Tree ---- //
+    public List<Integer> rightSideView(TreeNode root) {
+      List<Integer> rightView = new ArrayList<>();
+      List<Integer> leftView = new ArrayList<>();
+      if (root == null)
+        return rightView;
+
+      Queue<TreeNode> q = new ArrayDeque<>();
+      q.offer(root);
+
+      while (!q.isEmpty()) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
+          TreeNode curr = q.poll();
+          if (i == 0)
+            leftView.add(curr.val); // First element of each level is left view
+          if (i == size - 1)
+            rightView.add(curr.val); // Last element of each level is right view
+          if (curr.left != null)
+            q.offer(curr.left);
+          if (curr.right != null)
+            q.offer(curr.right);
+        }
+      }
+      return rightView;
+    }
+
+    // --------- Top View of the Tree --------- //
+    public List<Integer> topView(TreeNode root) {
+      List<Integer> result = new ArrayList<>();
+      if (root == null)
+        return result;
+      Map<Integer, Integer> map = new HashMap<>(); // for hd -> node.val
+      Queue<Pair> q = new ArrayDeque<>();
+      q.offer(new Pair(root, 0));
+
+      while (!q.isEmpty()) {
+        Pair curr = q.poll();
+        int horizontalDist = curr.hd;
+        TreeNode node = curr.node;
+
+        if (!map.containsKey(horizontalDist)) {
+          map.put(horizontalDist, node.val);
+        }
+
+        if (node.left != null) {
+          q.offer(new Pair(node.left, horizontalDist - 1));
+        }
+        if (node.right != null) {
+          q.offer(new Pair(node.right, horizontalDist + 1));
+        }
+      }
+      // Extract the node from the map
+      for (int value : map.values()) {
+        result.add(value);
+      }
+      return result;
+    }
+
+    // ----- Bottom View of the Tree ----- //
+    public List<Integer> bottomView(TreeNode root) {
+
+      List<Integer> result = new ArrayList<>();
+      if (root == null)
+        return result;
+
+      Map<Integer, Integer> map = new TreeMap<>();
+      Queue<Pair> q = new ArrayDeque<>();
+      q.offer(new Pair(root, 0));
+
+      while (!q.isEmpty()) {
+        Pair curr = q.poll();
+        TreeNode node = curr.node;
+        int hd = curr.hd;
+        // Main logic : always update for the current hd
+        map.put(hd, node.val);
+
+        if (node.left != null)
+          q.offer(new Pair(node.left, hd - 1));
+        if (node.right != null)
+          q.offer(new Pair(node.right, hd + 1));
+      }
+
+      result.addAll(map.values());
+      return result;
+    }
+
+  }
+
   // ======================== TREE CONSTRUCTION ========================
 
   /**
-   * Build tree from PREORDER and INORDER traversals This is a classic problem -
-   * understand the
-   * pattern!
+   * Build tree from PREORDER and INORDER traversals
    */
   public static TreeNode buildTreeFromPreorderInorder(int[] preorder, int[] inorder) {
     Map<Integer, Integer> inorderMap = new HashMap<>();
@@ -452,6 +576,7 @@ public class BasicsOfTrees {
       int inStart,
       int inEnd,
       Map<Integer, Integer> inorderMap) {
+
     if (preStart > preEnd || inStart > inEnd)
       return null;
 
@@ -464,25 +589,18 @@ public class BasicsOfTrees {
 
     // Recursively build left and right subtrees
     root.left = buildTree(
-        preorder,
-        preStart + 1,
-        preStart + leftSize,
-        inorder,
-        inStart,
-        rootIndex - 1,
-        inorderMap);
+        preorder, preStart + 1, preStart + leftSize,
+        inorder, inStart, rootIndex - 1, inorderMap);
     root.right = buildTree(
-        preorder, preStart + leftSize + 1, preEnd, inorder, rootIndex + 1, inEnd, inorderMap);
+        preorder, preStart + leftSize + 1, preEnd,
+        inorder, rootIndex + 1, inEnd, inorderMap);
 
     return root;
   }
 
   // ======================== TREE PATHS & SEARCHES ========================
 
-  /**
-   * Find ALL PATHS from root to leaves Very common in tests - multiple variations
-   * exist
-   */
+  // Find ALL PATHS from root to leaves
   public static List<List<Integer>> rootToLeafPaths(TreeNode root) {
     List<List<Integer>> paths = new ArrayList<>();
     if (root == null)
@@ -492,42 +610,57 @@ public class BasicsOfTrees {
     return paths;
   }
 
-  private static void findPaths(
-      TreeNode node, List<Integer> currentPath, List<List<Integer>> paths) {
+  private static void findPaths(TreeNode node, List<Integer> currentPath,
+      List<List<Integer>> paths) {
+
     if (node == null)
       return;
-
     currentPath.add(node.val);
 
-    // If leaf node, add path to result
+    // If leaf node, add current path to the result
     if (node.left == null && node.right == null) {
       paths.add(new ArrayList<>(currentPath));
     } else {
       findPaths(node.left, currentPath, paths);
       findPaths(node.right, currentPath, paths);
     }
-
-    currentPath.remove(currentPath.size() - 1); // Backtrack
+    // Backtract to explore other paths
+    // Remove last added node
+    currentPath.remove(currentPath.size() - 1);
   }
 
   /** PATH SUM: Check if there exists a path from root to leaf with given sum */
   public static boolean hasPathSum(TreeNode root, int targetSum) {
     if (root == null)
       return false;
+    return hasPathSumHelper(root, targetSum);
+  }
 
-    // If leaf node, check if remaining sum equals node value
-    if (root.left == null && root.right == null) {
-      return root.val == targetSum;
+  private static boolean hasPathSumHelper(TreeNode node, int remaining) {
+    if (node == null)
+      return false;
+    remaining = remaining - node.val;
+    // If we reach a leaf node, check if remaining sum is zero
+    if (node.left == null && node.right == null) {
+      return remaining == 0;
     }
-
-    // Recursively check left and right subtrees with reduced sum
-    return hasPathSum(root.left, targetSum - root.val)
-        || hasPathSum(root.right, targetSum - root.val);
+    // Recur for left and right subtrees
+    return hasPathSumHelper(node.left, remaining) || hasPathSumHelper(node.right, remaining);
   }
 
   /**
    * LOWEST COMMON ANCESTOR (LCA) in Binary Tree Very important concept - appears
    * in many variations
+   *
+   * LCA of two nodes q and p is defined as teh lowest level node that is an
+   * ancestor of both q and p
+   *
+   * for eg in a Tree like :
+   * 0
+   * / \
+   * 1 2
+   * / \ / \
+   * 3 4 5 6
    */
   public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
     if (root == null || root == p || root == q)
