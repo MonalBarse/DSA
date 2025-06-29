@@ -18,7 +18,7 @@ import java.util.*;
  * Tree Construction &
  * Manipulation 6. Advanced Tree Concepts
  */
-public class BasicsOfTrees {
+public class Basics102 {
 
   // ======================== TREE NODE DEFINITIONS ========================
 
@@ -344,7 +344,7 @@ public class BasicsOfTrees {
    * Returns the diameter of the binary tree (longest path between any two nodes)
    */
   public static int diameter(TreeNode root) {
-    BasicsOfTrees outer = new BasicsOfTrees();
+    Basics102 outer = new Basics102();
     DiameterOfBinaryTree diameterCalculator = outer.new DiameterOfBinaryTree();
     return diameterCalculator.diameterOfBinaryTree(root);
   }

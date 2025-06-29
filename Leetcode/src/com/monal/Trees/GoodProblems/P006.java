@@ -5,13 +5,23 @@ import com.monal.Trees.TreeNode;
 import java.util.*;
 /*
  Theory:
-    What orders do you require to create a Unique Binary Tree?
-    => Let's say you have been given a a pre-order (root, left, right) and post-order (left, right, root)
-    => Then creating a unique binary treee is not possible. You might think otherwise but let's try:
-       - If you have a pre-order and post-order, you can create a binary tree but it will not be unique.
-       - For example, if you have pre-order [1, 2, 3] and post-order [2, 3, 1], you can create a binary tree with root 1, left child 2, and right child 3.
-       - However, if you have pre-order [1, 2, 3] and post-order [3, 2, 1], you can create a different binary tree with root 1, left child 3, and right child 2.
-    => So, pre-order and post-order are not sufficient to create a unique binary tree.
+  => What orders do you require to create a Unique Binary Tree?
+    => Just Preorder (root, left, right) + Postorder (left, right, root) is NOT sufficient.
+    => Example:
+        Preorder:  [1, 2, 3]
+        Postorder: [3, 2, 1]
+    => Multiple valid trees can match these traversals:
+
+      Tree 1:             Tree 2:
+          1                   1
+        /                   /
+        2                   2
+      /                     \
+      3                       3
+
+    => Both trees give same Pre + Post, but structure is different.
+    => So, Preorder + Postorder cannot uniquely identify a binary tree.
+
 
  So you might question What orders do you require to create a Unique Binary Tree?
 

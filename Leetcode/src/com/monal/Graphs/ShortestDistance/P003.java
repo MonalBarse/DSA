@@ -1,10 +1,6 @@
 package com.monal.Graphs.ShortestDistance;
 
-import com.sun.source.tree.NewArrayTree;
-import java.util.ArrayDeque;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 /*
 Given an n x n binary matrix grid, return the length of the shortest clear path in the matrix.
@@ -86,7 +82,6 @@ public class P003 {
         }
         distance++;
       }
-
       return -1;
     }
   }

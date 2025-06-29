@@ -126,7 +126,39 @@ public class Traversals05 {
         }
       }
     }
+    return result;
+  }
 
+  public static List<Integer> morrisPostorderTraversal(TreeNode root) {
+    // Morris Postorder is more complex and not commonly used
+    // It requires two passes or a modified approach
+    // Here we will implement a simple version using a stack for clarity
+    List<Integer> result = new ArrayList<>();
+    if (root == null)
+      return result;
+
+    Stack<TreeNode> stack = new Stack<>();
+    TreeNode current = root;
+    TreeNode lastVisited = null;
+
+    while (current != null || !stack.isEmpty()) {
+      while (current != null) {
+        stack.push(current);
+        current = current.left;
+      }
+
+      current = stack.peek();
+      if (current.right == null || current.right == lastVisited) {
+        // Process current node
+        result.add(current.val);
+        lastVisited = current;
+        stack.pop();
+        current = null; // Move to next node in stack
+      } else {
+        // Move to right subtree
+        current = current.right;
+      }
+    }
     return result;
   }
 

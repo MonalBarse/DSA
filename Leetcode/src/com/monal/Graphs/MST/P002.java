@@ -1,7 +1,8 @@
 package com.monal.Graphs.MST;
 
-import com.monal.Graphs.MST.P001.DisjointSet;
 import java.util.ArrayList;
+
+import com.monal.Graphs.MST.P001.DisjointSet;
 
 /*
 There are n computers numbered from 0 to n - 1 connected by ethernet cables connections forming a network where connections[i] = [ai, bi] represents a connection between computers ai and bi. Any computer can reach any other computer directly or indirectly through the network.
@@ -22,84 +23,83 @@ Example 3:
 
 */
 public class P002 {
-  class Solution {
 
-    private int makeConnected(int n, int[][] connections) {
-      // If there are not enough connections to connect all computers
-      if (connections.length < n - 1) {
-        return -1;
-      }
+  @SuppressWarnings("unused")
+  private int makeConnected(int n, int[][] connections) {
+    // If there are not enough connections to connect all computers
+    if (connections.length < n - 1) {
+      return -1;
+    }
 
-      DisjointSet ds = new P001().new DisjointSet(n);
-      int countExtraEdges = 0;
+    DisjointSet ds = new P001().new DisjointSet(n);
+    int countExtraEdges = 0;
 
-      // Union the connected computers
-      for (int[] connection : connections) {
-        int u = connection[0];
-        int v = connection[1];
-        if (ds.findParent(u) != ds.findParent(v)) {
-          ds.unionBySize(u, v);
-        } else {
-          countExtraEdges++; // Count extra edges that can be used to connect components
-        }
-      }
-
-      // count the number of components
-      int connectedComponents = 0;
-      for (int i = 0; i < n; i++) {
-        if (ds.findParent(i) == i) {
-          connectedComponents++;
-        }
-      }
-
-      // To connect all components, we need at least (components - 1) edges
-      int ans = connectedComponents - 1;
-      // If we have enough extra edges, we can connect all components
-      if (countExtraEdges >= ans) {
-        return ans;
+    // Union the connected computers
+    for (int[] connection : connections) {
+      int u = connection[0];
+      int v = connection[1];
+      if (ds.findParent(u) != ds.findParent(v)) {
+        ds.unionBySize(u, v);
       } else {
-        return -1; // Not enough extra edges to connect all components
+        countExtraEdges++; // Count extra edges that can be used to connect components
       }
-
     }
 
-    public int numberOfProvinces(int n, int[][] connections) {
-      boolean visited[] = new boolean[n];
-      // make an adj list
-      ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
-      for (int i = 0; i < n; i++) {
-        graph.add(new ArrayList<>());
+    // count the number of components
+    int connectedComponents = 0;
+    for (int i = 0; i < n; i++) {
+      if (ds.findParent(i) == i) {
+        connectedComponents++;
       }
-      // fill the adj list
-      for (int[] connection : connections) {
-        int u = connection[0];
-        int v = connection[1];
-        graph.get(u).add(v);
-        graph.get(v).add(u);
-      }
-
-      // to track connected province
-      int TotalProviences = 0;
-      // check for every city
-      for (int i = 0; i < n; i++) {
-        if (!visited[i]) {
-          dfs(graph, i, visited);
-          TotalProviences++;
-        }
-      }
-      return TotalProviences;
     }
 
-    public void dfs(ArrayList<ArrayList<Integer>> graph, int i, boolean[] visited) {
-      // mark the curent node visited
-      visited[i] = true;
-      // visit all the neighbours
-      for (int neighbour : graph.get(i)) {
-        if (!visited[neighbour]) {
-          dfs(graph, neighbour, visited);
-        }
-      }
+    // To connect all components, we need at least (components - 1) edges
+    int ans = connectedComponents - 1;
+    // If we have enough extra edges, we can connect all components
+    if (countExtraEdges >= ans) {
+      return ans;
+    } else {
+      return -1; // Not enough extra edges to connect all components
     }
 
   }
+
+  public int numberOfProvinces(int n, int[][] connections) {
+    boolean visited[] = new boolean[n];
+    // make an adj list
+    ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+      graph.add(new ArrayList<>());
+    }
+    // fill the adj list
+    for (int[] connection : connections) {
+      int u = connection[0];
+      int v = connection[1];
+      graph.get(u).add(v);
+      graph.get(v).add(u);
+    }
+
+    // to track connected province
+    int TotalProviences = 0;
+    // check for every city
+    for (int i = 0; i < n; i++) {
+      if (!visited[i]) {
+        dfs(graph, i, visited);
+        TotalProviences++;
+      }
+    }
+    return TotalProviences;
+  }
+
+  public void dfs(ArrayList<ArrayList<Integer>> graph, int i, boolean[] visited) {
+    // mark the curent node visited
+    visited[i] = true;
+    // visit all the neighbours
+    for (int neighbour : graph.get(i)) {
+      if (!visited[neighbour]) {
+        dfs(graph, neighbour, visited);
+      }
+    }
+  }
+
 }

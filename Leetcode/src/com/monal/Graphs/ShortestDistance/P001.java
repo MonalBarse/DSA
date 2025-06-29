@@ -93,6 +93,7 @@ public class P001 {
 
     }
 
+    @SuppressWarnings("unused")
     private int[] shortestDistDFS(int n, int m, int[][] edges, int src) {
       // build graph adjlist
       ArrayList<ArrayList<Pair>> graph = new ArrayList<>();
