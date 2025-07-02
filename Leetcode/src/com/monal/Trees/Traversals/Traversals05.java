@@ -427,7 +427,7 @@ public class Traversals05 {
     System.out.println("✗ When tree structure needs to remain completely unchanged");
   }
 
-  static class TreeNode {
+  public static class TreeNode {
     int val;
     TreeNode left;
     TreeNode right;
