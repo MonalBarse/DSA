@@ -91,4 +91,13 @@ public class P002 {
     }
 
   }
+
+  public static void main(String[] args) {
+    List<Integer> a = Arrays.asList(4, 2, 4, 6, 1);
+    List<Integer> b = Arrays.asList(2, 1, 8, 5);
+    int maxSum = 10;
+
+    int result = Result.twoStacks(maxSum, a, b);
+    System.out.println(result); // Output: 4
+  }
 }

@@ -22,15 +22,13 @@ public class P008 {
         freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
       }
       // Create a min-heap based on frequency
-      PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>(
-          (a, b) -> a.getValue() - b.getValue());
+      PriorityQueue<Map.Entry<Integer, Integer>> minHeap =
+        new PriorityQueue<>((a, b) -> a.getValue() - b.getValue());
 
       for (Map.Entry<Integer, Integer> entry : freqMap.entrySet()) {
         minHeap.offer(entry);
         // If the heap size exceeds k, remove the smallest frequency element
-        if (minHeap.size() > k) {
-          minHeap.poll();
-        }
+        if (minHeap.size() > k) minHeap.poll();
       }
 
       // Extract the k most frequent elements from the min-heap
@@ -45,17 +43,16 @@ public class P008 {
 
   public static void main(String[] args) {
     Solution solution = new P008().new Solution();
-    int[] nums1 = {1, 1, 1, 2, 2, 3};
+    int[] nums1 = { 1, 1, 1, 2, 2, 3 };
     int k1 = 2;
     System.out.println(Arrays.toString(solution.topKFrequent(nums1, k1))); // Output: [1, 2]
 
-    int[] nums2 = {1};
+    int[] nums2 = { 1 };
     int k2 = 1;
     System.out.println(Arrays.toString(solution.topKFrequent(nums2, k2))); // Output: [1]
 
-    int[] nums3 = {1, 2, 2, 3, 3, 3, 4, 4, 4, 4};
+    int[] nums3 = { 1, 2, 2, 3, 3, 3, 4, 4, 4, 4 };
     int k3 = 2;
     System.out.println(Arrays.toString(solution.topKFrequent(nums3, k3))); // Output: [4, 3] or [3, 4]
   }
 }
-
