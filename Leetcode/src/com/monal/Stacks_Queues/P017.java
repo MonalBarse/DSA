@@ -23,7 +23,8 @@ public class P017 {
 
     // Step 1: Find the potential celebrity
     for (int i = 1; i < n; i++) {
-      if(i == candidate) continue; // i and candidate are the same, skip
+      if (i == candidate)
+        continue; // i and candidate are the same, skip
       if (party[candidate][i] == 1) {
         // candidate knows i → candidate can't be celebrity
         candidate = i;
@@ -47,29 +48,52 @@ public class P017 {
   }
 
   public static void main(String[] args) {
+    System.out.println("Celebrity Problem Test Cases:");
+    System.out.println("=====================================");
+    // Test cases for the celebrity problem
+    System.out.println("1 | 0 | 1");
+    System.out.println("0 | 1 | 1");
+    System.out.println("0 | 0 | 1");
     P017 solution = new P017();
     int[][] party1 = {
-      {1, 1, 0},
-      {0, 1, 0},
-      {0, 1, 1}
+        { 1, 0, 1 },
+        { 0, 1, 1 },
+        { 0, 0, 1 }
     };
-    System.out.println(solution.findCelebrity(3, party1)); // Output: 1
+    System.out.println("The celebrity is at index: " + solution.findCelebrity(3, party1)); // Output: 1
 
     int[][] party2 = {
-      {1, 1},
-      {1, 1}
+        { 1, 1 },
+        { 1, 1 }
     };
+    System.out.println("======================================");
+    System.out.println("1 | 1");
+    System.out.println("1 | 1");
+    System.out.println("There is no celebrity in this party.");
     System.out.println(solution.findCelebrity(2, party2)); // Output: -1
+
     int[][] party3 = {
-      {1, 1, 0, 1, 1, 1, 0, 1},
-      {0, 1, 0, 0, 0, 0, 0, 0},
-      {0, 1, 1, 1, 1, 1, 0, 1},
-      {0, 1, 0, 1, 1, 1, 0, 1},
-      {0, 1, 0, 1, 1, 1, 0, 0},
-      {0, 1, 0, 1, 1, 1, 0, 1},
-      {0, 1, 0, 1, 1, 1, 1, 1},
-      {0, 1, 0, 1, 1, 1, 0 ,1}
+        { 1, 1, 0, 1, 1, 1, 0, 1 },
+        { 0, 1, 0, 0, 0, 0, 0, 0 },
+        { 0, 1, 1, 1, 1, 1, 0, 1 },
+        { 0, 1, 0, 1, 1, 1, 0, 1 },
+        { 0, 1, 0, 1, 1, 1, 0, 0 },
+        { 0, 1, 0, 1, 1, 1, 0, 1 },
+        { 0, 1, 0, 1, 1, 1, 1, 1 },
+        { 0, 1, 0, 1, 1, 1, 0, 1 }
     };
-    System.out.println(solution.findCelebrity(8, party3)); // Output: 1
+    System.out.println("======================================");
+    System.out.println("1 | 1 | 0 | 1 | 1 | 1 | 0 | 1");
+    System.out.println("0 | 1 | 0 | 0 | 0 | 0 | 0 | 0");
+    System.out.println("0 | 1 | 1 | 1 | 1 | 1 | 0 | 1");
+    System.out.println("0 | 1 | 0 | 1 | 1 | 1 | 0 | 1");
+    System.out.println("0 | 1 | 0 | 1 | 1 | 1 | 0 | 0");
+    System.out.println("0 | 1 | 0 | 1 | 1 | 1 | 0 | 1");
+    System.out.println("0 | 1 | 0 | 1 | 1 | 1 | 1 | 1");
+    System.out.println("0 | 1 | 0 | 1 | 1 | 1 | 0 | 1");
+    System.out.println("======================================");
+    System.out.println("The celebrity is at index: " + solution.findCelebrity(8, party3)); // Output: 1
+
+    System.out.println("======================================");
   }
 }
