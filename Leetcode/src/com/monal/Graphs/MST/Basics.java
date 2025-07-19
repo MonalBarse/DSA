@@ -444,4 +444,162 @@ public class Basics {
             return String.format("(%d->%d: %d)", src, dest, weight);
         }
     }
+
+    class DJS {
+        class DisjointSet {
+            int[] parent, rank;
+
+            DisjointSet(int n) {
+                parent = new int[n];
+                rank = new int[n];
+            }
+
+            int find(int node) {
+                if (parent[node] == node)
+                    return node;
+                return parent[node] = find(parent[node]);
+            }
+
+            boolean union(int x, int y) {
+                int rootX = find(x), rootY = find(y);
+                if (rootX == rootY)
+                    return false; // already in same set
+                if (rank[rootX] < rank[rootY]) {
+                    parent[rootX] = rootY;
+                } else if (rank[rootX] > rank[rootY]) {
+                    parent[rootY] = rootX;
+                } else {
+                    parent[rootY] = rootX;
+                    rank[rootX]++;
+                }
+                return true;
+            }
+
+            int countComponents() {
+                int count = 0;
+                for (int i = 0; i < parent.length; i++)
+                    if (parent[i] == i)
+                        count++;
+                return count;
+            }
+        }
+
+        // Example 1: Number of Islands (2D grid)
+        class Solution1 {
+            public int numIslands(char[][] grid) {
+                int m = grid.length, n = grid[0].length;
+                DisjointSet djs = new DisjointSet(m * n); // Each cell can be separate
+
+                // Convert 2D coordinates to 1D index
+                for (int i = 0; i < m; i++) {
+                    for (int j = 0; j < n; j++) {
+                        if (grid[i][j] == '1') {
+                            int current = i * n + j; // 2D to 1D conversion
+                            // Check adjacent cells and union if both are '1'
+                        }
+                    }
+                }
+                return djs.countComponents();
+            }
+        }
+
+        // Example 2: Friend Circles (people numbered 0 to n-1)
+        class Solution2 {
+            public int findCircleNum(int[][] isConnected) {
+                int n = isConnected.length;
+                DisjointSet djs = new DisjointSet(n); // n people, indices 0 to n-1
+
+                for (int i = 0; i < n; i++)
+                    for (int j = i + 1; j < n; j++)
+                        if (isConnected[i][j] == 1)
+                            djs.union(i, j); // Direct mapping: person i → index i
+                return djs.countComponents();
+            }
+        }
+
+        // Example 3: Accounts Merge (emails as strings)
+        class Solution3 {
+            public List<List<String>> buildResult(DisjointSet djs, Map<String, Integer> emailToIndex) {
+                List<List<String>> result = new ArrayList<>();
+                Map<Integer, List<String>> indexToEmails = new HashMap<>();
+                for (Map.Entry<String, Integer> entry : emailToIndex.entrySet()) {
+                    int index = djs.find(entry.getValue());
+                    indexToEmails.computeIfAbsent(index, k -> new ArrayList<>()).add(entry.getKey());
+                }
+                for (List<String> emails : indexToEmails.values()) {
+                    Collections.sort(emails);
+                    result.add(emails);
+                }
+                return result;
+            }
+
+            public List<List<String>> accountsMerge(List<List<String>> accounts) {
+                Map<String, Integer> emailToIndex = new HashMap<>();
+                int emailCount = 0;
+
+                // First pass: assign index to each unique email
+                for (List<String> account : accounts) {
+                    for (int i = 1; i < account.size(); i++) {
+                        String email = account.get(i);
+                        if (!emailToIndex.containsKey(email)) {
+                            emailToIndex.put(email, emailCount++);
+                        }
+                    }
+                }
+
+                DisjointSet djs = new DisjointSet(emailCount); // Size = number of unique emails
+
+                // Second pass: union emails belonging to same account
+                for (List<String> account : accounts) {
+                    int firstEmailIndex = emailToIndex.get(account.get(1));
+                    for (int i = 2; i < account.size(); i++) {
+                        int emailIndex = emailToIndex.get(account.get(i));
+                        djs.union(firstEmailIndex, emailIndex);
+                    }
+                }
+
+                return buildResult(djs, emailToIndex);
+            }
+
+        }
+
+        // Example 4: Variable equations (your current problem)
+        class Solution4 {
+            public boolean equationsPossible(String[] equations) {
+                // Variables are single lowercase letters: a, b, c, ..., z
+                DisjointSet djs = new DisjointSet(26); // Exactly 26 possible variables
+
+                // Process equations...
+                for (String eqn : equations) {
+                    if (eqn.charAt(1) == '=') {
+                        char u = eqn.charAt(0), v = eqn.charAt(3);
+                        djs.union(u - 'a', v - 'a'); // Map a→0, b→1, ..., z→25
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        // Example 5: When you don't know the range in advance
+        class Solution5 {
+            public boolean solve(int[] elements) {
+                // If elements can be any integer, use HashMap approach
+                Map<Integer, Integer> valueToIndex = new HashMap<>();
+                int indexCounter = 0;
+
+                // Assign indices to unique values
+                for (int element : elements) {
+                    if (!valueToIndex.containsKey(element)) {
+                        valueToIndex.put(element, indexCounter++);
+                    }
+                }
+
+                DisjointSet djs = new DisjointSet(indexCounter); // Size = number of unique values
+
+                // Use valueToIndex.get(element) to get the index for Union-Find operations
+                return true;
+            }
+        }
+    }
 }

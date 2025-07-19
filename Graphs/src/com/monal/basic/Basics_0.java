@@ -1,4 +1,4 @@
-package com.monal.Basics;
+package com.monal.basic;
 
 import java.util.*;
 

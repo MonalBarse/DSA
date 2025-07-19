@@ -7,7 +7,8 @@ You are given an integer n. There is an undirected graph with n vertices, number
 
 Return the number of complete connected components of the graph.
 
-A connected component is a subgraph of a graph in which there exists a path between any two vertices, and no vertex of the subgraph shares an edge with a vertex outside of the subgraph.
+A connected component is a subgraph of a graph in which there exists a path between any two vertices,
+and no vertex of the subgraph shares an edge with a vertex outside of the subgraph.
 
 A connected component is said to be complete if there exists an edge between every pair of its vertices.
 
@@ -47,7 +48,6 @@ public class P002 {
           }
         }
       }
-
       return completeComponents;
     }
 
@@ -107,13 +107,10 @@ public class P002 {
       boolean[] visited = new boolean[n];
       int completeComponents = 0;
 
-      for (int i = 0; i < n; i++) {
-        if (!visited[i]) {
-          if (isCompleteComponentOptimized(i, adj, visited)) {
+      for (int i = 0; i < n; i++)
+        if (!visited[i])
+          if (isCompleteComponentOptimized(i, adj, visited))
             completeComponents++;
-          }
-        }
-      }
 
       return completeComponents;
     }
@@ -139,16 +136,16 @@ public class P002 {
       }
 
       int nodeCount = component.size();
-      int expectedEdges = nodeCount * (nodeCount - 1) / 2;
+      int expectedEdges = nodeCount * (nodeCount - 1) / 2; // for a dense network of n vertices
 
       // Count actual edges
       int actualEdges = 0;
       for (int node : component) {
         for (int neighbor : adj.get(node)) {
           // Only count edge once and ensure both endpoints are in component
-          if (node < neighbor && component.contains(neighbor)) {
+          if (node < neighbor && component.contains(neighbor))
             actualEdges++;
-          }
+
         }
       }
 

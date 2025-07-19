@@ -42,10 +42,7 @@ public class Basics01 {
 
             // Find with path compression
             int findParent(int node) {
-                if (parent[node] != node) {
-                    // Path compression: make parent[node] point directly to root
-                    parent[node] = findParent(parent[node]);
-                }
+                if (parent[node] != node) parent[node] = findParent(parent[node]);
                 return parent[node];
             }
 
@@ -276,23 +273,16 @@ public class Basics01 {
          */
         int makeConnected(int n, int[][] connections) {
             // Need at least (n-1) edges to connect n computers
-            if (connections.length < n - 1) {
+            if (connections.length < n - 1)
                 return -1;
-            }
-
             Concepts.DisjointSetUnionByRank disjointSet = new Concepts.DisjointSetUnionByRank(n);
-
             // Process all connections
-            for (int[] connection : connections) {
+            for (int[] connection : connections)
                 disjointSet.union(connection[0], connection[1]);
-            }
-
             // Count number of connected components
             Set<Integer> components = new HashSet<>();
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < n; i++)
                 components.add(disjointSet.findParent(i));
-            }
-
             // Need (components - 1) operations to connect all components
             return components.size() - 1;
         }

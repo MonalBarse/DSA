@@ -16,6 +16,7 @@ Return the total number of provinces.
  */
 public class P001 {
     class Solution {
+        // we are given a adj matrix
         public int findCircleNum(int[][] isConnected) {
             boolean visited[] = new boolean[isConnected.length];
 
@@ -52,7 +53,6 @@ public class P001 {
             while (!q.isEmpty()) {
                 int city = q.poll();
                 for (int neighbor = 0; neighbor < graph.length; neighbor++) {
-
                     if (graph[city][neighbor] == 1 && !visited[neighbor]) {
                         // if not visited and current city and neighbor are connected
                         visited[neighbor] = true;
@@ -60,7 +60,6 @@ public class P001 {
                     }
                 }
             }
-
         }
     }
 

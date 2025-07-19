@@ -2,29 +2,33 @@ package com.monal.Graphs.BFS_DFS;
 
 import java.util.*;
 
+/*
+ * Given a `crate` of Oranges few oranges are rotten to begin with, they are marked with crate[i][j] = 2
+ * crate[i][j] = 1 then the oranges are fresh, the every unit of time passes makes the fresh oranges if surrounded by
+ * rotten ones rotten (4 direction). Return how many unit time is required for the crate to have all rotten oranges
+ * If it is not possible for the oranges to be all rotten return -1
+ */
 public class P003 {
   public class RottingOranges {
 
-    public int orangesRottingMultiple(int[][] grid) {
-      int m = grid.length, n = grid[0].length;
-      Queue<int[]> queue = new LinkedList<>();
+    public int orangesRottingMultiple(int[][] crate) {
+      int m = crate.length, n = crate[0].length;
+      Queue<int[]> queue = new LinkedList<>(); // {coordinate x , coordinate y} of rotten orange
       boolean[][] visited = new boolean[m][n];
       int freshCount = 0;
 
       // KEY INSIGHT: Add ALL initially rotten oranges to queue at once!
       for (int i = 0; i < m; i++) {
         for (int j = 0; j < n; j++) {
-          if (grid[i][j] == 2) {
+          if (crate[i][j] == 2) {
             queue.offer(new int[] { i, j }); // Add all rotten oranges
             visited[i][j] = true; // Mark all initial rotten oranges as visited
-          } else if (grid[i][j] == 1) {
+          } else if (crate[i][j] == 1)
             freshCount++;
-          }
         }
       }
 
-      if (freshCount == 0)
-        return 0;
+      if (freshCount == 0) return 0;
 
       int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
       int minutes = 0;
@@ -33,7 +37,6 @@ public class P003 {
       while (!queue.isEmpty()) {
         int size = queue.size();
         boolean rottenThisMinute = false;
-
         // Process all oranges rotten at current time level
         for (int i = 0; i < size; i++) {
           int[] curr = queue.poll();
@@ -44,20 +47,16 @@ public class P003 {
 
             // Check bounds, not visited, and if it's a fresh orange
             if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n
-                && !visited[newRow][newCol] && grid[newRow][newCol] == 1) {
-
+                && !visited[newRow][newCol] && crate[newRow][newCol] == 1) {
               visited[newRow][newCol] = true; // Mark as visited
               freshCount--;
-              queue.offer(new int[] { newRow, newCol });
+              queue.offer(new int[] { newRow, newCol }); // add to new rotten ornage
               rottenThisMinute = true;
             }
           }
         }
-
-        if (rottenThisMinute)
-          minutes++;
+        if (rottenThisMinute) minutes++;
       }
-
       return freshCount == 0 ? minutes : -1;
     }
 

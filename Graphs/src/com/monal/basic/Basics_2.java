@@ -1,4 +1,4 @@
-package com.monal.Basics;
+package com.monal.basic;
 
 import java.util.*;
 
@@ -125,7 +125,7 @@ public class Basics_2 {
 
         // Priority queue: [distance, node]
         PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
-        pq.offer(new int[] { 0, start });
+        pq.offer(new int[] { 0, start }); // weight -> node
 
         while (!pq.isEmpty()) {
             int[] curr = pq.poll();
