@@ -197,6 +197,83 @@ public class DP101_1 {
         return second;
     }
 
+    // Minimum Cost to Climb Stairs
+
+    // Recursive MEMO implementation
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        Integer[] memo = new Integer[n + 1]; // memo[i] represents the minimum cost to reach step i
+        return minCostClimbingStairsHelper(cost, n, memo);
+    }
+
+    private int minCostClimbingStairsHelper(int[] cost, int n, Integer[] memo) {
+        // Base cases
+        if (n <= 1)
+            return 0;
+        if (n == 2)
+            return Math.min(cost[0], cost[1]);
+
+        if (memo[n] != null)
+            return memo[n];
+        // min cost to reach step n is the cost of step n-1 or n-2
+        memo[n] = Math.min(
+                minCostClimbingStairsHelper(cost, n - 1, memo) + cost[n - 1],
+                minCostClimbingStairsHelper(cost, n - 2, memo) + cost[n - 2]);
+        return memo[n];
+    }
+
+    // Tabulated implementation
+    public int minCostClimbingStairsTabulated(int[] cost) {
+        // Build an array dp where dp[i] is the minimum cost to climb to the top
+        // starting from the ith staircase.
+        // Hint 2
+        // Assuming we have n staircase labeled from 0 to n - 1 and assuming the top is
+        // n, then dp[n] = 0, marking that if you are at the top, the cost is 0.
+        // Hint 3
+        // Now, looping from n - 1 to 0, the dp[i] = cost[i] + min(dp[i + 1], dp[i +
+        // 2]). The answer will be the minimum of dp[0] and dp[1]
+
+        int n = cost.length;
+        int[] dp = new int[n + 1];
+        dp[n] = 0; // Cost to reach the top from the top is 0
+        dp[n - 1] = cost[n - 1]; // Cost to reach the top from the last step is just the cost of that step
+        for (int i = n - 2; i >= 0; i--) {
+            dp[i] = cost[i] + Math.min(dp[i + 1], dp[i + 2]);
+        }
+        // The answer is the minimum cost to reach the top from either step 0 or step 1
+        return Math.min(dp[0], dp[1]);
+
+    }
+
+    // DIVISER GAME
+    // Alice and bob palys a game, alice starting first,
+    // they take turns choosing a number x such that 1 <= x < n and n % x == 0
+    // A player loses if they cannot choose a number x, if they cannot make a move they lose
+    // Given an integer n, return true if alice wins the game, otherwise return false
+
+    public boolean divisorGame(int n) {
+        // Alice wins if n is even, otherwise Bob wins
+        return n % 2 == 0;
+    }
+
+    // solving it with dp
+    public boolean divisorGameDP(int n) {
+        // Create a DP array where dp[i] is true if Alice can win with n = i
+        boolean[] dp = new boolean[n + 1];
+        dp[0] = false; // Base case: if n = 0, Alice cannot make a move
+        dp[1] = false; // Base case: if n = 1, Alice cannot make a move
+
+        for (int i = 2; i <= n; i++) {
+            for (int x = 1; x < i; x++) {
+                if (i % x == 0 && !dp[i - x]) { // dp[i]
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[n];
+    }
+
     // ====================== 0/1 KNAPSACK PROBLEM =====================//
 
     /**
@@ -221,14 +298,10 @@ public class DP101_1 {
 
     private int helper_fn1(int[] W, int[] V, int capacity, int idx, int n) {
         // Base cases
-        if (idx == n || capacity == 0) {
-            return 0; // No more value can be obtained
-        }
+        if (idx == n || capacity == 0) return 0; // No more value can be obtained
 
         // If current item is too heavy, skip it
-        if (W[idx] > capacity) {
-            return helper_fn1(W, V, capacity, idx + 1, n);
-        }
+        if (W[idx] > capacity) return helper_fn1(W, V, capacity, idx + 1, n);
 
         // Try including the current item
         int include = V[idx] + helper_fn1(W, V, capacity - W[idx], idx + 1, n);
