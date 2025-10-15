@@ -107,9 +107,8 @@ public class P003 {
 
     public int numDecodingsTabulation(String s) {
       int n = s.length();
-      if (n == 0 || s.charAt(0) == '0') {
-        return 0;
-      }
+      if (n == 0 || s.charAt(0) == '0') return 0;
+
       int[] dp = new int[n + 1]; // dp[i] = number of ways to decode string of length i
       dp[0] = 1; // Base case: empty string can be decoded in one way
       dp[1] = 1; // Base case: single character string can be decoded in one way
@@ -118,14 +117,11 @@ public class P003 {
       // characters
       for (int i = 2; i <= n; i++) {
         // Check if the last digit is valid
-        if (s.charAt(i - 1) != '0') {
-          dp[i] += dp[i - 1];
-        }
+        if (s.charAt(i - 1) != '0') dp[i] += dp[i - 1];
+
         // Check if the last two digits form a valid number
         int twoDigit = Integer.parseInt(s.substring(i - 2, i));
-        if (twoDigit >= 10 && twoDigit <= 26) {
-          dp[i] += dp[i - 2];
-        }
+        if (twoDigit >= 10 && twoDigit <= 26) dp[i] += dp[i - 2];
       }
 
       return dp[n]; // The last element of dp array contains the total ways to decode the string
@@ -147,9 +143,7 @@ public class P003 {
         int curr = 0;
 
         // Check if the last digit is valid
-        if (s.charAt(i - 1) != '0') {
-          curr += prev1;
-        }
+        if (s.charAt(i - 1) != '0') curr += prev1;
 
         // Check if the last two digits form a valid number
         int twoDigit = Integer.parseInt(s.substring(i - 2, i));

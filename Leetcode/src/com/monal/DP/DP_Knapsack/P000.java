@@ -41,13 +41,10 @@ public class P000 {
     }
 
     // If current item is too heavy, skip it
-    if (W[idx] > capacity) {
-      return helper_fn1(W, V, capacity, idx + 1, n);
-    }
+    if (W[idx] > capacity) return helper_fn1(W, V, capacity, idx + 1, n);
 
     // Try including the current item
     int include = V[idx] + helper_fn1(W, V, capacity - W[idx], idx + 1, n);
-
     // Try excluding the current item
     int exclude = helper_fn1(W, V, capacity, idx + 1, n);
 
@@ -198,7 +195,8 @@ public class P000 {
     }
 
     // Try including the current item
-    int include = V[idx] + unboundedKnapsackHelper(W, V, capacity - W[idx], idx, n);
+    int include = V[idx] + unboundedKnapsackHelper(W, V, capacity - W[idx], idx, n); // no idx + 1,
+    // because we can take the same item again
 
     // Try excluding the current item
     int exclude = unboundedKnapsackHelper(W, V, capacity, idx + 1, n);
@@ -309,7 +307,7 @@ public class P000 {
   class Item {
     int weight;
     int value;
-
+    // Constructor to initialize weight and value
     public Item(int weight, int value) {
       this.weight = weight;
       this.value = value;
@@ -334,14 +332,15 @@ public class P000 {
 
     // Iterate through the sorted items
     for (Item item : items) {
-      if (capacity <= 0) {
-        break; // No more capacity left
-      }
+      if (capacity <= 0) break; // No more capacity left
+
       // If the item can fit in the knapsack, take it all
       if (item.weight <= capacity) {
         totalValue += item.value;
         capacity -= item.weight;
+
       } else { // Take the fraction of the item that fits
+
         totalValue += item.valuePerWeight() * capacity;
         capacity = 0; // Knapsack is full
       }

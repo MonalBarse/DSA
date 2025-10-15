@@ -1,6 +1,6 @@
-package com.monal;
-
+package DP.src.com.monal;
 import java.util.Arrays;
+
 
 /**
  * Advanced Dynamic Programming: Knapsack Variants
@@ -42,29 +42,27 @@ public class KnapsackVariants {
     return subsetSumMemo(arr, arr.length, sum, memo);
   }
 
-  private static boolean subsetSumMemo(int[] arr, int n, int sum, Boolean[][] memo) {
+  private static boolean subsetSumMemo(int[] arr, int n, int target, Boolean[][] memo) {
     // Base cases
-    if (sum == 0)
+    if (target == 0)
       return true; // Empty subset can always form sum 0
 
-    if (n == 0 || sum < 0)
+    if (n == 0 || target < 0)
       return false; // No elements left or sum became negative
 
     // Check if already computed
-    if (memo[n][sum] != null)
-      return memo[n][sum];
+    if (memo[n][target] != null)
+      return memo[n][target];
 
     // If current element is greater than sum, skip it
-    if (arr[n - 1] > sum) {
-      memo[n][sum] = subsetSumMemo(arr, n - 1, sum, memo);
-      return memo[n][sum];
-    }
+    if (arr[n - 1] > target)
+      return memo[n][target] = subsetSumMemo(arr, n - 1, target, memo);
 
     // Either include or exclude current element
-    memo[n][sum] = subsetSumMemo(arr, n - 1, sum - arr[n - 1], memo) ||
-        subsetSumMemo(arr, n - 1, sum, memo);
+    memo[n][target] = subsetSumMemo(arr, n - 1, target - arr[n - 1], memo) ||
+        subsetSumMemo(arr, n - 1, target, memo);
 
-    return memo[n][sum];
+    return memo[n][target];
   }
 
   /**
@@ -72,20 +70,19 @@ public class KnapsackVariants {
    */
   public static boolean subsetSumTabulation(int[] arr, int sum) {
     int n = arr.length;
-    boolean[][] dp = new boolean[n + 1][sum + 1];
+    boolean[][] dp = new boolean[n + 1][sum + 1]; // dp[i][j] = true if subset of first i elements can form sum j
 
     // Empty subset can form sum 0
-    for (int i = 0; i <= n; i++) {
+    for (int i = 0; i <= n; i++)
       dp[i][0] = true;
-    }
 
     // Fill dp table in bottom-up manner
     for (int i = 1; i <= n; i++) {
       for (int j = 1; j <= sum; j++) {
         // If current element is greater than sum, exclude it
-        if (arr[i - 1] > j) {
+        if (arr[i - 1] > j)
           dp[i][j] = dp[i - 1][j];
-        } else {
+        else {
           // Either include or exclude current element
           dp[i][j] = dp[i - 1][j] || dp[i - 1][j - arr[i - 1]];
         }
@@ -182,15 +179,11 @@ public class KnapsackVariants {
       return memo[n][sum];
 
     // If current element is greater than sum, skip it
-    if (arr[n - 1] > sum) {
-      memo[n][sum] = countSubsetMemo(arr, n - 1, sum, memo);
-      return memo[n][sum];
-    }
+    if (arr[n - 1] > sum)
+      return memo[n][sum] = countSubsetMemo(arr, n - 1, sum, memo);
 
     // Count subsets by either including or excluding current element
-    memo[n][sum] = countSubsetMemo(arr, n - 1, sum - arr[n - 1], memo) +
-        countSubsetMemo(arr, n - 1, sum, memo);
-
+    memo[n][sum] = countSubsetMemo(arr, n - 1, sum - arr[n - 1], memo) + countSubsetMemo(arr, n - 1, sum, memo);
     return memo[n][sum];
   }
 
@@ -199,7 +192,7 @@ public class KnapsackVariants {
    */
   public static int countSubsetSumTabulation(int[] arr, int sum) {
     int n = arr.length;
-    int[][] dp = new int[n + 1][sum + 1];
+    int[][] dp = new int[n + 1][sum + 1]; // dp[i][j] = number of subsets of first i elements that form sum j
 
     // Empty subset can form sum 0 (exactly 1 way)
     for (int i = 0; i <= n; i++) {
@@ -262,28 +255,66 @@ public class KnapsackVariants {
    * Instead of boolean (can we achieve sum?), we count how many ways
    * Same recurrence relation but using addition instead of logical OR
    */
+  // Using Memoization
+  public static int minSubSetSumDifference(int[] arr) {
+    int n = arr.length;
+    int totalSum = 0;
+    for (int num : arr)
+      totalSum += num;
+    // TO partition totalsum into 2 subsets, we can find sum upto totalSum/2 and
+    // then find the closest sum
+    // that can be achieved
+    int target = totalSum / 2;
+    int[][] memo = new int[n + 1][target + 1];
+    for (int i = 0; i <= n; i++)
+      Arrays.fill(memo[i], -1); // Initialize memoization table with -1
+
+    int closestSum = helper_subsetSum(arr, n, target, memo);
+    // The minimum difference will be totalSum - 2*closestSum
+    return totalSum - 2 * closestSum;
+  }
+
+  private static int helper_subsetSum(int[] arr, int n, int target, int[][] memo) {
+    if (target == 0)
+      return 0;
+    if (n == 0)
+      return Integer.MAX_VALUE; // No elements left to form sum
+
+    if (memo[n][target] != -1)
+      return memo[n][target];
+    // If current element is greater than target, skip it
+    if (arr[n - 1] > target)
+      return memo[n][target] = helper_subsetSum(arr, n - 1, target, memo);
+    int include = helper_subsetSum(arr, n - 1, target - arr[n - 1], memo);
+    int exclude = helper_subsetSum(arr, n - 1, target, memo);
+    // If we include the current element, we add its value to the closest sum
+    if (include != Integer.MAX_VALUE)
+      include += arr[n - 1]; // Include current element's value
+
+    // We take the maximum of the two options
+    memo[n][target] = Math.max(include, exclude);
+    return memo[n][target];
+  }
+
   public static int minSubsetSumDifference(int[] arr) {
     int totalSum = 0;
-    for (int num : arr) {
+    for (int num : arr)
       totalSum += num;
-    }
 
     int n = arr.length;
     boolean[][] dp = new boolean[n + 1][totalSum / 2 + 1];
 
     // Initialize dp for sum = 0
-    for (int i = 0; i <= n; i++) {
+    for (int i = 0; i <= n; i++)
       dp[i][0] = true;
-    }
 
     // Find all possible subset sums
     for (int i = 1; i <= n; i++) {
       for (int j = 1; j <= totalSum / 2; j++) {
-        if (arr[i - 1] > j) {
+        if (arr[i - 1] > j)
           dp[i][j] = dp[i - 1][j];
-        } else {
+        else
           dp[i][j] = dp[i - 1][j] || dp[i - 1][j - arr[i - 1]];
-        }
       }
     }
 
@@ -352,8 +383,6 @@ public class KnapsackVariants {
    * ✅ Why?
    * Because each 0 can be either included or not — and it doesn't change the sum.
    * So for every subset that makes the target, each zero gives 2 choices (±0).
-   *
-   *
    */
   public static int countSubsetsWithDiffZeroAware(int[] arr, int diff) {
     int n = arr.length, S = 0, zeroCount = 0;
@@ -401,7 +430,6 @@ public class KnapsackVariants {
    *
    * Approach:
    * This is equivalent to partitioning the array into two subsets S1 and S2
-   * where:
    * S1 - S2 = target
    * S1 + S2 = totalSum
    *
@@ -413,16 +441,15 @@ public class KnapsackVariants {
    */
   public static int targetSum(int[] nums, int target) {
     int totalSum = 0;
-    for (int num : nums) {
+    for (int num : nums)
       totalSum += num;
-    }
     // If totalSum + target is odd or target's absolute value > totalSum, no
     // solution exists
     if ((totalSum + target) % 2 != 0 || Math.abs(target) > totalSum) {
       return 0;
     }
-
     int sum = (totalSum + target) / 2;
+
     return countSubsetSumTabulation(nums, sum);
   }
 

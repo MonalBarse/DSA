@@ -23,13 +23,12 @@ public class P003 {
     class Solution {
 
         public List<Integer> largestDivisibleSubset(int[] arr) {
-
             Arrays.sort(arr); // Sort to ensure divisibility works left to r
             // does not affect answer since it's asking for subset not subseq
 
             int n = arr.length;
             int[] curr = new int[n]; // dp[i] = size of largest subset ending at i
-            int[] prev = new int[n]; // prev[i] =jprevious index in path
+            int[] prev = new int[n]; // prev[i] = previous index in path
 
             Arrays.fill(curr, 1);
             Arrays.fill(prev, -1);
@@ -46,12 +45,10 @@ public class P003 {
                         prev[i] = j;
                     }
                 }
-                if (curr[i] > curr[maxIndex]) {
+                if (curr[i] > curr[maxIndex])
                     maxIndex = i;
-                }
             }
 
-            // Reconstruct the path
             List<Integer> result = new ArrayList<>();
             while (maxIndex != -1) {
                 result.add(arr[maxIndex]);

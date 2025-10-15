@@ -25,7 +25,8 @@ public class P001 {
     private int LISrecursive(int[] arr, int curr, int prev) {
       int n = arr.length;
       // base case
-      if (curr == n) return 0;
+      if (curr == n)
+        return 0;
 
       // we have two choices - take the current element or not
       int not_take = LISrecursive(arr, curr + 1, prev);
@@ -50,9 +51,11 @@ public class P001 {
 
     private int LIS_memoized(int[] arr, int curr, int prev, int[][] memo) {
       int n = arr.length;
-      if (curr == n) return 0;
+      if (curr == n)
+        return 0;
 
-      if (memo[curr][prev + 1] != -1) return memo[curr][prev + 1];
+      if (memo[curr][prev + 1] != -1)
+        return memo[curr][prev + 1];
 
       int not_take = LIS_memoized(arr, curr + 1, prev, memo);
       int take = 0;
@@ -85,20 +88,16 @@ public class P001 {
       int[] dp = new int[n]; // dp[i] = length of LIS ending at index i
       Arrays.fill(dp, 1); // Every element is at least an LIS of length 1
 
-      for (int i = 0; i < n; i++) {
-        for (int j = 0; j < i; j++) {
-          if (arr[j] < arr[i]) { // if current element is greater than previous
+      for (int i = 0; i < n; i++)
+        for (int j = 0; j < i; j++)
+          if (arr[j] < arr[i]) // if current element is greater than previous
             // then can either increase the length of LIS (dp[j] + 1) or
             // keep the previous length and skip the current element (dp[i])
             dp[i] = Math.max(dp[i], dp[j] + 1);
-          }
-        }
-      }
 
       int maxLen = 0;
-      for (int len : dp) {
+      for (int len : dp)
         maxLen = Math.max(maxLen, len);
-      }
       return maxLen;
     }
 
@@ -107,15 +106,14 @@ public class P001 {
       List<Integer> temp = new ArrayList<>();
       for (int nm : arr) {
         int idx = Collections.binarySearch(temp, nm);
-        if (idx < 0) idx = -(idx + 1); // insertion point
-        if (idx == temp.size()) {
+        if (idx < 0)
+          idx = -(idx + 1); // insertion point
+        if (idx == temp.size())
           temp.add(nm); // extend the LIS
-        } else {
+        else
           temp.set(idx, nm); // replace to keep potential LIS growing
-        }
       }
       return temp.size(); // LIS length
     }
   }
 }
-

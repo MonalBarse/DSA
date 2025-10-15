@@ -1,4 +1,4 @@
-package com.monal;
+package DP.src.com.monal;
 
 /**
  * Topics covered:
@@ -248,8 +248,10 @@ public class DP101_1 {
     // DIVISER GAME
     // Alice and bob palys a game, alice starting first,
     // they take turns choosing a number x such that 1 <= x < n and n % x == 0
-    // A player loses if they cannot choose a number x, if they cannot make a move they lose
-    // Given an integer n, return true if alice wins the game, otherwise return false
+    // A player loses if they cannot choose a number x, if they cannot make a move
+    // they lose
+    // Given an integer n, return true if alice wins the game, otherwise return
+    // false
 
     public boolean divisorGame(int n) {
         // Alice wins if n is even, otherwise Bob wins
@@ -298,10 +300,12 @@ public class DP101_1 {
 
     private int helper_fn1(int[] W, int[] V, int capacity, int idx, int n) {
         // Base cases
-        if (idx == n || capacity == 0) return 0; // No more value can be obtained
+        if (idx == n || capacity == 0)
+            return 0; // No more value can be obtained
 
         // If current item is too heavy, skip it
-        if (W[idx] > capacity) return helper_fn1(W, V, capacity, idx + 1, n);
+        if (W[idx] > capacity)
+            return helper_fn1(W, V, capacity, idx + 1, n);
 
         // Try including the current item
         int include = V[idx] + helper_fn1(W, V, capacity - W[idx], idx + 1, n);
@@ -360,9 +364,8 @@ public class DP101_1 {
         for (int i = 0; i <= n; i++) {
             for (int w = 0; w <= capacity; w++) {
                 // Base case: no items or no capacity
-                if (i == 0 || w == 0) {
+                if (i == 0 || w == 0)
                     dp[i][w] = 0;
-                }
                 // If current item's weight can fit in the knapsack
                 else if (weights[i - 1] <= w) {
                     // Max of: (1) including current item, (2) excluding current item
@@ -372,9 +375,7 @@ public class DP101_1 {
                     );
                 }
                 // If current item is too heavy, skip it
-                else {
-                    dp[i][w] = dp[i - 1][w];
-                }
+                else dp[i][w] = dp[i - 1][w];
             }
         }
         // Return the maximum value that can be obtained
