@@ -46,11 +46,7 @@ public class P016 {
         int maxRow = 0;
 
         // Find the max element in the middle column
-        for (int i = 0; i < rows; i++) {
-          if (mat[i][mid] > mat[maxRow][mid]) {
-            maxRow = i;
-          }
-        }
+        for (int i = 0; i < rows; i++) if (mat[i][mid] > mat[maxRow][mid]) maxRow = i;
 
         // Compare the peak candidate with its neighbors
         boolean isPeak = true;
@@ -62,18 +58,17 @@ public class P016 {
           isPeak = false;
           start = mid + 1;
         }
-        if (isPeak)
-          return new int[] { maxRow, mid };
+        if (isPeak) return new int[] {maxRow, mid};
       }
-      return new int[] { -1, -1 };
+      return new int[] {-1, -1};
     }
   }
 
   public static void main(String[] args) {
     P016 p016 = new P016();
     P016.Solution solution = p016.new Solution();
-    int[][] mat1 = { { 1, 4 }, { 3, 2 } };
-    int[][] mat2 = { { 10, 20, 15 }, { 21, 30, 14 }, { 7, 16, 32 } };
+    int[][] mat1 = {{1, 4}, {3, 2}};
+    int[][] mat2 = {{10, 20, 15}, {21, 30, 14}, {7, 16, 32}};
     System.out.println(solution.findPeakGrid(mat1)); // [0,1]
     System.out.println(solution.findPeakGrid(mat2)); // [1,1]
   }
