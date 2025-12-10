@@ -74,7 +74,7 @@ it is currently src/com/monal, edit it to add yours.
 - [x] Binary Search
 - [x] Modified Binary Search
 - [x] Binary Search Interview questions
-- [ ] Binary Search on 2D Arrays
+- [x] Binary Search on 2D Arrays
 - [x] Pattern questions
 
 ## Strings
@@ -89,9 +89,9 @@ it is currently src/com/monal, edit it to add yours.
 
 - [x] Introduction
 - [x] Complete Bitwise Operators
-- [ ] Prime numbers
-- [ ] HCF / LCM
-- [ ] Sieve of Eratosthenes
+- [x] Prime numbers
+- [x] HCF / LCM
+- [x] Sieve of Eratosthenes
 - [ ] Newton's Square Root Method
 - [ ] Number Theory
 - [ ] Euclidean algorithm
@@ -159,87 +159,87 @@ it is currently src/com/monal, edit it to add yours.
 - [x] Complexity Analysis
 - [x] 1D DP
 - [x] 0/1 Knapsack
-- [ ] 2D/3D DP and DP on Grids
-- [ ] DP on Subsequences
-- [ ] DP on Strings
-- [ ] DP on Stocks
-- [ ] DP on LIS (Longest Increasing Subsequence)
-- [ ] MCM DP | Partition DP
-- [ ] DP on Squares
+- [x] 2D/3D DP and DP on Grids
+- [x] DP on Subsequences
+- [x] DP on Strings
+- [x] DP on Stocks
+- [x] DP on LIS (Longest Increasing Subsequence)
+- [x] MCM DP | Partition DP
+- [x] DP on Squares
 
 ## Stacks & Queues
 
-- [ ] Introduction
-- [ ] Interview problems
-- [ ] Push efficient
-- [ ] Pop efficient
-- [ ] Queue using Stack and Vice versa
-- [ ] Circular Queue
+- [x] Introduction
+- [x] Interview problems
+- [x] Push efficient
+- [x] Pop efficient
+- [x] Queue using Stack and Vice versa
+- [x] Circular Queue
 
 ## Hashmaps
 
-- [ ] Introduction
-- [ ] Theory - how it works
-- [ ] Comparisons of various forms
-- [ ] Limitations and how to solve
-- [ ] Map using LinkedList
-- [ ] Map using Hash
-- [ ] Chaining
-- [ ] Probing
-- [ ] Huffman-Encoder
+- [x] Introduction
+- [x] Theory - how it works
+- [x] Comparisons of various forms
+- [x] Limitations and how to solve
+- [x] Map using LinkedList
+- [x] Map using Hash
+- [x] Chaining
+- [x] Probing
+- [x] Huffman-Encoder
 
 ## Linked List
 
-- [ ] Introduction
-- [ ] Singly and Doubly Linked List
-- [ ] Circular Linked List
-- [ ] Fast and slow pointer
-- [ ] Cycle Detection
-- [ ] Reversing of LinkedList
-- [ ] Linked List Interview questions
+- [x] Introduction
+- [x] Singly and Doubly Linked List
+- [x] Circular Linked List
+- [x] Fast and slow pointer
+- [x] Cycle Detection
+- [x] Reversing of LinkedList
+- [x] Linked List Interview questions
 
 ## Trees
 
-- [ ] Introduction
-- [ ] Binary Trees
-- [ ] Binary Search Trees
-- [ ] DFS
-- [ ] BFS
+- [x] Introduction
+- [x] Binary Trees
+- [x] Binary Search Trees
+- [x] DFS
+- [x] BFS
 - [ ] AVL Trees
 - [ ] Segment Tree
 - [ ] Fenwick Tree / Binary Indexed Tree
 
 ## Heaps
 
-- [ ] Introduction
-- [ ] Theory
-- [ ] Priority Queue
-- [ ] Two Heaps Method
-- [ ] k-way merge
-- [ ] top k elements
+- [x] Introduction
+- [x] Theory
+- [x] Priority Queue
+- [x] Two Heaps Method
+- [x] k-way merge
+- [x] top k elements
 - [ ] interval problems
 
 ## Tries
 
-- [ ] Introduction
+- [x] Introduction
 
 ## Graphs
 
-- [ ] Introduction
-- [ ] BFS
-- [ ] DFS
-- [ ] Working with graph components
-- [ ] Minimum Spanning Trees
-- [ ] Kruskal Algorithm
-- [ ] Prims Algorithm
-- [ ] Dijkstra’s shortest path algorithm
-- [ ] Topological Sort
-- [ ] Bellman ford
+- [x] Introduction
+- [x] BFS
+- [x] DFS
+- [x] Working with graph components
+- [x] Minimum Spanning Trees
+- [x] Kruskal Algorithm
+- [x] Prims Algorithm
+- [x] Dijkstra’s shortest path algorithm
+- [x] Topological Sort
+- [x] Bellman ford
 - [ ] A\* pathfinding Algorithm
 
 ## Greedy Algorithms
 
-- [ ] Introduction
+- [x] Introduction
 
 ## Advanced concepts apart from interviews
 
